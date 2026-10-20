@@ -224,7 +224,7 @@ export default async function AgentPage({ params }: PageProps<"/ai-agents/[slug]
       {demoVideo && (
         <Section tone="light" labelledBy="demo-title">
           <SectionHeader id="demo-title" eyebrow="Demo" title={`See ${a.name} work.`} />
-          <div className="mx-auto mt-10 max-w-4xl">
+          <div className="mx-auto mt-10 max-w-5xl">
             <VideoEmbed video={demoVideo} />
           </div>
           {agentPocs.length > 0 && (

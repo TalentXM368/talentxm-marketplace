@@ -15,12 +15,15 @@ export function PocPresentation({ poc }: { poc: Poc }) {
   return poc.presentation ? <PresentationEmbed presentation={poc.presentation} /> : null;
 }
 
-/** Video and presentation together, side by side on wide screens when both exist. */
+/**
+ * Video, then presentation. Stacked rather than side by side: YouTube and Drive choose the
+ * starting quality from the player's size, so a full-width player starts in HD.
+ */
 export function PocAssets({ slug, className }: { slug: string; className?: string }) {
   const poc = getPoc(slug);
   if (!poc) return null;
   return (
-    <div className={cn("grid gap-6", poc.presentation && "lg:grid-cols-2", className)}>
+    <div className={cn("grid gap-8", className)}>
       <PocVideo poc={poc} />
       <PocPresentation poc={poc} />
     </div>
