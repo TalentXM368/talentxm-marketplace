@@ -55,7 +55,20 @@ Per UX01, these sections render nothing while their arrays in `content/site.ts` 
 - `testimonials`: testimonial grid
 - `stats`: stat band. Every stat needs a `source`.
 
-Add `demoVideo` to an agent in `content/agents.ts` and its POC video player appears on that agent's page.
+Add `demoVideo` to an agent in `content/agents.ts` and its POC video player appears on that agent's page. Without one, the agent page uses its first POC from the library.
+
+## POC Library
+
+`/poc-library` lists every POC, with filters for category, technology and search. Each POC has its own page at `/poc-library/<slug>`.
+
+- **Add a POC:** add an entry to `pocs` in `content/pocs.ts`. `categories` (industries) and `functions` (business functions) mirror the folders in the POC Drive library; the filters only offer values at least one POC uses. A new technology goes in `technologies`. The page, sitemap entry and social preview image are generated from that entry.
+- **Video only in Drive:** use `driveVideo(id, title, duration, thumbnail)` and save a frame from the video in `public/images/pocs/` as the thumbnail (Drive thumbnails are often a black first frame).
+- **Video:** use `youtube(id, title, duration)`. Keep "predictive maintenance" out of the title: the publish gate blocks that phrase.
+- **Presentation:** use `drivePdf(id, title)`, or set `presentation` to a Google Slides `/embed` URL. Only embed decks meant for clients. Share the file as "anyone with the link", or visitors will see a sign-in prompt.
+- **No presentation:** write the copy from the video transcript, and add `walkthrough` (key moments with `m:ss` times) and `boundaries` (what the POC deliberately does not do). On YouTube videos each walkthrough time starts the player at that point. Captions can be pulled with `yt-dlp --skip-download --write-auto-subs <url>`.
+- **Link from a use case:** add the POC slug to `pocs` on a `UseCaseRow` in `content/industries.ts`, or to `poc` on an evidence item in `content/trust.ts`.
+- **Embed the assets elsewhere:** use `<PocAssets slug="…" />` from `components/poc/poc-assets.tsx`.
+- Pages read POC data only through `lib/pocs.ts`. If the data moves to Drive, Cloudflare or Sanity, only that file changes.
 
 ## Forms
 

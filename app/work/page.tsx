@@ -4,6 +4,7 @@ import { CTABand } from "@/components/sections/cta-band";
 import { Hero } from "@/components/sections/hero";
 import { Section } from "@/components/sections/section";
 import { getAgent } from "@/content/agents";
+import { pocPath } from "@/lib/pocs";
 import { evidenceItems } from "@/content/trust";
 import type { EvidenceLabel } from "@/content/types";
 import { pageMetadata } from "@/lib/seo";
@@ -30,6 +31,7 @@ export default function WorkPage() {
         lede="Every item carries a label that says what kind of evidence it is. We publish client outcomes only with written permission."
         image="/images/tech-dashboard-bg.webp"
         primary={{ label: "Request an Agent Pilot", href: "/ai-agents#request-pilot" }}
+        secondary={{ label: "Open the POC Library", href: "/poc-library" }}
         breadcrumbs={[{ label: "Work", href: "/work" }]}
       />
 
@@ -64,15 +66,26 @@ export default function WorkPage() {
                     <dd className="mt-0.5">{e.engagementModel}</dd>
                   </div>
                 </dl>
-                {agent && (
-                  <Link
-                    href={`/ai-agents/${agent.slug}`}
-                    className="txm-focus group mt-6 inline-flex items-center gap-2 font-semibold text-txm-indigo hover:text-txm-base"
-                  >
-                    {agent.name}
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
-                  </Link>
-                )}
+                <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
+                  {e.poc && (
+                    <Link
+                      href={pocPath(e.poc)}
+                      className="txm-focus group inline-flex items-center gap-2 font-semibold text-txm-indigo hover:text-txm-base"
+                    >
+                      Watch the POC
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+                    </Link>
+                  )}
+                  {agent && (
+                    <Link
+                      href={`/ai-agents/${agent.slug}`}
+                      className="txm-focus group inline-flex items-center gap-2 font-semibold text-txm-indigo hover:text-txm-base"
+                    >
+                      {agent.name}
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+                    </Link>
+                  )}
+                </div>
               </li>
             );
           })}

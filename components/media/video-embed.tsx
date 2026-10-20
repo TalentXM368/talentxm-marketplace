@@ -1,9 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Play } from "lucide-react";
 import type { VideoAsset } from "@/content/types";
+
+const SEEK_EVENT = "txm:video-seek";
+
+interface SeekDetail {
+  embedUrl: string;
+  seconds: number;
+}
+
+/** Starts the matching VideoEmbed on the page at `seconds`. */
+export function seekVideo(video: VideoAsset, seconds: number) {
+  window.dispatchEvent(new CustomEvent<SeekDetail>(SEEK_EVENT, { detail: { embedUrl: video.embedUrl, seconds } }));
+}
 
 /**
  * POC video player (UX01: new). Shows a thumbnail, play button and title.
@@ -11,13 +23,30 @@ import type { VideoAsset } from "@/content/types";
  */
 export function VideoEmbed({ video }: { video: VideoAsset }) {
   const [playing, setPlaying] = useState(false);
+  const [start, setStart] = useState(0);
+  const ref = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    function onSeek(e: Event) {
+      const { embedUrl, seconds } = (e as CustomEvent<SeekDetail>).detail;
+      if (embedUrl !== video.embedUrl) return;
+      setStart(seconds);
+      setPlaying(true);
+      ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+    window.addEventListener(SEEK_EVENT, onSeek);
+    return () => window.removeEventListener(SEEK_EVENT, onSeek);
+  }, [video.embedUrl]);
+
+  const params = `autoplay=1${start > 0 ? `&start=${start}` : ""}`;
 
   return (
-    <figure className="overflow-hidden rounded-2xl border border-txm-line bg-txm-base shadow-txm-card">
+    <figure ref={ref} className="overflow-hidden rounded-2xl border border-txm-line bg-txm-base shadow-txm-card">
       <div className="relative aspect-video">
         {playing ? (
           <iframe
-            src={`${video.embedUrl}${video.embedUrl.includes("?") ? "&" : "?"}autoplay=1`}
+            key={start}
+            src={`${video.embedUrl}${video.embedUrl.includes("?") ? "&" : "?"}${params}`}
             title={video.title}
             allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
             className="absolute inset-0 h-full w-full"

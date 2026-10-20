@@ -4,6 +4,7 @@ import { FormSection } from "@/components/forms/form-section";
 import { CheckList, FAQ, PodModelDiagram } from "@/components/sections/blocks";
 import { Hero } from "@/components/sections/hero";
 import { Section, SectionHeader } from "@/components/sections/section";
+import { PocLinks } from "@/components/poc/poc-link";
 import { JsonLd } from "@/components/seo/json-ld";
 import { StatusChip } from "@/components/signature/signature";
 import { ButtonLink } from "@/components/ui/button";
@@ -64,7 +65,10 @@ export default async function IndustryPage({ params }: PageProps<"/industries/[s
             <tbody className="divide-y divide-txm-line bg-white">
               {ind.useCaseRows.map((r) => (
                 <tr key={r.workflow} className="txm-small align-top text-txm-slate">
-                  <th scope="row" className="px-5 py-4 font-semibold text-txm-ink">{r.workflow}</th>
+                  <th scope="row" className="px-5 py-4 font-semibold text-txm-ink">
+                    {r.workflow}
+                    <PocLinks slugs={r.pocs} />
+                  </th>
                   <td className="px-5 py-4"><StatusChip status={r.status} /></td>
                   <td className="px-5 py-4">{r.systems}</td>
                   <td className="px-5 py-4">{r.control}</td>
@@ -83,6 +87,7 @@ export default async function IndustryPage({ params }: PageProps<"/industries/[s
                 <p className="font-semibold text-txm-ink">{r.workflow}</p>
                 <StatusChip status={r.status} />
               </div>
+              <PocLinks slugs={r.pocs} />
               <dl className="txm-small mt-4 grid gap-3 text-txm-slate">
                 {[
                   ["Systems", r.systems],

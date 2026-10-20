@@ -3,8 +3,8 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { agentIndustryFilters, agents, agentTypeFilters } from "@/content/agents";
 import type { Agent } from "@/content/types";
-import { cn } from "@/lib/cn";
 import { AgentCard } from "./agent-card";
+import { FilterGroup } from "./filter-controls";
 
 function matches(agent: Agent, industry: string | null, type: string | null) {
   if (industry) {
@@ -80,63 +80,6 @@ export function AgentCatalog() {
         </div>
       )}
     </div>
-  );
-}
-
-function FilterGroup({
-  label,
-  options,
-  value,
-  onChange,
-}: {
-  label: string;
-  options: readonly { value: string; label: string }[];
-  value: string | null;
-  onChange: (value: string | null) => void;
-}) {
-  const id = `filter-${label.toLowerCase().replace(/\s+/g, "-")}`;
-  return (
-    <div role="group" aria-labelledby={id} className="flex flex-col gap-3 md:flex-row md:items-center">
-      <p id={id} className="txm-eyebrow w-32 shrink-0 text-txm-subtle">
-        {label}
-      </p>
-      <div className="flex flex-wrap gap-2">
-        <FilterButton active={!value} onClick={() => onChange(null)}>
-          All
-        </FilterButton>
-        {options.map((o) => (
-          <FilterButton key={o.value} active={value === o.value} onClick={() => onChange(o.value)}>
-            {o.label}
-          </FilterButton>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function FilterButton({
-  active,
-  onClick,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      aria-pressed={active}
-      onClick={onClick}
-      className={cn(
-        "txm-focus rounded-full border px-4 py-2 text-sm font-semibold transition-colors",
-        active
-          ? "border-transparent bg-txm-base text-white"
-          : "border-txm-line bg-white text-txm-ink hover:bg-slate-50",
-      )}
-    >
-      {children}
-    </button>
   );
 }
 

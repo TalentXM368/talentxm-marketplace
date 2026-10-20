@@ -24,6 +24,7 @@ export const industries: Industry[] = [
         control: "Staff resolve every coverage exception",
         deliveryModel: "Capability pod",
         measures: "Visits checked before arrival; eligibility denials",
+        pocs: ["eligibility-verification", "healthcare-ops-genie"],
       },
       {
         workflow: "Routine appointment scheduling",
@@ -32,6 +33,7 @@ export const industries: Industry[] = [
         control: "Clinical or urgent requests routed to staff",
         deliveryModel: "Capability pod",
         measures: "Requests handled without rework; time to booking",
+        pocs: ["schedulexm"],
       },
       {
         workflow: "Prescription refill preparation",
@@ -103,6 +105,7 @@ export const industries: Industry[] = [
         control: "Planner approves every work order",
         deliveryModel: "Capability pod",
         measures: "Alerts confirmed by engineers; lead time on test data",
+        pocs: ["machine-health-monitoring"],
       },
       {
         workflow: "Chemical and technical document extraction",
@@ -111,6 +114,7 @@ export const industries: Industry[] = [
         control: "Qualified reviewer approves extracted data",
         deliveryModel: "Project delivery",
         measures: "Field accuracy; time per document",
+        pocs: ["chemistxm"],
       },
       {
         workflow: "ERP and MES integration",
