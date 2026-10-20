@@ -72,6 +72,7 @@ export const footerColumns: { heading: string; links: NavLink[] }[] = [
       { label: "AI Agents", href: "/ai-agents" },
       { label: "Healthcare", href: "/industries/healthcare" },
       { label: "Manufacturing", href: "/industries/manufacturing" },
+      { label: "POC Library", href: "/poc-library" },
       { label: "Work", href: "/work" },
     ],
   },

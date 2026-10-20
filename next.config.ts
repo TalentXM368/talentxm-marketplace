@@ -61,6 +61,8 @@ const nextConfig: NextConfig = {
   },
   images: {
     formats: ["image/avif", "image/webp"],
+    // POC video thumbnails.
+    remotePatterns: [{ protocol: "https", hostname: "i.ytimg.com", pathname: "/vi/**" }],
   },
   async redirects() {
     return legacyRedirects.map(([source, destination]) => ({ source, destination, statusCode: 301 }));

@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
 import { site } from "@/content/site";
-import type { Faq, Seo } from "@/content/types";
+import type { Faq, Seo, VideoAsset } from "@/content/types";
 
 interface PageMetaOptions extends Seo {
   path: string;
   noindex?: boolean;
+  /** Social preview image. Defaults to the site image. */
+  image?: { url: string; width: number; height: number; alt: string };
 }
 
 /** Per-route metadata with a self-referencing canonical (Architecture S7). */
-export function pageMetadata({ title, description, path, noindex }: PageMetaOptions): Metadata {
+export function pageMetadata({ title, description, path, noindex, image }: PageMetaOptions): Metadata {
+  const images = [image ?? { url: "/og.png", width: 1200, height: 630, alt: site.name }];
   return {
     title,
     description,
@@ -19,7 +22,7 @@ export function pageMetadata({ title, description, path, noindex }: PageMetaOpti
       url: path,
       siteName: site.name,
       type: "website",
-      images: [{ url: "/og.png", width: 1200, height: 630, alt: site.name }],
+      images,
     },
     robots: noindex ? { index: false, follow: true } : undefined,
   };
@@ -77,5 +80,26 @@ export function breadcrumbLd(items: { label: string; href: string }[]) {
       name: item.label,
       item: `${site.url}${item.href}`,
     })),
+  };
+}
+
+/** "M:SS" to ISO 8601 duration. */
+function isoDuration(duration: string) {
+  const [m, s] = duration.split(":").map(Number);
+  return `PT${m}M${s}S`;
+}
+
+export function videoLd(video: VideoAsset, name: string, description: string, uploadDate: string, path: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    name,
+    description,
+    thumbnailUrl: [video.thumbnail],
+    uploadDate,
+    embedUrl: video.embedUrl,
+    url: `${site.url}${path}`,
+    ...(video.duration && { duration: isoDuration(video.duration) }),
+    publisher: { "@type": "Organization", name: site.name, url: site.url },
   };
 }

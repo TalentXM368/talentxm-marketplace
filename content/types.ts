@@ -144,6 +144,8 @@ export interface UseCaseRow {
   control: string;
   deliveryModel: string;
   measures: string;
+  /** POC slugs that demonstrate this workflow. */
+  pocs?: string[];
 }
 
 export interface Industry {
@@ -191,6 +193,78 @@ export interface EvidenceItem {
   summary: string;
   validationSummary: string;
   engagementModel: string;
+  poc?: string;
+}
+
+/** Industry folders in the POC Drive library. */
+export type PocCategorySlug = "healthcare" | "financial-services" | "manufacturing" | "retail";
+
+/** Folders under "Business Functions" in the POC Drive library. */
+export type BusinessFunctionSlug =
+  | "customer-service"
+  | "finance"
+  | "human-resources"
+  | "marketing"
+  | "procurement"
+  | "recruiting"
+  | "sales"
+  | "supply-chain";
+
+export interface PocCategory {
+  slug: PocCategorySlug;
+  name: string;
+  icon: IconName;
+}
+
+export interface BusinessFunction {
+  slug: BusinessFunctionSlug;
+  name: string;
+}
+
+export interface Technology {
+  slug: string;
+  name: string;
+  group: TechTag["category"];
+}
+
+export interface PresentationAsset {
+  title: string;
+  /** Google Slides /embed or Drive /preview URL. */
+  embedUrl: string;
+  /** Where "Open presentation" goes. */
+  openUrl: string;
+}
+
+export interface VideoMoment {
+  time: string;
+  title: string;
+  detail: string;
+}
+
+export interface Poc {
+  slug: string;
+  title: string;
+  categories: AtLeastOne<PocCategorySlug>;
+  functions: BusinessFunctionSlug[];
+  /** Links the POC to the industry pages. */
+  industries: IndustrySlug[];
+  /** Agent slug, when the POC demonstrates a catalogue agent. */
+  agent?: string;
+  summary: string;
+  problem: string;
+  solution: string;
+  outcomes: AtLeastOne<string>;
+  /** What the POC deliberately does not do, as stated in the video or deck. */
+  boundaries?: string[];
+  /** Technology slugs from content/pocs.ts. */
+  technologies: AtLeastOne<string>;
+  video: VideoAsset;
+  /** Key moments in the video, written from its transcript. `time` is m:ss. */
+  walkthrough?: AtLeastOne<VideoMoment>;
+  presentation?: PresentationAsset;
+  /** ISO date the video was published. */
+  publishedAt: string;
+  seo: Seo;
 }
 
 export interface NavLink {

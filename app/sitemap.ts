@@ -2,11 +2,12 @@ import type { MetadataRoute } from "next";
 import { agents } from "@/content/agents";
 import { industries } from "@/content/industries";
 import { legalPages } from "@/content/legal";
+import { getPocs, pocLibraryPath, pocPath } from "@/lib/pocs";
 import { serviceDomains } from "@/content/services";
 import { site } from "@/content/site";
 
 // Built from the content files. Filtered catalogue URLs and noindex pages are excluded (Architecture S7).
-const lastModified = "2026-10-13";
+const lastModified = "2026-10-19";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [
@@ -17,6 +18,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...agents.map((a) => `/ai-agents/${a.slug}`),
     "/industries",
     ...industries.map((i) => `/industries/${i.slug}`),
+    pocLibraryPath,
+    ...getPocs().map((p) => pocPath(p.slug)),
     "/flexible-talent",
     "/work",
     "/about",

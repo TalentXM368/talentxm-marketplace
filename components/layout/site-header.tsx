@@ -12,6 +12,7 @@ type MenuKey = "services" | "industries" | "company";
 const flatLinks = [
   { label: "AI Agents", href: "/ai-agents" },
   { label: "Flexible Talent", href: "/flexible-talent" },
+  { label: "POC Library", href: "/poc-library" },
   { label: "Work", href: "/work" },
 ];
 
@@ -131,6 +132,11 @@ export function SiteHeader() {
               <li>
                 <NavLink href="/flexible-talent" onNavigate={close}>
                   Flexible Talent
+                </NavLink>
+              </li>
+              <li>
+                <NavLink href="/poc-library" onNavigate={close}>
+                  POC Library
                 </NavLink>
               </li>
               <li>

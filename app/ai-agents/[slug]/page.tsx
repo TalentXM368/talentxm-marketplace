@@ -3,12 +3,14 @@ import { ArrowDown } from "lucide-react";
 import { AgentGrid } from "@/components/catalog/agent-catalog";
 import { FormSection } from "@/components/forms/form-section";
 import { VideoEmbed } from "@/components/media/video-embed";
+import { PocGrid } from "@/components/poc/poc-card";
 import { CheckList, FAQ } from "@/components/sections/blocks";
 import { Hero } from "@/components/sections/hero";
 import { Section, SectionHeader } from "@/components/sections/section";
 import { JsonLd } from "@/components/seo/json-ld";
 import { HumanDecisionPoints, StatusChip, TechTags } from "@/components/signature/signature";
 import { agentIndustryLabel, agents, getAgent, statusLabels } from "@/content/agents";
+import { pocsForAgent } from "@/lib/pocs";
 import { pageMetadata, serviceLd } from "@/lib/seo";
 
 export function generateStaticParams() {
@@ -30,6 +32,8 @@ export default async function AgentPage({ params }: PageProps<"/ai-agents/[slug]
   const path = `/ai-agents/${a.slug}`;
   const sameIndustry = agents.filter((o) => o.slug !== a.slug && o.industries.some((i) => a.industries.includes(i)));
   const others = sameIndustry.length > 0 ? sameIndustry : agents.filter((o) => o.slug !== a.slug);
+  const agentPocs = pocsForAgent(a.slug);
+  const demoVideo = a.demoVideo ?? agentPocs[0]?.video;
 
   return (
     <>
@@ -217,12 +221,18 @@ export default async function AgentPage({ params }: PageProps<"/ai-agents/[slug]
         </div>
       </Section>
 
-      {a.demoVideo && (
+      {demoVideo && (
         <Section tone="light" labelledBy="demo-title">
           <SectionHeader id="demo-title" eyebrow="Demo" title={`See ${a.name} work.`} />
           <div className="mx-auto mt-10 max-w-4xl">
-            <VideoEmbed video={a.demoVideo} />
+            <VideoEmbed video={demoVideo} />
           </div>
+          {agentPocs.length > 0 && (
+            <div className="mt-16">
+              <p className="txm-eyebrow mb-6 text-center text-txm-indigo">From the POC Library</p>
+              <PocGrid items={agentPocs} />
+            </div>
+          )}
         </Section>
       )}
 

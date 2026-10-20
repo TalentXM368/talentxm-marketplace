@@ -24,7 +24,12 @@ Phase 1 copy was drafted from the Replit site, the Architecture & Sitemap doc (S
 - [ ] Which client logos can be published, each with a permission record.
 - [ ] Approved testimonials, each with a permission record.
 - [ ] Any stats, each with a source.
-- [ ] POC demo videos for the agents: embed URL, thumbnail and title.
+- [x] POC demo videos for the agents (POC Library, `content/pocs.ts`).
+- [x] POC presentations from Drive: ChemistXM and machine health.
+- [ ] Retail Control Plane deck is marked confidential and is not embedded. Add a client-facing version when one exists.
+- [x] Copy, key moments and boundaries written from the video transcripts (ScheduleXM, eligibility, patient re-engagement, OPS Genie, contract compliance, AP vendor email, Retail Control Plane).
+- [ ] Review the transcript-based POC copy. The technologies now follow the videos, so the eligibility POC (Workato GO, Azure, Epic) no longer matches its agent record (Copilot Studio, Optum, X12), and the AP vendor POC no longer lists the SAP and BlackLine systems marked "designed" on its agent.
+- [ ] Healthcare OPS Genie video cites figures ($800,000 a year saved, 26–39% of staff time on data entry, $200 billion waste) that are not on the page. They need a source before they can be used.
 
 ## Legal (counsel, TXM-044)
 

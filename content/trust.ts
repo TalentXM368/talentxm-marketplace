@@ -85,6 +85,7 @@ export const evidenceItems: EvidenceItem[] = [
     summary: "An agent that sends X12 270 requests and reads 271 responses for scheduled visits.",
     validationSummary: "Tested end to end against the Optum eligibility API.",
     engagementModel: "Capability pod",
+    poc: "eligibility-verification",
   },
   {
     slug: "schedulexm-poc",
@@ -94,6 +95,7 @@ export const evidenceItems: EvidenceItem[] = [
     summary: "Request understanding, slot search and booking preparation with routing to schedulers.",
     validationSummary: "Built and tested against an athenahealth sandbox.",
     engagementModel: "Capability pod",
+    poc: "schedulexm",
   },
   {
     slug: "refillxm-poc",
@@ -112,6 +114,7 @@ export const evidenceItems: EvidenceItem[] = [
     summary: "A model that flags abnormal telemetry and an assistant that drafts work orders for approval.",
     validationSummary: "Tested on sample equipment telemetry with an approval control on write-back.",
     engagementModel: "Capability pod",
+    poc: "machine-health-monitoring",
   },
   {
     slug: "chemical-documents-poc",
@@ -121,6 +124,7 @@ export const evidenceItems: EvidenceItem[] = [
     summary: "Field extraction from safety and technical data sheets, with the source passage for each value.",
     validationSummary: "Tested on a sample document set with reviewer corrections.",
     engagementModel: "Project delivery",
+    poc: "chemistxm",
   },
   {
     slug: "ap-vendor-email-poc",
@@ -130,5 +134,6 @@ export const evidenceItems: EvidenceItem[] = [
     summary: "Email classification, status lookup and reply drafting with approval in Microsoft Teams.",
     validationSummary: "Built on Workato with demo SAP S/4HANA, Ariba, BTP and BlackLine connectors.",
     engagementModel: "Project delivery",
+    poc: "ap-vendor-email-assistant",
   },
 ];
