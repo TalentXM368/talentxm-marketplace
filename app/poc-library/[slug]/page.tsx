@@ -28,14 +28,14 @@ import { canSeek } from "@/lib/video";
 
 function Walkthrough({ poc, moments }: { poc: Poc; moments: VideoMoment[] }) {
   return (
-    <div>
-      <h2 className="txm-eyebrow text-txm-indigo">In the video</h2>
-      <p className="txm-small mt-2 text-txm-slate">
-        {canSeek(poc.video) ? "Select a time to play the video from that point." : "Key moments in the recording."}
-      </p>
-      <div className="mt-8">
-        <PocWalkthrough video={poc.video} moments={moments} />
+    <div className="grid gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-12">
+      <div>
+        <h2 className="txm-eyebrow text-txm-indigo">In the video</h2>
+        <p className="txm-small mt-2 text-txm-slate">
+          {canSeek(poc.video) ? "Select a time to play the video from that point." : "Key moments in the recording."}
+        </p>
       </div>
+      <PocWalkthrough video={poc.video} moments={moments} />
     </div>
   );
 }
@@ -100,24 +100,15 @@ export default async function PocPage({ params }: PageProps<"/poc-library/[slug]
         <h2 id="video-title" className="sr-only">
           Video and presentation
         </h2>
-        {p.walkthrough && !p.presentation ? (
-          // Video stays in view beside the key moments, so a timestamp plays next to where it was selected.
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-14">
-            <div className="lg:sticky lg:top-24 lg:self-start">
-              <PocAssets slug={p.slug} />
+        {/* Full-width player so the video starts in HD; a timestamp scrolls back up to it. */}
+        <div className="mx-auto max-w-5xl">
+          <PocAssets slug={p.slug} />
+          {p.walkthrough && (
+            <div className="mt-14">
+              <Walkthrough poc={p} moments={p.walkthrough} />
             </div>
-            <Walkthrough poc={p} moments={p.walkthrough} />
-          </div>
-        ) : (
-          <>
-            <PocAssets slug={p.slug} className={p.presentation ? undefined : "mx-auto max-w-4xl"} />
-            {p.walkthrough && (
-              <div className="mx-auto mt-14 max-w-3xl">
-                <Walkthrough poc={p} moments={p.walkthrough} />
-              </div>
-            )}
-          </>
-        )}
+          )}
+        </div>
       </Section>
 
       <Section tone="light" labelledBy="overview-title">

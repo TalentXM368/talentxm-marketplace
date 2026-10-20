@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Play } from "lucide-react";
 import type { VideoAsset } from "@/content/types";
@@ -25,6 +25,19 @@ export function VideoEmbed({ video }: { video: VideoAsset }) {
   const [playing, setPlaying] = useState(false);
   const [start, setStart] = useState(0);
   const ref = useRef<HTMLElement>(null);
+  const frame = useRef<HTMLIFrameElement>(null);
+
+  // Next keeps pages you navigate away from mounted but hidden (React Activity), so a
+  // playing iframe would keep its sound. This cleanup runs as the page is hidden:
+  // blank the iframe at once, then return to the thumbnail for when the visitor comes back.
+  useLayoutEffect(
+    () => () => {
+      if (frame.current) frame.current.src = "about:blank";
+      setPlaying(false);
+      setStart(0);
+    },
+    [],
+  );
 
   useEffect(() => {
     function onSeek(e: Event) {
@@ -45,6 +58,7 @@ export function VideoEmbed({ video }: { video: VideoAsset }) {
       <div className="relative aspect-video">
         {playing ? (
           <iframe
+            ref={frame}
             key={start}
             src={`${video.embedUrl}${video.embedUrl.includes("?") ? "&" : "?"}${params}`}
             title={video.title}
