@@ -6,8 +6,18 @@ import Link from "next/link";
 import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
 import { companyMenu, industriesMenu, servicesMenu, servicesPromo, site, utilityLinks } from "@/content/site";
 import { cn } from "@/lib/cn";
+import { homeHref, isOpenPath } from "@/lib/site-lock";
+import { LockedLabel } from "./locked-label";
 
 type MenuKey = "services" | "industries" | "company";
+
+// A menu is dimmed when none of its pages are open yet (lib/site-lock.ts).
+const menuIsOpen: Record<MenuKey, boolean> = {
+  services: servicesMenu.some((c) => isOpenPath(c.href)),
+  industries: industriesMenu.some((l) => isOpenPath(l.href)),
+  company: companyMenu.some((l) => isOpenPath(l.href)),
+};
+const showPrimaryCta = isOpenPath(site.primaryCta.href);
 
 const flatLinks = [
   { label: "AI Agents", href: "/ai-agents" },
@@ -72,11 +82,17 @@ export function SiteHeader() {
     <>
       <div className="hidden bg-txm-base text-slate-300 md:block">
         <div className="txm-container flex h-9 items-center justify-end gap-6">
-          {utilityLinks.map((l) => (
-            <Link key={l.href} href={l.href} className="txm-focus-inverse txm-small hover:text-white">
-              {l.label}
-            </Link>
-          ))}
+          {utilityLinks.map((l) =>
+            isOpenPath(l.href) ? (
+              <Link key={l.href} href={l.href} className="txm-focus-inverse txm-small hover:text-white">
+                {l.label}
+              </Link>
+            ) : (
+              <LockedLabel key={l.href} className="txm-small">
+                {l.label}
+              </LockedLabel>
+            ),
+          )}
         </div>
       </div>
 
@@ -92,23 +108,27 @@ export function SiteHeader() {
             condensed ? "h-16" : "h-[72px]",
           )}
         >
-          <Link href="/" className="txm-focus shrink-0" aria-label="TalentXM home" onNavigate={close}>
+          <Link href={homeHref} className="txm-focus shrink-0" aria-label="TalentXM home" onNavigate={close}>
             <Image src="/images/talentxm-logo.png" alt="TalentXM" width={1140} height={460} priority className="h-9 w-auto" />
           </Link>
 
           <nav ref={navRef} aria-label="Main" className="hidden lg:block">
             <ul className="flex items-center gap-1">
               <li className="relative" onMouseLeave={() => open === "services" && close()}>
-                <MenuTrigger
-                  label="Services"
-                  expanded={open === "services"}
-                  onClick={() => toggle("services")}
-                  onMouseEnter={() => hoverOpen("services")}
-                  controls="menu-services"
-                  ref={(el) => {
-                    triggers.current.services = el;
-                  }}
-                />
+                {menuIsOpen.services ? (
+                  <MenuTrigger
+                    label="Services"
+                    expanded={open === "services"}
+                    onClick={() => toggle("services")}
+                    onMouseEnter={() => hoverOpen("services")}
+                    controls="menu-services"
+                    ref={(el) => {
+                      triggers.current.services = el;
+                    }}
+                  />
+                ) : (
+                  <LockedLabel className={navItemClass}>Services</LockedLabel>
+                )}
                 {open === "services" && <ServicesMegaMenu onNavigate={close} />}
               </li>
               <li>
@@ -117,16 +137,20 @@ export function SiteHeader() {
                 </NavLink>
               </li>
               <li className="relative" onMouseLeave={() => open === "industries" && close()}>
-                <MenuTrigger
-                  label="Industries"
-                  expanded={open === "industries"}
-                  onClick={() => toggle("industries")}
-                  onMouseEnter={() => hoverOpen("industries")}
-                  controls="menu-industries"
-                  ref={(el) => {
-                    triggers.current.industries = el;
-                  }}
-                />
+                {menuIsOpen.industries ? (
+                  <MenuTrigger
+                    label="Industries"
+                    expanded={open === "industries"}
+                    onClick={() => toggle("industries")}
+                    onMouseEnter={() => hoverOpen("industries")}
+                    controls="menu-industries"
+                    ref={(el) => {
+                      triggers.current.industries = el;
+                    }}
+                  />
+                ) : (
+                  <LockedLabel className={navItemClass}>Industries</LockedLabel>
+                )}
                 {open === "industries" && <Dropdown id="menu-industries" links={industriesMenu} onNavigate={close} />}
               </li>
               <li>
@@ -145,30 +169,36 @@ export function SiteHeader() {
                 </NavLink>
               </li>
               <li className="relative" onMouseLeave={() => open === "company" && close()}>
-                <MenuTrigger
-                  label="Company"
-                  expanded={open === "company"}
-                  onClick={() => toggle("company")}
-                  onMouseEnter={() => hoverOpen("company")}
-                  controls="menu-company"
-                  ref={(el) => {
-                    triggers.current.company = el;
-                  }}
-                />
+                {menuIsOpen.company ? (
+                  <MenuTrigger
+                    label="Company"
+                    expanded={open === "company"}
+                    onClick={() => toggle("company")}
+                    onMouseEnter={() => hoverOpen("company")}
+                    controls="menu-company"
+                    ref={(el) => {
+                      triggers.current.company = el;
+                    }}
+                  />
+                ) : (
+                  <LockedLabel className={navItemClass}>Company</LockedLabel>
+                )}
                 {open === "company" && <Dropdown id="menu-company" links={companyMenu} onNavigate={close} align="right" />}
               </li>
             </ul>
           </nav>
 
           <div className="flex items-center gap-3">
-            <Link
-              href={site.primaryCta.href}
-              onNavigate={close}
-              className="txm-focus hidden items-center gap-2 rounded-lg bg-txm-base px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-txm-surface sm:inline-flex"
-            >
-              {site.primaryCta.label}
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
+            {showPrimaryCta && (
+              <Link
+                href={site.primaryCta.href}
+                onNavigate={close}
+                className="txm-focus hidden items-center gap-2 rounded-lg bg-txm-base px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-txm-surface sm:inline-flex"
+              >
+                {site.primaryCta.label}
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            )}
             <button
               type="button"
               className="txm-focus inline-flex h-11 w-11 items-center justify-center rounded-lg text-txm-ink hover:bg-slate-100 lg:hidden"
@@ -188,7 +218,10 @@ export function SiteHeader() {
   );
 }
 
+const navItemClass = "inline-block rounded-md px-3 py-2 text-[15px] font-medium text-txm-ink";
+
 function NavLink({ href, children, onNavigate }: { href: string; children: React.ReactNode; onNavigate: () => void }) {
+  if (!isOpenPath(href)) return <LockedLabel className={navItemClass}>{children}</LockedLabel>;
   return (
     <Link
       href={href}
@@ -382,7 +415,7 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
         <p id={titleId} className="sr-only">
           Menu
         </p>
-        <Link href="/" onNavigate={onClose} aria-label="TalentXM home" className="txm-focus">
+        <Link href={homeHref} onNavigate={onClose} aria-label="TalentXM home" className="txm-focus">
           <Image src="/images/talentxm-logo.png" alt="TalentXM" width={1140} height={460} className="h-8 w-auto" />
         </Link>
         <button
@@ -396,62 +429,86 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
       </div>
 
       <nav aria-label="Mobile" className="flex-1 overflow-y-auto px-4 py-4">
-        <MobileAccordion label="Services">
-          <Link href="/services" onNavigate={onClose} className={linkClass}>
+        <MobileAccordion label="Services" locked={!menuIsOpen.services}>
+          <MobileLink href="/services" onClose={onClose} className={linkClass}>
             All Enterprise AI Services
-          </Link>
+          </MobileLink>
           {servicesMenu.map((col) => (
-            <Link key={col.href} href={col.href} onNavigate={onClose} className={linkClass}>
+            <MobileLink key={col.href} href={col.href} onClose={onClose} className={linkClass}>
               {col.heading}
-            </Link>
+            </MobileLink>
           ))}
         </MobileAccordion>
-        <Link href="/ai-agents" onNavigate={onClose} className={cn(linkClass, "text-lg font-semibold")}>
+        <MobileLink href="/ai-agents" onClose={onClose} className={cn(linkClass, "text-lg font-semibold")}>
           AI Agents
-        </Link>
-        <MobileAccordion label="Industries">
+        </MobileLink>
+        <MobileAccordion label="Industries" locked={!menuIsOpen.industries}>
           {industriesMenu.map((l) => (
-            <Link key={l.href} href={l.href} onNavigate={onClose} className={linkClass}>
+            <MobileLink key={l.href} href={l.href} onClose={onClose} className={linkClass}>
               {l.label}
-            </Link>
+            </MobileLink>
           ))}
         </MobileAccordion>
         {flatLinks.slice(1).map((l) => (
-          <Link key={l.href} href={l.href} onNavigate={onClose} className={cn(linkClass, "text-lg font-semibold")}>
+          <MobileLink key={l.href} href={l.href} onClose={onClose} className={cn(linkClass, "text-lg font-semibold")}>
             {l.label}
-          </Link>
+          </MobileLink>
         ))}
-        <MobileAccordion label="Company">
+        <MobileAccordion label="Company" locked={!menuIsOpen.company}>
           {companyMenu.map((l) => (
-            <Link key={l.href} href={l.href} onNavigate={onClose} className={linkClass}>
+            <MobileLink key={l.href} href={l.href} onClose={onClose} className={linkClass}>
               {l.label}
-            </Link>
+            </MobileLink>
           ))}
         </MobileAccordion>
         <div className="mt-4 border-t border-txm-line pt-4">
           {utilityLinks.map((l) => (
-            <Link key={l.href} href={l.href} onNavigate={onClose} className={cn(linkClass, "text-txm-slate")}>
+            <MobileLink key={l.href} href={l.href} onClose={onClose} className={cn(linkClass, "text-txm-slate")}>
               {l.label}
-            </Link>
+            </MobileLink>
           ))}
         </div>
       </nav>
 
-      <div className="shrink-0 border-t border-txm-line p-4">
-        <Link
-          href={site.primaryCta.href}
-          onNavigate={onClose}
-          className="txm-focus flex w-full items-center justify-center gap-2 rounded-lg bg-txm-base px-6 py-3.5 font-semibold text-white"
-        >
-          {site.primaryCta.label}
-          <ArrowRight className="h-4 w-4" aria-hidden="true" />
-        </Link>
-      </div>
+      {showPrimaryCta && (
+        <div className="shrink-0 border-t border-txm-line p-4">
+          <Link
+            href={site.primaryCta.href}
+            onNavigate={onClose}
+            className="txm-focus flex w-full items-center justify-center gap-2 rounded-lg bg-txm-base px-6 py-3.5 font-semibold text-white"
+          >
+            {site.primaryCta.label}
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
 
-function MobileAccordion({ label, children }: { label: string; children: React.ReactNode }) {
+function MobileLink({
+  href,
+  onClose,
+  className,
+  children,
+}: {
+  href: string;
+  onClose: () => void;
+  className: string;
+  children: React.ReactNode;
+}) {
+  if (!isOpenPath(href)) {
+    return <LockedLabel className={cn(className, "hover:bg-transparent")}>{children}</LockedLabel>;
+  }
+  return (
+    <Link href={href} onNavigate={onClose} className={className}>
+      {children}
+    </Link>
+  );
+}
+
+function MobileAccordion({ label, locked, children }: { label: string; locked?: boolean; children: React.ReactNode }) {
+  if (locked) return <LockedLabel className="block px-3 py-3 text-lg font-semibold text-txm-ink">{label}</LockedLabel>;
   return (
     <details className="group border-b border-transparent">
       <summary className="txm-focus flex cursor-pointer list-none items-center justify-between rounded-lg px-3 py-3 text-lg font-semibold text-txm-ink hover:bg-slate-50 [&::-webkit-details-marker]:hidden">

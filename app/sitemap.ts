@@ -5,6 +5,7 @@ import { legalPages } from "@/content/legal";
 import { getPocs, pocLibraryPath, pocPath } from "@/lib/pocs";
 import { serviceDomains } from "@/content/services";
 import { site } from "@/content/site";
+import { isOpenPath } from "@/lib/site-lock";
 
 // Built from the content files. Filtered catalogue URLs and noindex pages are excluded (Architecture S7).
 const lastModified = "2026-10-19";
@@ -30,7 +31,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...legalPages.map((p) => `/legal/${p.slug}`),
   ];
 
-  return paths.map((path) => ({
+  // Pages locked while the site is under development (lib/site-lock.ts) stay out of the sitemap.
+  return paths.filter(isOpenPath).map((path) => ({
     url: `${site.url}${path === "/" ? "" : path}`,
     lastModified,
     changeFrequency: "monthly",

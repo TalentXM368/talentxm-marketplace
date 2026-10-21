@@ -4,12 +4,14 @@ import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, MessageCircle, X } from "lucide-react";
 import { site } from "@/content/site";
+import { isOpenPath } from "@/lib/site-lock";
 
+// Routes to pages that are not open yet (lib/site-lock.ts) are left out; WhatsApp always shows.
 const routes = [
   { label: "Discuss your AI priority", detail: "For enterprise teams", href: "/contact" },
   { label: "Request an agent pilot", detail: "Start from a validated agent", href: "/ai-agents#request-pilot" },
   { label: "Join the talent network", detail: "For specialists and candidates", href: "/careers#join" },
-];
+].filter((r) => isOpenPath(r.href));
 
 /**
  * One floating contact entry point (UX01: replaces the stacked chat + WhatsApp buttons).
@@ -45,7 +47,9 @@ export function ContactLauncher() {
         >
           <div className="txm-mesh-bg px-5 py-4">
             <p className="font-semibold text-white">How can we help?</p>
-            <p className="txm-small text-slate-300">Pick a route and a named person will reply.</p>
+            <p className="txm-small text-slate-300">
+              {routes.length > 0 ? "Pick a route and a named person will reply." : "Message us and a named person will reply."}
+            </p>
           </div>
           <ul className="p-2">
             {routes.map((r) => (
@@ -66,7 +70,7 @@ export function ContactLauncher() {
                 </Link>
               </li>
             ))}
-            <li className="mt-1 border-t border-txm-line pt-1">
+            <li className={routes.length > 0 ? "mt-1 border-t border-txm-line pt-1" : undefined}>
               <a
                 href={site.whatsapp.href}
                 target="_blank"

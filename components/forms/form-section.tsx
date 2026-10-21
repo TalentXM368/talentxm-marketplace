@@ -1,7 +1,8 @@
+import { formsLive } from "@/content/site";
 import type { FormId } from "@/content/types";
 import { LeadForm } from "./lead-form";
 
-/** A titled form block, used on form pages and at the end of service pages. */
+/** A titled form block, used on form pages and at the end of service pages. Renders nothing until formsLive. */
 export function FormSection({
   id,
   formId,
@@ -23,6 +24,7 @@ export function FormSection({
   aside?: React.ReactNode;
   tone?: "light" | "white";
 }) {
+  if (!formsLive) return null;
   return (
     <section id={id} aria-labelledby={`${id}-title`} className={tone === "light" ? "txm-section txm-section-light" : "txm-section bg-white"}>
       <div className="txm-container grid gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
