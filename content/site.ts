@@ -58,6 +58,9 @@ export const companyMenu: NavLink[] = [
 /** Insights (P-21) stays out of the header until three articles exist. */
 export const showInsights = false;
 
+/** Lead forms post to a Phase 1 stub that sends nothing on yet (app/api/forms). They stay hidden until connected. */
+export const formsLive = false;
+
 export const footerColumns: { heading: string; links: NavLink[] }[] = [
   {
     heading: "Services",

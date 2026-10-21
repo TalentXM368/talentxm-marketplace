@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { JsonLd } from "@/components/seo/json-ld";
 import { breadcrumbLd } from "@/lib/seo";
+import { isOpenPath } from "@/lib/site-lock";
 
 export interface Crumb {
   label: string;
@@ -26,9 +27,13 @@ export function Breadcrumb({ items }: { items: Crumb[] }) {
                   </span>
                 ) : (
                   <>
-                    <Link href={item.href} className="txm-focus-inverse hover:text-white">
-                      {item.label}
-                    </Link>
+                    {isOpenPath(item.href) ? (
+                      <Link href={item.href} className="txm-focus-inverse hover:text-white">
+                        {item.label}
+                      </Link>
+                    ) : (
+                      <span>{item.label}</span>
+                    )}
                     <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
                   </>
                 )}

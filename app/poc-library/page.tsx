@@ -8,6 +8,7 @@ import { PocLibrary } from "@/components/poc/poc-library";
 import { site } from "@/content/site";
 import { getPocs, pocLibraryPath, pocPath } from "@/lib/pocs";
 import { pageMetadata } from "@/lib/seo";
+import { isOpenPath } from "@/lib/site-lock";
 
 const description =
   "Watch TalentXM proofs of concept for healthcare, manufacturing and retail. Filter by industry, business function or technology and open any POC.";
@@ -36,7 +37,9 @@ export default function PocLibraryPage() {
         lede="Each proof of concept was built end to end and recorded. Filter by industry, business function or technology, then open a POC for the video, the problem it solves and the systems it connects."
         image="/images/tech-dashboard-bg.webp"
         primary={{ label: "Browse the POCs", href: "#library" }}
-        secondary={{ label: "Request an Agent Pilot", href: "/ai-agents#request-pilot" }}
+        secondary={
+          isOpenPath("/ai-agents") ? { label: "Request an Agent Pilot", href: "/ai-agents#request-pilot" } : undefined
+        }
         breadcrumbs={[{ label: "POC Library", href: pocLibraryPath }]}
       />
 
@@ -49,12 +52,15 @@ export default function PocLibraryPage() {
         </Suspense>
       </Section>
 
-      <CTABand
-        title="Have a workflow in mind?"
-        description="Tell us about the systems involved. We will show you the closest POC and scope a pilot with measures agreed up front."
-        primary={{ label: "Discuss Your AI Priority", href: "/contact" }}
-        secondary={{ label: "Browse AI Agents", href: "/ai-agents" }}
-      />
+      {/* Both CTAs point at pages that stay closed while the site is locked (lib/site-lock.ts). */}
+      {isOpenPath("/contact") && (
+        <CTABand
+          title="Have a workflow in mind?"
+          description="Tell us about the systems involved. We will show you the closest POC and scope a pilot with measures agreed up front."
+          primary={{ label: "Discuss Your AI Priority", href: "/contact" }}
+          secondary={{ label: "Browse AI Agents", href: "/ai-agents" }}
+        />
+      )}
     </>
   );
 }

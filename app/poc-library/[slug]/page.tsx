@@ -11,7 +11,7 @@ import { Section, SectionHeader } from "@/components/sections/section";
 import { Hero } from "@/components/sections/hero";
 import { JsonLd } from "@/components/seo/json-ld";
 import { getAgent } from "@/content/agents";
-import { site } from "@/content/site";
+import { formsLive, site } from "@/content/site";
 import type { Poc, TechTag, VideoMoment } from "@/content/types";
 import {
   getPoc,
@@ -24,6 +24,7 @@ import {
   getPocUseCases,
 } from "@/lib/pocs";
 import { pageMetadata, videoLd } from "@/lib/seo";
+import { isOpenPath } from "@/lib/site-lock";
 import { canSeek } from "@/lib/video";
 
 function Walkthrough({ poc, moments }: { poc: Poc; moments: VideoMoment[] }) {
@@ -69,11 +70,13 @@ export default async function PocPage({ params }: PageProps<"/poc-library/[slug]
 
   const path = pocPath(p.slug);
   const agent = p.agent ? getAgent(p.agent) : undefined;
+  // Links to pages that are not open yet (lib/site-lock.ts) are left out of "Where this applies".
+  const agentLink = agent && isOpenPath(`/ai-agents/${agent.slug}`) ? agent : undefined;
   const techs = pocTechnologies(p);
   const techGroups = (Object.keys(groupLabels) as TechTag["category"][])
     .map((g) => ({ g, items: techs.filter((t) => t.group === g) }))
     .filter((x) => x.items.length > 0);
-  const useCases = getPocUseCases(p.slug);
+  const useCases = getPocUseCases(p.slug).filter((u) => isOpenPath(u.href));
   const related = relatedPocs(p);
 
   return (
@@ -85,7 +88,9 @@ export default async function PocPage({ params }: PageProps<"/poc-library/[slug]
         lede={p.summary}
         image="/images/neural-bg.webp"
         primary={{ label: "Watch the POC", href: "#poc-video" }}
-        secondary={{ label: agent ? "Request an Agent Pilot" : "Discuss This Workflow", href: "#request" }}
+        secondary={
+          formsLive ? { label: agent ? "Request an Agent Pilot" : "Discuss This Workflow", href: "#request" } : undefined
+        }
         breadcrumbs={[
           { label: "POC Library", href: pocLibraryPath },
           { label: p.title, href: path },
@@ -171,22 +176,22 @@ export default async function PocPage({ params }: PageProps<"/poc-library/[slug]
         </div>
       </Section>
 
-      {(agent || useCases.length > 0) && (
+      {(agentLink || useCases.length > 0) && (
         <Section tone="light" labelledBy="applies-title">
           <SectionHeader id="applies-title" eyebrow="Where this applies" title="Related agent and use cases." />
           <ul className="mx-auto mt-10 grid max-w-4xl gap-4 md:grid-cols-2">
-            {agent && (
+            {agentLink && (
               <li>
                 <Link
-                  href={`/ai-agents/${agent.slug}`}
+                  href={`/ai-agents/${agentLink.slug}`}
                   className="txm-card group flex h-full flex-col p-6"
                 >
                   <span className="txm-eyebrow text-txm-subtle">AI agent</span>
                   <span className="mt-2 inline-flex items-center gap-2 text-lg font-bold text-txm-ink group-hover:text-txm-indigo">
-                    {agent.name}
+                    {agentLink.name}
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
                   </span>
-                  <span className="txm-small mt-1 text-txm-slate">{agent.outcomeLine}</span>
+                  <span className="txm-small mt-1 text-txm-slate">{agentLink.outcomeLine}</span>
                 </Link>
               </li>
             )}

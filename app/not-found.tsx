@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/button";
+import { pocLibraryPath } from "@/lib/pocs";
+import { isOpenPath, siteLocked } from "@/lib/site-lock";
 
 export const metadata: Metadata = {
   title: "Page not found",
@@ -13,7 +15,12 @@ const topLinks = [
   { label: "Industries", href: "/industries" },
   { label: "Flexible Talent", href: "/flexible-talent" },
   { label: "Contact", href: "/contact" },
-];
+].filter((l) => isOpenPath(l.href));
+
+// While the site is locked the POC Library is the only place to send people.
+const mainLink = siteLocked
+  ? { label: "Go to the POC Library", href: pocLibraryPath }
+  : { label: "Go to Services", href: "/services" };
 
 export default function NotFound() {
   return (
@@ -22,23 +29,26 @@ export default function NotFound() {
         <p className="txm-eyebrow text-txm-cyan">404</p>
         <h1 className="txm-h1 mt-3 text-white">We could not find that page.</h1>
         <p className="txm-lede mt-4 max-w-2xl text-slate-300">
-          It may have moved when we rebuilt the site. These pages are a good place to start.
+          It may have moved when we rebuilt the site.
+          {topLinks.length > 0 && " These pages are a good place to start."}
         </p>
-        <ul className="mt-8 flex flex-wrap gap-3">
-          {topLinks.map((l) => (
-            <li key={l.href}>
-              <Link
-                href={l.href}
-                className="txm-focus-inverse inline-block rounded-full border border-white/20 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"
-              >
-                {l.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        {topLinks.length > 0 && (
+          <ul className="mt-8 flex flex-wrap gap-3">
+            {topLinks.map((l) => (
+              <li key={l.href}>
+                <Link
+                  href={l.href}
+                  className="txm-focus-inverse inline-block rounded-full border border-white/20 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"
+                >
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
         <div className="mt-10">
-          <ButtonLink href="/services" tone="dark">
-            Go to Services
+          <ButtonLink href={mainLink.href} tone="dark">
+            {mainLink.label}
           </ButtonLink>
         </div>
       </div>
