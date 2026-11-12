@@ -195,7 +195,7 @@ export function SiteHeader() {
               <Link
                 href={site.primaryCta.href}
                 onNavigate={close}
-                className="txm-focus-inverse hidden items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-txm-base transition-colors hover:bg-txm-yellow sm:inline-flex"
+                className="txm-focus-inverse hidden shrink-0 items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold whitespace-nowrap text-txm-base transition-colors hover:bg-txm-yellow sm:inline-flex lg:hidden xl:inline-flex"
               >
                 {site.primaryCta.label}
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -220,7 +220,7 @@ export function SiteHeader() {
   );
 }
 
-const navItemClass = "inline-block rounded-md px-3 py-2 text-[15px] font-medium text-white/85";
+const navItemClass = "inline-block rounded-md px-2.5 py-2 text-sm font-medium whitespace-nowrap text-white/85 xl:px-3 xl:text-[15px]";
 
 function NavLink({ href, children, onNavigate }: { href: string; children: React.ReactNode; onNavigate: () => void }) {
   if (!isOpenPath(href)) return <LockedLabel className={navItemClass}>{children}</LockedLabel>;
@@ -228,7 +228,7 @@ function NavLink({ href, children, onNavigate }: { href: string; children: React
     <Link
       href={href}
       onNavigate={onNavigate}
-      className="txm-focus-inverse rounded-md px-3 py-2 text-[15px] font-medium text-white/85 transition-colors hover:text-white"
+      className="txm-focus-inverse inline-block rounded-md px-2.5 py-2 text-sm font-medium whitespace-nowrap text-white/85 transition-colors hover:text-white xl:px-3 xl:text-[15px]"
     >
       {children}
     </Link>
@@ -262,7 +262,7 @@ function MenuTrigger({
         if (e.pointerType === "mouse") onMouseEnter();
       }}
       className={cn(
-        "txm-focus-inverse inline-flex items-center gap-1 rounded-md px-3 py-2 text-[15px] font-medium transition-colors hover:text-white",
+        "txm-focus-inverse inline-flex items-center gap-1 rounded-md px-2.5 py-2 text-sm font-medium whitespace-nowrap transition-colors hover:text-white xl:px-3 xl:text-[15px]",
         expanded ? "text-txm-yellow" : "text-white/85",
       )}
     >
