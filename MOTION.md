@@ -13,7 +13,7 @@ The site should sell by sight: a visitor should see how an agent works, not only
 | Squarespace | One shared scroll reveal, a small set of easing curves, cards that respond on hover, a rail of large cards, full support for reduced motion | Hero video (we have no footage yet), counting stats (we have no sourced numbers) |
 | Lusion | Very large display type against small text, headings that rise from behind a mask, rolling button labels, one signature visual in the hero, a huge closing call to action, sections that slide over each other | Hijacked scrolling, blocked zoom, sound, a heavy 3D scene, no reduced-motion support |
 
-**Level chosen:** hybrid. A refined base on every section, plus two signature moments on the home page: the node field in the hero and the pinned agent story.
+**Level chosen:** hybrid. A refined base on every section, plus two signature moments on the home page: the ribbon field in the hero and the pinned agent story.
 
 ## Principles
 
@@ -21,7 +21,7 @@ The site should sell by sight: a visitor should see how an agent works, not only
 2. **One idea per section.** A section gets one motion pattern, not three.
 3. **Content never depends on motion.** Everything is in the server HTML and readable with JavaScript off, with reduced motion on, and on a slow phone.
 4. **Play once.** Reveals run the first time an element enters the screen and never replay while scrolling up and down.
-5. **Fast in, calm after.** Entrances are quick and ease out; nothing loops except the hero node field, the slow background mesh and the small scroll hint.
+5. **Fast in, calm after.** Entrances are quick and ease out; nothing loops except the ribbon field, the slow background mesh and the small scroll hint.
 6. **The page scrolls natively.** No smooth-scroll library and no scroll hijacking.
 
 ## Tokens
@@ -72,13 +72,13 @@ Each pattern has one implementation. Reuse it; do not build a second version.
 - **How:** `.txm-display` (hero, up to 88px) and `.txm-display-xl` (closing call, up to 120px). Enable with `<Hero display>` and `<CTABand size="xl">`.
 - **Limit:** one display headline per screen.
 
-### Node field (hero signature)
+### Ribbon field (brand shapes)
 
-- **What:** a network of connected nodes that drifts slowly and moves away from the cursor. It echoes the logo mark and the idea of people, systems and agents connected.
-- **Colour:** nodes run orange to yellow to teal from left to right, on navy, the same order as the brand gradient.
-- **How:** `<NodeField />` in `components/motion/node-field.tsx`, passed to `<Hero visual={…}>`. Canvas 2D, no 3D library.
-- **Rules:** it fades out toward the text side so the headline keeps its contrast; it pauses when off screen or when the tab is hidden; it is decorative and hidden from assistive technology.
-- **Limit:** one per page, in the hero only.
+- **What:** the large flowing forms from the brand board's website concept: an orange ribbon with a glowing rim and a fine dot texture, over a teal crescent and a yellow lobe, with two hairline arcs and light film grain. They wipe in from the right on load, drift slowly, shift a little with the pointer and slide as the page scrolls.
+- **Colour:** Energy Orange-Red, Human Teal and Opportunity Yellow on deep navy. On an orange surface (`palette="on-orange"`) the ribbon becomes Trust Blue.
+- **How:** `<RibbonField />` in `components/motion/ribbon-field.tsx`. Every `Hero` shows it: the home hero at full strength, interior heroes with `tone="soft"`. One inline SVG moved with CSS; no canvas and no 3D library.
+- **Rules:** shapes stay on the right so the headline on the left keeps its contrast; on small screens they sit behind the text at 38% opacity; decorative and hidden from assistive technology.
+- **Limit:** hero and closing call only. Do not place it behind body content.
 
 ### Pinned story (the agent at work)
 
@@ -118,7 +118,7 @@ Each pattern has one implementation. Reuse it; do not build a second version.
 
 ### Closing call
 
-- **What:** a full-width navy band with the largest type on the page and the primary action.
+- **What:** a full-width Energy Orange-Red band with the largest type on the page, the ribbon field in Trust Blue, and the primary action as a deep navy pill. It is the one full-colour surface on a page.
 - **How:** `<CTABand size="xl">`.
 
 ## Scroll triggers
@@ -130,7 +130,7 @@ Each pattern has one implementation. Reuse it; do not build a second version.
 
 ## Brand in motion
 
-- Moving colour is limited to the brand gradient and the node field, always on navy.
+- Moving colour is limited to the brand shapes (ribbon field) and the brand gradient, on deep navy or on Energy Orange-Red.
 - The background mesh keeps its low opacity; white text sits on it.
 - Text on the gradient is navy, never white.
 - One bright colour per component still applies when things move.
@@ -140,7 +140,7 @@ Each pattern has one implementation. Reuse it; do not build a second version.
 | Pattern | With "reduce motion" on |
 |---|---|
 | Reveal, heading reveal, load-in | Content is visible immediately, no movement |
-| Node field | One still frame |
+| Ribbon field | Still shapes, no drift, no pointer or scroll movement |
 | Pinned story | Stages stacked in the page, no pinning |
 | Rail | Still scrolls; buttons jump without animation |
 | Hover lift and rolling labels | Off |
@@ -155,7 +155,7 @@ Also:
 
 ## Performance
 
-- No animation library is installed. Reveals use `IntersectionObserver` plus CSS; the story uses one scroll listener throttled to a frame; the node field is a single canvas.
+- No animation library is installed. Reveals use `IntersectionObserver` plus CSS; the story uses one scroll listener throttled to a frame; the ribbon field is one inline SVG moved with CSS.
 - The hero headline is real text and appears within the first second; the canvas starts after the page is interactive.
 - Every observer, listener and animation loop is cleaned up when a page is hidden, because Next keeps previous pages mounted.
 - Before adding a dependency (Motion, GSAP, three.js), show that the pattern cannot be built with what is here.
@@ -163,7 +163,7 @@ Also:
 ## Mobile
 
 - Pinned story becomes four stacked cards.
-- Node field uses fewer nodes at 40% opacity behind the text.
+- Ribbon field sits behind the text at 38% opacity.
 - Rails use native swipe with snap.
 - Hover effects do not run on touch.
 
@@ -171,7 +171,7 @@ Also:
 
 | # | Section | Motion |
 |---|---|---|
-| 1 | Hero | Display headline rises word by word; node field; load-in; scroll hint |
+| 1 | Hero | Display headline rises word by word; ribbon field; brand signature line; load-in; scroll hint |
 | 2 | Frameworks strip | Reveal |
 | 3 | Inside an agent | Pinned story |
 | 4 | What we do | Heading reveal; four cards staggered |
@@ -181,7 +181,7 @@ Also:
 | 8 | Industries | Cards staggered |
 | 9 | Delivery models | Sheet; two panels staggered |
 | 10 | Work, Trust | Cards staggered |
-| 11 | Closing call | Display-XL headline |
+| 11 | Closing call | Display-XL headline on orange with the ribbon field in Trust Blue |
 | 12 | Marketplace teaser | Still |
 
 ## Roadmap for other pages

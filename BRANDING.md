@@ -60,7 +60,7 @@ Also: `app/icon.png` and `app/apple-icon.png` (gradient mark on navy) and `publi
 
 | Name | Role (brand board) | Hex | CSS variable | Tailwind class |
 |---|---|---|---|---|
-| Trust Blue | Trust scales | `#091d5c` | `--txm-brand-navy` | `txm-navy`, `txm-base` |
+| Trust Blue | Trust scales | `#091d5c` | `--txm-brand-navy` | `txm-navy` |
 | Energy Orange-Red | Energy drives | `#f9552b` | `--txm-brand-orange` | `txm-orange` |
 | Opportunity Yellow | Opportunity opens | `#fce403` | `--txm-brand-yellow` | `txm-yellow` |
 | Human Teal | Human connection | `#57c3bb` | `--txm-brand-teal` | `txm-teal` |
@@ -79,8 +79,8 @@ Also: `app/icon.png` and `app/apple-icon.png` (gradient mark on navy) and `publi
 
 | Purpose | Hex | CSS variable | Tailwind class |
 |---|---|---|---|
-| Dark surface (hero, footer, top bar) | `#091d5c` | `--txm-bg-base` | `bg-txm-base` |
-| Deeper dark (hover on navy, panels) | `#0d1725` | `--txm-bg-surface` | `bg-txm-surface` |
+| Dark surface (header, hero, footer, dark sections) | `#0d1725` | `--txm-bg-base` (`--txm-brand-deep`) | `bg-txm-base` |
+| Raised panel on dark (cards, hover) | `#162033` | `--txm-bg-surface` | `bg-txm-surface` |
 | Light section background (cream) | `#f6f4f1` | `--txm-bg-light` | `bg-txm-light` |
 | Cards and page background | `#ffffff` | `--txm-bg-elevated` | `bg-white` |
 | Headings and primary text | `#0d1725` | `--txm-text-primary` | `text-txm-ink` |
@@ -117,15 +117,19 @@ Small text needs 4.5:1; large text and icons need 3:1.
 ### Colour rules
 
 - **On light surfaces:** text is ink or slate; links, eyebrows and small icons use `text-txm-accent`. Never set small text in raw orange, yellow or teal.
-- **On navy:** headings white, body `text-txm-on-dark`, eyebrows and text links `text-txm-yellow`. Teal and orange are also allowed for accents.
-- **On the gradient or on yellow:** text and icons are navy (`text-txm-base`), never white.
-- **Proportion:** navy, white and cream do most of the work. Use one bright colour per component; the gradient is for small, high-value moments.
+- **Dark surfaces are deep navy `#0d1725`**, as on the brand board's website concept, not Trust Blue. Trust Blue `#091d5c` is a colour used on top: buttons on light surfaces, shapes, chips, the logo tiles.
+- **On deep navy:** headings white, body `text-txm-on-dark`, eyebrows and text links `text-txm-yellow`. Teal and orange are also allowed for accents.
+- **On the gradient or on yellow:** text and icons are deep navy (`text-txm-base`), never white.
+- **On orange (closing call only):** the display headline is white (large text only, 3.3:1); all smaller text and buttons are deep navy.
+- **Header:** deep navy with the neutral logo, white navigation and a white pill call to action.
+- **Proportion:** deep navy, white and cream do most of the work. Orange, teal and yellow appear as large brand shapes in the hero and closing call, and otherwise one bright colour per component; the gradient is for small, high-value moments.
 - Focus rings are navy on light (`.txm-focus`) and yellow on dark (`.txm-focus-inverse`).
 
 ### Gradient
 
 - **Brand gradient** (`--txm-gradient-primary`, class `.txm-gradient-bg`): left to right, `#f95e29` 0% → `#fa8c1c` 25% → `#fce403` 50% → `#d4dc2f` 64% → `#94cf76` 82% → `#61c4ae` 100%. Named on the slide as Energy Orange-Red → Opportunity Yellow → Human Teal. Used for icon tiles, the active item in a list, the contact button, thin accent bars.
-- **Mesh** (`--txm-gradient-mesh`, class `.txm-mesh-bg`): soft orange, teal and yellow glows over navy, for hero and call-to-action backgrounds. The glows are deliberately faint because white text sits on them; do not raise their opacity without rechecking contrast.
+- **Mesh** (`--txm-gradient-mesh`, class `.txm-mesh-bg`): a quiet Trust Blue glow and a trace of teal over deep navy, for depth behind dark heroes and panels. It carries no orange or yellow; the bright colours come from the brand shapes.
+- **Brand shapes:** the orange ribbon, teal crescent and yellow lobe from the board. See `MOTION.md`, "Ribbon field".
 
 ## Typography
 
@@ -133,7 +137,7 @@ The slides have all text converted to outlines, so no typeface is named. **Propo
 
 | Role | Font | Loaded as | Used by |
 |---|---|---|---|
-| Display | Montserrat (600 to 800) | `--font-montserrat` → `--font-display`, class `font-display` | `.txm-h1`, `.txm-h2`, `.txm-h3`, `.txm-eyebrow`, prose `h2` |
+| Display | Montserrat (300 to 500: light display, regular headings) | `--font-montserrat` → `--font-display`, class `font-display` | `.txm-h1`, `.txm-h2`, `.txm-h3`, `.txm-eyebrow`, prose `h2` |
 | Body and UI | Inter | `--font-inter` → `--font-sans` | Everything else |
 | Numbers and labels | System monospace | `--font-mono` | Step numbers, layer labels |
 
@@ -162,7 +166,7 @@ Carried over from the previous design system; the slides do not change them.
 
 ## Components
 
-- **Primary button:** on light, navy fill with white text; on dark, yellow fill with navy text (hover: white). See `components/ui/button.tsx`.
+- **Buttons are pills** (fully rounded). Primary: on light, Trust Blue fill with white text; on dark, yellow fill with deep navy text (hover: white); on orange, deep navy fill. The header call to action is a white pill. See `components/ui/button.tsx`.
 - **Secondary button:** outline; navy-tinted border on light, white border on dark.
 - **Text link button:** `text-txm-accent` on light (hover navy), `text-txm-yellow` on dark (hover white).
 - **Eyebrow:** `txm-eyebrow` plus `text-txm-accent` on light or `text-txm-yellow` on dark.
@@ -175,7 +179,7 @@ Carried over from the previous design system; the slides do not change them.
 - POC videos, thumbnails and embedded decks keep their own styling. POC data is read only through `lib/pocs.ts`.
 - Form error (red) and success (emerald) states, and the WhatsApp green dot.
 - Neutral greys from Tailwind's `slate` scale for input borders, hover fills and tech pills.
-- Hero background photos in `public/images/` predate this brand and have a blue cast under the navy overlay; candidates for replacement with Option 8 imagery.
+- Background photos in `public/images/` predate this brand. Heroes no longer use them; they show the brand shapes instead (`components/motion/ribbon-field.tsx`).
 
 ## Changing the brand in code
 

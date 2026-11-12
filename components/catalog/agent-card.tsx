@@ -42,7 +42,7 @@ export function AgentCard({ agent }: { agent: Agent }) {
       </ul>
       <Link
         href={`/ai-agents/${agent.slug}`}
-        className="txm-focus inline-flex w-full items-center justify-center gap-2 rounded-lg bg-txm-base px-4 py-2.5 font-semibold text-white transition-colors hover:bg-txm-surface"
+        className="txm-focus inline-flex w-full items-center justify-center gap-2 rounded-full bg-txm-navy px-4 py-2.5 font-semibold text-white transition-colors hover:bg-txm-base"
         aria-label={`View ${agent.name}`}
       >
         View agent

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { AgentCard } from "@/components/catalog/agent-card";
 import { AgentFlowStory, type FlowStage } from "@/components/motion/agent-flow-story";
-import { NodeField } from "@/components/motion/node-field";
+import { RibbonField } from "@/components/motion/ribbon-field";
 import { Rail } from "@/components/motion/rail";
 import { Reveal } from "@/components/motion/reveal";
 import {
@@ -104,7 +104,8 @@ export default function HomePage() {
       <Hero
         size="lg"
         display
-        visual={<NodeField />}
+        visual={<RibbonField />}
+        signature={["People", "AI", "What's next"]}
         scrollHint={{ label: "See an agent at work", href: "#agent-flow" }}
         eyebrow="Enterprise AI services · US · LATAM · India"
         title="Enterprise AI, built into the systems you already run."
