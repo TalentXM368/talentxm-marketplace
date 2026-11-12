@@ -48,12 +48,12 @@ export function SectionHeader({
 }) {
   return (
     <div className={cn("max-w-3xl", align === "center" ? "mx-auto text-center" : "text-left", className)}>
-      {eyebrow && <p className={cn("txm-eyebrow mb-3", inverse ? "text-txm-cyan" : "text-txm-indigo")}>{eyebrow}</p>}
+      {eyebrow && <p className={cn("txm-eyebrow mb-3", inverse ? "text-txm-yellow" : "text-txm-accent")}>{eyebrow}</p>}
       <h2 id={id} className={cn("txm-h2", inverse ? "text-white" : "text-txm-ink")}>
         {title}
       </h2>
       {description && (
-        <p className={cn("txm-lede mt-4", inverse ? "text-slate-300" : "text-txm-slate")}>{description}</p>
+        <p className={cn("txm-lede mt-4", inverse ? "text-txm-on-dark" : "text-txm-slate")}>{description}</p>
       )}
     </div>
   );

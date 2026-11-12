@@ -53,7 +53,7 @@ export default function WorkPage() {
             const agent = getAgent(e.agent);
             return (
               <li key={e.slug} className="txm-card flex h-full flex-col p-7">
-                <p className="txm-eyebrow text-txm-indigo">{e.label}</p>
+                <p className="txm-eyebrow text-txm-accent">{e.label}</p>
                 <h3 className="mt-2 text-xl font-bold text-txm-ink">{e.title}</h3>
                 <p className="txm-body mt-2 text-txm-slate">{e.summary}</p>
                 <dl className="txm-small mt-5 grid gap-3 border-t border-txm-line pt-5 text-txm-slate sm:grid-cols-2">
@@ -70,7 +70,7 @@ export default function WorkPage() {
                   {e.poc && (
                     <Link
                       href={pocPath(e.poc)}
-                      className="txm-focus group inline-flex items-center gap-2 font-semibold text-txm-indigo hover:text-txm-base"
+                      className="txm-focus group inline-flex items-center gap-2 font-semibold text-txm-accent hover:text-txm-base"
                     >
                       Watch the POC
                       <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
@@ -79,7 +79,7 @@ export default function WorkPage() {
                   {agent && (
                     <Link
                       href={`/ai-agents/${agent.slug}`}
-                      className="txm-focus group inline-flex items-center gap-2 font-semibold text-txm-indigo hover:text-txm-base"
+                      className="txm-focus group inline-flex items-center gap-2 font-semibold text-txm-accent hover:text-txm-base"
                     >
                       {agent.name}
                       <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />

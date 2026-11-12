@@ -12,7 +12,7 @@ export function PocLinks({ slugs }: { slugs?: string[] }) {
         <li key={p.slug}>
           <Link
             href={pocPath(p.slug)}
-            className="txm-focus txm-small inline-flex items-center gap-1.5 font-semibold text-txm-indigo hover:text-txm-base"
+            className="txm-focus txm-small inline-flex items-center gap-1.5 font-semibold text-txm-accent hover:text-txm-base"
           >
             <PlayCircle className="h-4 w-4 shrink-0" aria-hidden="true" />
             {items.length > 1 ? (

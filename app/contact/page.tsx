@@ -69,26 +69,26 @@ export default function ContactPage() {
 
           <aside className="space-y-4" aria-label="Other ways to reach us">
             <div className="rounded-2xl border border-txm-line bg-white p-6">
-              <Mail className="h-5 w-5 text-txm-indigo" aria-hidden="true" />
+              <Mail className="h-5 w-5 text-txm-accent" aria-hidden="true" />
               <p className="mt-3 font-semibold text-txm-ink">Email</p>
-              <a href={`mailto:${site.email}`} className="txm-focus txm-small text-txm-indigo hover:text-txm-base">
+              <a href={`mailto:${site.email}`} className="txm-focus txm-small text-txm-accent hover:text-txm-base">
                 {site.email}
               </a>
             </div>
             <div className="rounded-2xl border border-txm-line bg-white p-6">
-              <MessageCircle className="h-5 w-5 text-txm-indigo" aria-hidden="true" />
+              <MessageCircle className="h-5 w-5 text-txm-accent" aria-hidden="true" />
               <p className="mt-3 font-semibold text-txm-ink">WhatsApp</p>
               <a
                 href={site.whatsapp.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="txm-focus txm-small text-txm-indigo hover:text-txm-base"
+                className="txm-focus txm-small text-txm-accent hover:text-txm-base"
               >
                 {site.whatsapp.display}
               </a>
             </div>
             <div className="rounded-2xl border border-txm-line bg-white p-6">
-              <MapPin className="h-5 w-5 text-txm-indigo" aria-hidden="true" />
+              <MapPin className="h-5 w-5 text-txm-accent" aria-hidden="true" />
               <p className="mt-3 font-semibold text-txm-ink">Location</p>
               <p className="txm-small text-txm-slate">
                 {site.location}, United States. Delivery across {site.regions}.

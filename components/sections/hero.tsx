@@ -51,11 +51,11 @@ export function Hero({
         <div className={cn("grid items-center gap-12", aside ? "lg:grid-cols-[minmax(0,1fr)_420px]" : "")}>
           <div className="max-w-3xl">
             <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1.5">
-              <span className="h-2 w-2 rounded-full bg-txm-cyan" aria-hidden="true" />
+              <span className="h-2 w-2 rounded-full bg-txm-yellow" aria-hidden="true" />
               <span className="txm-small font-semibold text-white/90">{eyebrow}</span>
             </p>
             <h1 className="txm-h1 text-white">{title}</h1>
-            <p className="txm-lede mt-5 max-w-2xl text-slate-300">{lede}</p>
+            <p className="txm-lede mt-5 max-w-2xl text-txm-on-dark">{lede}</p>
             {(primary || secondary) && (
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 {primary && (

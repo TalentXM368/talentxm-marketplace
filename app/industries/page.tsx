@@ -53,7 +53,7 @@ export default function IndustriesPage() {
                 <p className="txm-small mt-4 text-txm-subtle">
                   {agentsForIndustry(i.slug).length} validated agents · {i.useCaseRows.length} mapped workflows
                 </p>
-                <span className="mt-6 flex items-center gap-2 font-semibold text-txm-indigo">
+                <span className="mt-6 flex items-center gap-2 font-semibold text-txm-accent">
                   Explore {i.name}
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                 </span>
@@ -80,7 +80,7 @@ export default function IndustriesPage() {
                   <span className="block font-semibold text-txm-ink">{ap.name}</span>
                   <span className="txm-small block text-txm-slate">Cross-industry · {ap.businessFunction}</span>
                 </span>
-                <ArrowRight className="h-4 w-4 text-txm-indigo" aria-hidden="true" />
+                <ArrowRight className="h-4 w-4 text-txm-accent" aria-hidden="true" />
               </Link>
             )}
             <Link href="/services" className="txm-card txm-focus group flex items-center gap-4 p-5">
@@ -89,7 +89,7 @@ export default function IndustriesPage() {
                 <span className="block font-semibold text-txm-ink">Enterprise AI Services</span>
                 <span className="txm-small block text-txm-slate">Five domains from the foundation to managed services</span>
               </span>
-              <ArrowRight className="h-4 w-4 text-txm-indigo" aria-hidden="true" />
+              <ArrowRight className="h-4 w-4 text-txm-accent" aria-hidden="true" />
             </Link>
           </div>
         </div>

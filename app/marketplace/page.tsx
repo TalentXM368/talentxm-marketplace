@@ -67,11 +67,11 @@ export default function MarketplacePage() {
 
       <Section tone="dark" labelledBy="evidence-title">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="txm-eyebrow text-txm-cyan">Evidence, not a score</p>
+          <p className="txm-eyebrow text-txm-yellow">Evidence, not a score</p>
           <h2 id="evidence-title" className="txm-h2 mt-3 text-white">
             People decide who to hire.
           </h2>
-          <p className="txm-lede mt-4 text-slate-300">
+          <p className="txm-lede mt-4 text-txm-on-dark">
             The marketplace will help employers find and review specialists. It will not make hiring decisions or
             reduce a person to a single number.
           </p>

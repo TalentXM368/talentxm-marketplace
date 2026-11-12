@@ -16,9 +16,9 @@ export default function UnderDevelopment() {
   return (
     <section className="txm-mesh-bg flex min-h-[70vh] items-center">
       <div className="txm-container py-20">
-        <p className="txm-eyebrow text-txm-cyan">Under development</p>
+        <p className="txm-eyebrow text-txm-yellow">Under development</p>
         <h1 className="txm-h1 mt-3 max-w-3xl text-white">This part of TalentXM.ai is still being built.</h1>
-        <p className="txm-lede mt-4 max-w-2xl text-slate-300">
+        <p className="txm-lede mt-4 max-w-2xl text-txm-on-dark">
           The POC Library is open now. Watch the proofs of concept we have built and recorded, and filter them by
           industry, business function or technology.
         </p>
@@ -28,7 +28,7 @@ export default function UnderDevelopment() {
           </ButtonLink>
           <a
             href={`mailto:${site.email}`}
-            className="txm-focus-inverse rounded-md text-sm font-semibold text-slate-300 hover:text-white"
+            className="txm-focus-inverse rounded-md text-sm font-semibold text-txm-on-dark hover:text-white"
           >
             Questions? {site.email}
           </a>

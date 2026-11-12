@@ -1,37 +1,58 @@
 @import "tailwindcss";
 
-/* TalentXM v2 design tokens, carried over from the Replit build (UX01: reuse). */
+/* TalentXM brand tokens ("Option 8"). Names, values and usage rules: see BRANDING.md. */
 :root {
-  --txm-bg-base: #0a0f24;
-  --txm-bg-surface: #0f1b3d;
-  --txm-bg-light: #f7f8fb;
+  /* Core palette */
+  --txm-brand-navy: #091d5c; /* Trust Blue */
+  --txm-brand-orange: #f9552b; /* Energy Orange-Red */
+  --txm-brand-yellow: #fce403; /* Opportunity Yellow */
+  --txm-brand-teal: #57c3bb; /* Human Teal */
+  --txm-brand-neutral: #e6e5e2; /* Neutral Base */
+  /* Extended palette (tints) */
+  --txm-tint-warm: #fac9b2;
+  --txm-tint-bright: #faf4cb;
+  --txm-tint-soft: #d2ece9;
+  --txm-tint-cool: #c0c4df;
+  /* Derived for accessibility: orange darkened so small text passes AA on white and cream. */
+  --txm-brand-orange-ink: #c2380f;
+
+  --txm-bg-base: var(--txm-brand-navy);
+  --txm-bg-surface: #0d1725;
+  --txm-bg-light: #f6f4f1;
   --txm-bg-elevated: #ffffff;
-  --txm-text-primary: #0a0f24;
+  --txm-text-primary: #0d1725;
   --txm-text-secondary: #4a5568;
   --txm-text-inverse: #ffffff;
+  --txm-text-on-dark: var(--txm-tint-cool);
   --txm-text-muted: #94a3b8;
-  --txm-text-subtle: #64748b;
-  --txm-brand-indigo: #4f46e5;
-  --txm-brand-blue: #2563eb;
-  --txm-brand-cyan: #06b6d4;
-  --txm-brand-violet: #7c3aed;
-  --txm-gradient-primary: linear-gradient(135deg, #4f46e5 0%, #2563eb 40%, #06b6d4 80%, #7c3aed 100%);
+  --txm-text-subtle: #5a6578;
+  --txm-gradient-primary: linear-gradient(
+    90deg,
+    #f95e29 0%,
+    #fa8c1c 25%,
+    #fce403 50%,
+    #d4dc2f 64%,
+    #94cf76 82%,
+    #61c4ae 100%
+  );
+  /* Kept low in alpha: white text sits directly on this over navy. */
   --txm-gradient-mesh:
-    radial-gradient(at 20% 20%, #4f46e5 0%, transparent 50%),
-    radial-gradient(at 80% 0%, #06b6d4 0%, transparent 50%),
-    radial-gradient(at 50% 100%, #7c3aed 0%, transparent 50%);
-  --txm-border-subtle: rgba(255, 255, 255, 0.08);
-  --txm-border-default: rgba(15, 27, 61, 0.1);
+    radial-gradient(at 20% 20%, rgba(249, 85, 43, 0.38) 0%, transparent 50%),
+    radial-gradient(at 80% 0%, rgba(87, 195, 187, 0.3) 0%, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(252, 228, 3, 0.14) 0%, transparent 50%);
+  --txm-border-subtle: rgba(255, 255, 255, 0.1);
+  --txm-border-default: rgba(9, 29, 92, 0.12);
   --txm-radius-sm: 8px;
   --txm-radius-md: 12px;
   --txm-radius-lg: 20px;
-  --txm-shadow-card: 0 1px 3px rgba(10, 15, 36, 0.06), 0 8px 24px rgba(10, 15, 36, 0.04);
-  --txm-shadow-elev: 0 24px 48px -12px rgba(10, 15, 36, 0.16);
+  --txm-shadow-card: 0 1px 3px rgba(9, 29, 92, 0.06), 0 8px 24px rgba(9, 29, 92, 0.04);
+  --txm-shadow-elev: 0 24px 48px -12px rgba(9, 29, 92, 0.18);
   --txm-header-h: 64px;
 }
 
 @theme inline {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-montserrat), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --color-txm-base: var(--txm-bg-base);
@@ -41,10 +62,17 @@
   --color-txm-slate: var(--txm-text-secondary);
   --color-txm-muted: var(--txm-text-muted);
   --color-txm-subtle: var(--txm-text-subtle);
-  --color-txm-indigo: var(--txm-brand-indigo);
-  --color-txm-blue: var(--txm-brand-blue);
-  --color-txm-cyan: var(--txm-brand-cyan);
-  --color-txm-violet: var(--txm-brand-violet);
+  --color-txm-on-dark: var(--txm-text-on-dark);
+  --color-txm-navy: var(--txm-brand-navy);
+  --color-txm-orange: var(--txm-brand-orange);
+  --color-txm-yellow: var(--txm-brand-yellow);
+  --color-txm-teal: var(--txm-brand-teal);
+  --color-txm-neutral: var(--txm-brand-neutral);
+  --color-txm-accent: var(--txm-brand-orange-ink);
+  --color-txm-tint-warm: var(--txm-tint-warm);
+  --color-txm-tint-bright: var(--txm-tint-bright);
+  --color-txm-tint-soft: var(--txm-tint-soft);
+  --color-txm-tint-cool: var(--txm-tint-cool);
   --color-txm-line: var(--txm-border-default);
   --color-txm-line-dark: var(--txm-border-subtle);
 
@@ -109,6 +137,7 @@ body {
   }
 
   .txm-h1 {
+    font-family: var(--font-display);
     font-size: 56px;
     line-height: 64px;
     font-weight: 800;
@@ -116,6 +145,7 @@ body {
     text-wrap: balance;
   }
   .txm-h2 {
+    font-family: var(--font-display);
     font-size: 40px;
     line-height: 48px;
     font-weight: 700;
@@ -123,6 +153,7 @@ body {
     text-wrap: balance;
   }
   .txm-h3 {
+    font-family: var(--font-display);
     font-size: 28px;
     line-height: 36px;
     font-weight: 700;
@@ -141,6 +172,7 @@ body {
     line-height: 20px;
   }
   .txm-eyebrow {
+    font-family: var(--font-display);
     font-size: 13px;
     line-height: 20px;
     font-weight: 600;
@@ -191,12 +223,12 @@ body {
 
   .txm-focus:focus-visible,
   .txm-prose a:focus-visible {
-    outline: 2px solid var(--txm-brand-indigo);
+    outline: 2px solid var(--txm-brand-navy);
     outline-offset: 2px;
     border-radius: 6px;
   }
   .txm-focus-inverse:focus-visible {
-    outline: 2px solid var(--txm-brand-cyan);
+    outline: 2px solid var(--txm-brand-yellow);
     outline-offset: 2px;
     border-radius: 6px;
   }
@@ -217,6 +249,7 @@ body {
     max-width: 72ch;
   }
   .txm-prose h2 {
+    font-family: var(--font-display);
     color: var(--txm-text-primary);
     font-size: 24px;
     line-height: 32px;
@@ -244,7 +277,7 @@ body {
     margin-block: 6px;
   }
   .txm-prose a {
-    color: var(--txm-brand-indigo);
+    color: var(--txm-brand-orange-ink);
     text-decoration: underline;
     text-underline-offset: 3px;
   }

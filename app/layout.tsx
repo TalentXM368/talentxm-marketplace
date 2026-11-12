@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Montserrat } from "next/font/google";
 import { ContactLauncher } from "@/components/layout/contact-launcher";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -10,6 +10,8 @@ import "./globals.css";
 export const ensureStatic = "navigation";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
+// Display face for headings and eyebrows; matches the wordmark (see BRANDING.md).
+const montserrat = Montserrat({ variable: "--font-montserrat", subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -21,12 +23,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a0f24",
+  themeColor: "#091d5c",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${inter.variable} ${montserrat.variable}`}>
       <body className="flex min-h-screen flex-col">
         <a
           href="#main"

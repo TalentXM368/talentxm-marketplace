@@ -97,11 +97,11 @@ export default function ServicesPage() {
 
       <Section tone="dark" labelledBy="discovery-title">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="txm-eyebrow text-txm-cyan">Discovery offer</p>
+          <p className="txm-eyebrow text-txm-yellow">Discovery offer</p>
           <h2 id="discovery-title" className="txm-h2 mt-3 text-white">
             {servicesPromo.title}
           </h2>
-          <p className="txm-lede mt-4 text-slate-300">
+          <p className="txm-lede mt-4 text-txm-on-dark">
             A short, fixed-scope engagement. We map one workflow end to end, assess the platforms and data it depends
             on, and recommend what to build, what to fix first and what to leave alone.
           </p>

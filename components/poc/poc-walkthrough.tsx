@@ -18,14 +18,14 @@ export function PocWalkthrough({ video, moments }: { video: VideoAsset; moments:
       {moments.map((m) => (
         <li key={m.time + m.title} className="relative">
           <span
-            className="absolute top-1.5 -left-[37px] h-2.5 w-2.5 rounded-full bg-txm-indigo ring-4 ring-white"
+            className="absolute top-1.5 -left-[37px] h-2.5 w-2.5 rounded-full bg-txm-orange ring-4 ring-white"
             aria-hidden="true"
           />
           {seekable ? (
             <button
               type="button"
               onClick={() => seekVideo(video, toSeconds(m.time))}
-              className="txm-focus inline-flex items-center gap-1.5 rounded-md bg-txm-indigo/10 px-2 py-0.5 text-sm font-semibold text-txm-indigo tabular-nums hover:bg-txm-indigo/15"
+              className="txm-focus inline-flex items-center gap-1.5 rounded-md bg-txm-orange/10 px-2 py-0.5 text-sm font-semibold text-txm-accent tabular-nums hover:bg-txm-orange/15"
               aria-label={`Play from ${m.time}: ${m.title}`}
             >
               <Play className="h-3 w-3 fill-current" aria-hidden="true" />

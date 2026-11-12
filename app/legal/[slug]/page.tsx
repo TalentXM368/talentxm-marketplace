@@ -25,7 +25,7 @@ export default async function LegalPage({ params }: PageProps<"/legal/[slug]">) 
         <div className="txm-container">
           <Breadcrumb items={[{ label: page.title, href: `/legal/${page.slug}` }]} />
           <h1 className="txm-h1 text-white">{page.title}</h1>
-          <p className="txm-small mt-4 text-slate-300">Last updated {page.updated}</p>
+          <p className="txm-small mt-4 text-txm-on-dark">Last updated {page.updated}</p>
         </div>
       </section>
       <section className="txm-section bg-white">

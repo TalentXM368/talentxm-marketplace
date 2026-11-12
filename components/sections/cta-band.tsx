@@ -23,7 +23,7 @@ export function CTABand({
           />
           <div className="mx-auto max-w-2xl">
             <h2 className="txm-h2 text-white">{title}</h2>
-            {description && <p className="txm-lede mt-4 text-slate-300">{description}</p>}
+            {description && <p className="txm-lede mt-4 text-txm-on-dark">{description}</p>}
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <ButtonLink href={primary.href} tone="dark">
                 {primary.label}

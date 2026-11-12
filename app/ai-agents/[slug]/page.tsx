@@ -52,14 +52,14 @@ export default async function AgentPage({ params }: PageProps<"/ai-agents/[slug]
       >
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <StatusChip status={a.status} className="bg-white" />
-          <p className="txm-small text-slate-300">{a.statusEvidence}</p>
+          <p className="txm-small text-txm-on-dark">{a.statusEvidence}</p>
         </div>
       </Hero>
 
       <Section labelledBy="outcome-title">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
           <div>
-            <p className="txm-eyebrow text-txm-indigo">Outcome</p>
+            <p className="txm-eyebrow text-txm-accent">Outcome</p>
             <h2 id="outcome-title" className="txm-h3 mt-3 text-txm-ink">
               {a.summary}
             </h2>
@@ -97,12 +97,12 @@ export default async function AgentPage({ params }: PageProps<"/ai-agents/[slug]
               ))}
             </ol>
           </div>
-          <div className="rounded-2xl border border-txm-indigo/25 bg-white p-7 shadow-txm-card">
+          <div className="rounded-2xl border border-txm-orange/25 bg-white p-7 shadow-txm-card">
             <h3 className="text-lg font-bold text-txm-ink">Assisted workflow</h3>
             <ol className="mt-4 space-y-3">
               {a.assistedWorkflow.map((s) => (
                 <li key={s} className="txm-body flex gap-3 text-txm-slate">
-                  <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-txm-indigo" aria-hidden="true" />
+                  <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-txm-orange" aria-hidden="true" />
                   {s}
                 </li>
               ))}
@@ -151,11 +151,11 @@ export default async function AgentPage({ params }: PageProps<"/ai-agents/[slug]
               <div
                 className={
                   step.t === "Human decision"
-                    ? "txm-gradient-bg h-full rounded-xl p-5 text-white"
+                    ? "txm-gradient-bg h-full rounded-xl p-5 text-txm-base"
                     : "h-full rounded-xl border border-txm-line bg-white p-5"
                 }
               >
-                <p className={step.t === "Human decision" ? "txm-eyebrow text-white/80" : "txm-eyebrow text-txm-subtle"}>
+                <p className={step.t === "Human decision" ? "txm-eyebrow text-txm-base/80" : "txm-eyebrow text-txm-subtle"}>
                   {step.t}
                 </p>
                 <p className={step.t === "Human decision" ? "mt-2 font-semibold" : "mt-2 font-semibold text-txm-ink"}>
@@ -229,7 +229,7 @@ export default async function AgentPage({ params }: PageProps<"/ai-agents/[slug]
           </div>
           {agentPocs.length > 0 && (
             <div className="mt-16">
-              <p className="txm-eyebrow mb-6 text-center text-txm-indigo">From the POC Library</p>
+              <p className="txm-eyebrow mb-6 text-center text-txm-accent">From the POC Library</p>
               <PocGrid items={agentPocs} />
             </div>
           )}

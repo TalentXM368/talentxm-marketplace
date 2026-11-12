@@ -7,12 +7,12 @@ import { LockedLabel } from "./locked-label";
 /** Columns follow Architecture S3, so labels match the header. */
 export function SiteFooter() {
   return (
-    <footer className="bg-txm-base text-slate-300">
+    <footer className="bg-txm-base text-txm-on-dark">
       <div className="txm-container py-16">
         <div className="grid gap-10 lg:grid-cols-[1.2fr_repeat(4,minmax(0,1fr))]">
           <div>
-            <Link href={homeHref} className="txm-focus-inverse inline-block rounded-lg bg-white px-3 py-2" aria-label="TalentXM home">
-              <Image src="/images/talentxm-logo.png" alt="TalentXM" width={1140} height={460} className="h-8 w-auto" />
+            <Link href={homeHref} className="txm-focus-inverse inline-block" aria-label="TalentXM home">
+              <Image src="/images/brand/logo-horizontal-gradient.png" alt="TalentXM" width={893} height={220} className="h-9 w-auto" />
             </Link>
             <p className="txm-small mt-5 max-w-xs text-slate-400">
               Enterprise AI services, from platforms and integration to agents and delivery teams.

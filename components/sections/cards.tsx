@@ -40,7 +40,7 @@ export function ServiceCard({
       <div className="flex flex-1 flex-col">
         <h3 className="mb-2 text-xl font-bold text-txm-ink">{title}</h3>
         <p className="txm-body mb-6 flex-1 text-txm-slate">{description}</p>
-        <span className="flex items-center gap-2 font-semibold text-txm-indigo">
+        <span className="flex items-center gap-2 font-semibold text-txm-accent">
           {linkLabel}
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
         </span>
