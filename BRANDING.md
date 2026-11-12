@@ -158,7 +158,7 @@ Carried over from the previous design system; the slides do not change them.
 - **Radius:** 8px (`rounded-txm-sm`), 12px (`rounded-txm-md`), 20px (`rounded-txm-lg`, cards). Buttons use `rounded-lg`.
 - **Shadow:** `shadow-txm-card` for cards at rest, `shadow-txm-elev` on hover and for floating panels. Both are navy-tinted.
 - **Layout:** `.txm-container` is 1200px wide with 24px gutters (16px on mobile). `.txm-section` has 96/64/48px vertical padding.
-- **Motion:** the mesh drifts slowly (`.txm-mesh-animate`); all motion stops under `prefers-reduced-motion`.
+- **Motion:** animation, transitions and scroll behaviour have their own guide, `MOTION.md`. All motion stops under `prefers-reduced-motion`.
 
 ## Components
 

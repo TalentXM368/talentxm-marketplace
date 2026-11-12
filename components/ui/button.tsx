@@ -56,7 +56,14 @@ export function ButtonLink({ href, children, variant, tone, size, className, arr
   const classes = cn(buttonStyles({ variant, tone, size }), "group", className);
   const content = (
     <>
-      {children}
+      {/* Rolling label (MOTION.md): only for plain-text labels on filled and outline buttons. */}
+      {typeof children === "string" && variant !== "text" ? (
+        <span className="txm-roll" data-text={children}>
+          <span>{children}</span>
+        </span>
+      ) : (
+        children
+      )}
       {showArrow && (
         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
       )}

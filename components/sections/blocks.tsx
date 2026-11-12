@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronDown, ShieldCheck } from "lucide-react";
+import { Reveal } from "@/components/motion/reveal";
 import { JsonLd } from "@/components/seo/json-ld";
 import { IconTile } from "@/components/ui/icon";
 import { frameworks } from "@/content/trust";
@@ -9,26 +10,44 @@ import { faqLd } from "@/lib/seo";
 import { cn } from "@/lib/cn";
 
 /** Numbered steps: what working with TalentXM looks like (UX01: reuse). */
-export function JourneySteps({ steps }: { steps: { title: string; body: string }[] }) {
-  return (
-    <ol className={cn("grid gap-6", steps.length === 4 ? "md:grid-cols-2 lg:grid-cols-4" : "md:grid-cols-3")}>
-      {steps.map((s, i) => (
-        <li key={s.title} className="txm-card p-7">
-          <p className="mb-3 font-mono text-sm text-txm-subtle">{String(i + 1).padStart(2, "0")}</p>
-          <h3 className="mb-2 text-xl font-bold text-txm-ink">{s.title}</h3>
-          <p className="txm-body text-txm-slate">{s.body}</p>
-        </li>
-      ))}
-    </ol>
-  );
+export function JourneySteps({
+  steps,
+  reveal = false,
+}: {
+  steps: { title: string; body: string }[];
+  /** Steps rise in one by one under a line that draws itself (MOTION.md). */
+  reveal?: boolean;
+}) {
+  const classes = cn("grid gap-6", steps.length === 4 ? "md:grid-cols-2 lg:grid-cols-4" : "md:grid-cols-3");
+  const items = steps.map((s, i) => (
+    <li key={s.title} className="txm-card p-7">
+      <p className="mb-3 font-mono text-sm text-txm-subtle">{String(i + 1).padStart(2, "0")}</p>
+      <h3 className="mb-2 text-xl font-bold text-txm-ink">{s.title}</h3>
+      <p className="txm-body text-txm-slate">{s.body}</p>
+    </li>
+  ));
+  if (reveal) {
+    return (
+      <Reveal as="ol" stagger className={cn(classes, "txm-journey")}>
+        {items}
+      </Reveal>
+    );
+  }
+  return <ol className={classes}>{items}</ol>;
 }
 
 /** Enterprise AI stack: five service domains as layers, foundation at the bottom. */
-export function StackDiagram({ domains, highlight }: { domains: ServiceDomain[]; highlight?: string }) {
-  return (
-    <figure className="mx-auto max-w-3xl">
-      <ol className="flex flex-col gap-2" aria-label="Enterprise AI stack, top layer first">
-        {domains.map((d) => {
+export function StackDiagram({
+  domains,
+  highlight,
+  reveal = false,
+}: {
+  domains: ServiceDomain[];
+  highlight?: string;
+  /** Layers build up from the foundation as the diagram scrolls into view (MOTION.md). */
+  reveal?: boolean;
+}) {
+  const layers = domains.map((d) => {
           const active = highlight === d.slug;
           return (
             <li key={d.slug}>
@@ -58,8 +77,20 @@ export function StackDiagram({ domains, highlight }: { domains: ServiceDomain[];
               </Link>
             </li>
           );
-        })}
-      </ol>
+  });
+  const listClass = "flex flex-col gap-2";
+  const listLabel = "Enterprise AI stack, top layer first";
+  return (
+    <figure className="mx-auto max-w-3xl">
+      {reveal ? (
+        <Reveal as="ol" stagger reverse className={listClass} aria-label={listLabel}>
+          {layers}
+        </Reveal>
+      ) : (
+        <ol className={listClass} aria-label={listLabel}>
+          {layers}
+        </ol>
+      )}
       <figcaption className="txm-small mt-4 text-center text-txm-subtle">
         Each layer depends on the one beneath it. Operate &amp; Scale wraps the whole stack.
       </figcaption>
