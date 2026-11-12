@@ -80,7 +80,7 @@ export function SiteHeader() {
 
   return (
     <>
-      <div className="hidden bg-txm-base text-txm-on-dark md:block">
+      <div className="hidden border-b border-white/10 bg-txm-base text-txm-on-dark md:block">
         <div className="txm-container flex h-9 items-center justify-end gap-6">
           {utilityLinks.map((l) =>
             isOpenPath(l.href) ? (
@@ -100,8 +100,8 @@ export function SiteHeader() {
         // Anchored during page transitions so only the content moves (MOTION.md).
         style={{ viewTransitionName: "site-header" }}
         className={cn(
-          "sticky top-0 z-40 border-b bg-white/95 backdrop-blur transition-shadow",
-          condensed ? "border-txm-line shadow-txm-card" : "border-transparent",
+          "sticky top-0 z-40 border-b bg-txm-base/90 backdrop-blur-md transition-shadow",
+          condensed ? "border-white/10 shadow-txm-elev" : "border-transparent",
         )}
       >
         <div
@@ -110,8 +110,8 @@ export function SiteHeader() {
             condensed ? "h-16" : "h-[72px]",
           )}
         >
-          <Link href={homeHref} className="txm-focus shrink-0" aria-label="TalentXM home" onNavigate={close}>
-            <Image src="/images/brand/logo-horizontal-navy.png" alt="TalentXM" width={893} height={220} priority className="h-9 w-auto" />
+          <Link href={homeHref} className="txm-focus-inverse shrink-0" aria-label="TalentXM home" onNavigate={close}>
+            <Image src="/images/brand/logo-horizontal-neutral.png" alt="TalentXM" width={893} height={220} priority className="h-9 w-auto" />
           </Link>
 
           <nav ref={navRef} aria-label="Main" className="hidden lg:block">
@@ -195,7 +195,7 @@ export function SiteHeader() {
               <Link
                 href={site.primaryCta.href}
                 onNavigate={close}
-                className="txm-focus hidden items-center gap-2 rounded-lg bg-txm-base px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-txm-surface sm:inline-flex"
+                className="txm-focus-inverse hidden items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-txm-base transition-colors hover:bg-txm-yellow sm:inline-flex"
               >
                 {site.primaryCta.label}
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -203,7 +203,7 @@ export function SiteHeader() {
             )}
             <button
               type="button"
-              className="txm-focus inline-flex h-11 w-11 items-center justify-center rounded-lg text-txm-ink hover:bg-slate-100 lg:hidden"
+              className="txm-focus-inverse inline-flex h-11 w-11 items-center justify-center rounded-full text-white hover:bg-white/10 lg:hidden"
               aria-label="Open menu"
               aria-expanded={mobileOpen}
               aria-controls="mobile-menu"
@@ -220,7 +220,7 @@ export function SiteHeader() {
   );
 }
 
-const navItemClass = "inline-block rounded-md px-3 py-2 text-[15px] font-medium text-txm-ink";
+const navItemClass = "inline-block rounded-md px-3 py-2 text-[15px] font-medium text-white/85";
 
 function NavLink({ href, children, onNavigate }: { href: string; children: React.ReactNode; onNavigate: () => void }) {
   if (!isOpenPath(href)) return <LockedLabel className={navItemClass}>{children}</LockedLabel>;
@@ -228,7 +228,7 @@ function NavLink({ href, children, onNavigate }: { href: string; children: React
     <Link
       href={href}
       onNavigate={onNavigate}
-      className="txm-focus rounded-md px-3 py-2 text-[15px] font-medium text-txm-ink transition-colors hover:text-txm-accent"
+      className="txm-focus-inverse rounded-md px-3 py-2 text-[15px] font-medium text-white/85 transition-colors hover:text-white"
     >
       {children}
     </Link>
@@ -262,8 +262,8 @@ function MenuTrigger({
         if (e.pointerType === "mouse") onMouseEnter();
       }}
       className={cn(
-        "txm-focus inline-flex items-center gap-1 rounded-md px-3 py-2 text-[15px] font-medium transition-colors hover:text-txm-accent",
-        expanded ? "text-txm-accent" : "text-txm-ink",
+        "txm-focus-inverse inline-flex items-center gap-1 rounded-md px-3 py-2 text-[15px] font-medium transition-colors hover:text-white",
+        expanded ? "text-txm-yellow" : "text-white/85",
       )}
     >
       {label}

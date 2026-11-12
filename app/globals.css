@@ -16,8 +16,10 @@
   /* Derived for accessibility: orange darkened so small text passes AA on white and cream. */
   --txm-brand-orange-ink: #c2380f;
 
-  --txm-bg-base: var(--txm-brand-navy);
-  --txm-bg-surface: #0d1725;
+  /* Deep navy from the brand board (24.svg): the site dark surface. Trust Blue is a colour on top of it. */
+  --txm-brand-deep: #0d1725;
+  --txm-bg-base: var(--txm-brand-deep);
+  --txm-bg-surface: #162033;
   --txm-bg-light: #f6f4f1;
   --txm-bg-elevated: #ffffff;
   --txm-text-primary: #0d1725;
@@ -35,11 +37,11 @@
     #94cf76 82%,
     #61c4ae 100%
   );
-  /* Kept low in alpha: white text sits directly on this over navy. */
+  /* Quiet depth only: Trust Blue and a trace of teal over deep navy. White text sits directly on it. */
   --txm-gradient-mesh:
-    radial-gradient(at 20% 20%, rgba(249, 85, 43, 0.38) 0%, transparent 50%),
-    radial-gradient(at 80% 0%, rgba(87, 195, 187, 0.3) 0%, transparent 50%),
-    radial-gradient(at 50% 100%, rgba(252, 228, 3, 0.14) 0%, transparent 50%);
+    radial-gradient(at 12% 0%, rgba(9, 29, 92, 0.55) 0%, transparent 55%),
+    radial-gradient(at 88% 100%, rgba(87, 195, 187, 0.12) 0%, transparent 50%),
+    radial-gradient(at 50% 120%, rgba(9, 29, 92, 0.6) 0%, transparent 55%);
   --txm-border-subtle: rgba(255, 255, 255, 0.1);
   --txm-border-default: rgba(9, 29, 92, 0.12);
   --txm-radius-sm: 8px;
@@ -151,7 +153,7 @@ body {
     font-family: var(--font-display);
     font-size: 56px;
     line-height: 64px;
-    font-weight: 800;
+    font-weight: 400;
     letter-spacing: -0.02em;
     text-wrap: balance;
   }
@@ -159,7 +161,7 @@ body {
     font-family: var(--font-display);
     font-size: 40px;
     line-height: 48px;
-    font-weight: 700;
+    font-weight: 400;
     letter-spacing: -0.02em;
     text-wrap: balance;
   }
@@ -167,7 +169,7 @@ body {
     font-family: var(--font-display);
     font-size: 28px;
     line-height: 36px;
-    font-weight: 700;
+    font-weight: 500;
     text-wrap: balance;
   }
   .txm-body {
@@ -186,8 +188,8 @@ body {
     font-family: var(--font-display);
     font-size: 13px;
     line-height: 20px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
+    font-weight: 500;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
   }
   @media (max-width: 768px) {
@@ -337,6 +339,29 @@ body {
     transform: scaleX(0);
   }
 }
+@keyframes txm-ribbon-wipe {
+  from {
+    clip-path: inset(0 0 0 100%);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes txm-ribbon-a {
+  to {
+    transform: translate(-22px, 16px) rotate(-1.8deg);
+  }
+}
+@keyframes txm-ribbon-b {
+  to {
+    transform: translate(24px, -12px) rotate(1.6deg);
+  }
+}
+@keyframes txm-ribbon-c {
+  to {
+    transform: translate(-28px, -14px) rotate(2.2deg);
+  }
+}
 @keyframes txm-nudge {
   0%,
   100% {
@@ -353,7 +378,7 @@ body {
     font-family: var(--font-display);
     font-size: clamp(2.5rem, 6.1vw, 5.5rem);
     line-height: 1.02;
-    font-weight: 800;
+    font-weight: 300;
     letter-spacing: -0.03em;
     text-wrap: balance;
   }
@@ -361,7 +386,7 @@ body {
     font-family: var(--font-display);
     font-size: clamp(2.75rem, 8.4vw, 7.5rem);
     line-height: 0.98;
-    font-weight: 800;
+    font-weight: 300;
     letter-spacing: -0.035em;
     text-wrap: balance;
   }
@@ -441,15 +466,65 @@ body {
     animation-delay: calc(90ms * var(--i, 0) + 350ms);
   }
 
-  /* Hero node field: faded toward the text side so the headline keeps its contrast. */
-  .txm-node-field {
-    opacity: 0.4;
+  /* Ribbon field: the flowing brand shapes, kept to the right and dimmed on small screens for text contrast. */
+  .txm-ribbons {
+    --rb-1: var(--txm-brand-orange);
+    --rb-2: var(--txm-brand-teal);
+    --rb-3: var(--txm-brand-yellow);
+    --rb-rim: var(--txm-tint-warm);
+    --rb-depth: var(--txm-brand-navy);
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    opacity: 0.38;
+    animation: txm-ribbon-wipe 1600ms var(--txm-ease-out) backwards;
+  }
+  .txm-ribbons[data-palette="on-orange"] {
+    --rb-1: var(--txm-brand-navy);
+    --rb-o2: 0.96;
+    --rb-o3: 0.88;
+    --rb-o4: 0.85;
+    --rb-rim: var(--txm-tint-cool);
+    --rb-depth: var(--txm-brand-yellow);
   }
   @media (min-width: 1024px) {
-    .txm-node-field {
-      opacity: 0.95;
-      mask-image: linear-gradient(to right, transparent 8%, black 62%);
+    .txm-ribbons {
+      opacity: 1;
     }
+    .txm-ribbons[data-tone="soft"] {
+      opacity: 0.85;
+    }
+  }
+  .txm-ribbon-layer {
+    transform: translate3d(
+      calc(var(--rb-px, 0) * var(--rb-depth-k, 1) * -14px),
+      calc(var(--rb-py, 0) * var(--rb-depth-k, 1) * -10px + var(--rb-sy, 0) * var(--rb-depth-k, 1) * 110px),
+      0
+    );
+    transition: transform 700ms var(--txm-ease-out);
+  }
+  .txm-ribbon-drift {
+    transform-box: view-box;
+    transform-origin: 100% 100%;
+    animation: txm-ribbon-a 24s var(--txm-ease-in-out) infinite alternate;
+  }
+  .txm-ribbon-drift-b {
+    animation-name: txm-ribbon-b;
+    animation-duration: 30s;
+  }
+  .txm-ribbon-drift-c {
+    animation-name: txm-ribbon-c;
+    animation-duration: 36s;
+  }
+
+  /* Brand signature line: wide-tracked capitals, as on the brand board. */
+  .txm-signature {
+    font-family: var(--font-display);
+    font-size: 12px;
+    line-height: 22px;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
   }
   .txm-scroll-hint > svg {
     animation: txm-nudge 1.8s var(--txm-ease-in-out) infinite;
@@ -730,8 +805,13 @@ body {
     scroll-behavior: auto !important;
   }
   .txm-mesh-animate,
-  .txm-scroll-hint > svg {
+  .txm-scroll-hint > svg,
+  .txm-ribbons,
+  .txm-ribbon-drift {
     animation: none !important;
+  }
+  .txm-ribbon-layer {
+    transform: none !important;
   }
   .txm-reveal[data-reveal="pending"],
   .txm-reveal-stagger[data-reveal="pending"] > * {

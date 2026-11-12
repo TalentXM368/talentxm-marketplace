@@ -6,7 +6,7 @@ import { cn } from "@/lib/cn";
 // Primary (filled), secondary (outline) and text link with arrow (UX01: reuse).
 // Each variant has a distinct hover and a visible focus ring.
 export const buttonStyles = cva(
-  "inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60",
+  "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60",
   {
     variants: {
       variant: {
@@ -24,7 +24,7 @@ export const buttonStyles = cva(
       },
     },
     compoundVariants: [
-      { variant: "primary", tone: "light", className: "bg-txm-base text-white hover:bg-txm-surface" },
+      { variant: "primary", tone: "light", className: "bg-txm-navy text-white hover:bg-txm-base" },
       { variant: "primary", tone: "dark", className: "bg-txm-yellow text-txm-base hover:bg-white" },
       {
         variant: "secondary",

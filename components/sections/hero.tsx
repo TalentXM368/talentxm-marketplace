@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { ArrowDown } from "lucide-react";
+import { RibbonField } from "@/components/motion/ribbon-field";
 import { SplitText } from "@/components/motion/split-text";
 import { ButtonLink } from "@/components/ui/button";
 import { Breadcrumb, type Crumb } from "@/components/layout/breadcrumb";
@@ -9,13 +9,16 @@ interface HeroProps {
   eyebrow: string;
   title: string;
   lede: string;
+  /** Kept for existing callers. Heroes now use the brand shapes instead of a background photo. */
   image?: string;
-  /** Replaces the background photo, e.g. the animated node field on the home page. */
+  /** Replaces the default background (the soft ribbon field). */
   visual?: React.ReactNode;
   /** Large display headline (MOTION.md: "Display type"). */
   display?: boolean;
   /** In-page target for the "scroll" hint under the calls to action. */
   scrollHint?: { label: string; href: string };
+  /** Short brand lines set in wide capitals at the bottom right, as on the brand board. */
+  signature?: string[];
   primary?: { label: string; href: string };
   secondary?: { label: string; href: string };
   breadcrumbs?: Crumb[];
@@ -26,15 +29,15 @@ interface HeroProps {
 
 const step = (i: number) => ({ "--i": i }) as React.CSSProperties;
 
-/** Gradient + network background, eyebrow pill, H1, two CTAs (UX01: reuse). */
+/** Deep navy with the brand shapes, eyebrow pill, H1 and two CTAs (UX01: reuse; BRANDING.md). */
 export function Hero({
   eyebrow,
   title,
   lede,
-  image = "/images/hero-bg-dark.webp",
   visual,
   display = false,
   scrollHint,
+  signature,
   primary,
   secondary,
   breadcrumbs,
@@ -46,27 +49,15 @@ export function Hero({
     <section
       className={cn(
         "txm-mesh-bg relative isolate overflow-hidden",
-        size === "lg" ? "min-h-[82vh] lg:min-h-[88vh]" : "min-h-[52vh]",
+        size === "lg" ? "min-h-[84vh] lg:min-h-[90vh]" : "min-h-[52vh]",
         "flex items-center",
       )}
     >
-      {visual ? (
-        <div className="absolute inset-0 -z-10">{visual}</div>
-      ) : (
-        <div className="absolute inset-0 -z-10">
-          <Image src={image} alt="" fill priority sizes="100vw" className="object-cover opacity-50 mix-blend-overlay" />
-          <div className="absolute inset-0 bg-gradient-to-t from-txm-base via-txm-base/80 to-txm-base/55" />
-        </div>
-      )}
-      <div
-        aria-hidden="true"
-        className="txm-mesh-animate absolute inset-0 -z-20 opacity-60"
-        style={{ backgroundImage: "var(--txm-gradient-mesh)" }}
-      />
+      <div className="absolute inset-0 -z-10">{visual ?? <RibbonField tone="soft" />}</div>
       <div className="txm-container w-full py-16 md:py-24">
         {breadcrumbs && <Breadcrumb items={breadcrumbs} />}
         <div className={cn("grid items-center gap-12", aside ? "lg:grid-cols-[minmax(0,1fr)_420px]" : "")}>
-          <div className={display ? "max-w-5xl" : "max-w-3xl"}>
+          <div className={display ? "max-w-4xl" : "max-w-3xl"}>
             <p
               className="txm-load mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1.5"
               style={step(0)}
@@ -77,7 +68,7 @@ export function Hero({
             <h1 className={cn(display ? "txm-display" : "txm-h1", "txm-words-load text-white")}>
               <SplitText text={title} />
             </h1>
-            <p className="txm-lede txm-load mt-6 max-w-2xl text-txm-on-dark" style={step(2)}>
+            <p className="txm-lede txm-load mt-6 max-w-xl text-txm-on-dark" style={step(2)}>
               {lede}
             </p>
             {(primary || secondary) && (
@@ -109,6 +100,18 @@ export function Hero({
           {aside && <div className="hidden lg:block">{aside}</div>}
         </div>
       </div>
+      {signature && (
+        <p
+          className="txm-signature txm-load absolute bottom-10 left-[max(24px,calc((100vw-1200px)/2+24px))] hidden text-txm-on-dark lg:block"
+          style={step(6)}
+        >
+          {signature.map((line) => (
+            <span key={line} className="block">
+              {line}
+            </span>
+          ))}
+        </p>
+      )}
     </section>
   );
 }
