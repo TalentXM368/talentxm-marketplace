@@ -6,7 +6,7 @@ import { cn } from "@/lib/cn";
 const statusStyles: Record<AgentStatus, string> = {
   available: "bg-emerald-50 text-emerald-800 border-emerald-200",
   pilot: "bg-sky-50 text-sky-800 border-sky-200",
-  "validated-poc": "bg-indigo-50 text-indigo-800 border-indigo-200",
+  "validated-poc": "bg-txm-tint-cool/40 text-txm-navy border-txm-tint-cool",
   concept: "bg-slate-100 text-slate-700 border-slate-300",
 };
 
@@ -52,7 +52,7 @@ export function HumanDecisionPoints({ points }: { points: HumanDecisionPoint[] }
           </div>
           <div>
             <p className="font-semibold text-txm-ink">{p.step}</p>
-            <p className="txm-small mt-0.5 font-medium text-txm-indigo">{p.who}</p>
+            <p className="txm-small mt-0.5 font-medium text-txm-accent">{p.who}</p>
             <p className="txm-small mt-2 text-txm-slate">{p.why}</p>
           </div>
         </li>

@@ -149,14 +149,14 @@ export function LeadForm({
           <input
             id={fieldId("consent")}
             type="checkbox"
-            className="txm-focus mt-1 h-4 w-4 shrink-0 rounded border-slate-300 accent-txm-indigo"
+            className="txm-focus mt-1 h-4 w-4 shrink-0 rounded border-slate-300 accent-txm-navy"
             aria-invalid={errors.consent ? true : undefined}
             aria-describedby={errors.consent ? `${fieldId("consent")}-error` : undefined}
             {...register("consent")}
           />
           <label htmlFor={fieldId("consent")} className="txm-small text-txm-slate">
             I agree that TalentXM may contact me about this request. See the{" "}
-            <Link href="/legal/privacy" className="txm-focus font-medium text-txm-indigo underline underline-offset-2">
+            <Link href="/legal/privacy" className="txm-focus font-medium text-txm-accent underline underline-offset-2">
               Privacy Policy
             </Link>
             .

@@ -94,7 +94,7 @@ export default function FlexibleTalentPage() {
                   <h3 className={group === "talent-led" ? "mt-4 text-lg font-bold text-txm-ink" : "mt-4 text-lg font-bold text-white"}>
                     {m.name}
                   </h3>
-                  <p className={group === "talent-led" ? "txm-small mt-2 text-txm-slate" : "txm-small mt-2 text-slate-300"}>
+                  <p className={group === "talent-led" ? "txm-small mt-2 text-txm-slate" : "txm-small mt-2 text-txm-on-dark"}>
                     {m.description}
                   </p>
                   <p className={group === "talent-led" ? "txm-small mt-4 text-txm-subtle" : "txm-small mt-4 text-slate-400"}>
@@ -153,7 +153,7 @@ export default function FlexibleTalentPage() {
             <div key={r.name} className="rounded-2xl border border-white/10 bg-txm-surface p-6">
               <IconTile name="globe" size="sm" />
               <h3 className="mt-4 text-lg font-bold text-white">{r.name}</h3>
-              <p className="txm-small mt-2 text-slate-300">{r.detail}</p>
+              <p className="txm-small mt-2 text-txm-on-dark">{r.detail}</p>
             </div>
           ))}
         </div>

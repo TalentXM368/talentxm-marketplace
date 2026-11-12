@@ -119,7 +119,7 @@ export function PocLibrary() {
           <button
             type="button"
             onClick={clear}
-            className="txm-focus txm-small font-semibold text-txm-indigo hover:text-txm-base"
+            className="txm-focus txm-small font-semibold text-txm-accent hover:text-txm-base"
           >
             Clear filters
           </button>
@@ -137,7 +137,7 @@ export function PocLibrary() {
           <button
             type="button"
             onClick={clear}
-            className="txm-focus txm-small mt-4 font-semibold text-txm-indigo hover:text-txm-base"
+            className="txm-focus txm-small mt-4 font-semibold text-txm-accent hover:text-txm-base"
           >
             Show all POCs
           </button>

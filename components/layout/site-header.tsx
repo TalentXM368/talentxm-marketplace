@@ -80,7 +80,7 @@ export function SiteHeader() {
 
   return (
     <>
-      <div className="hidden bg-txm-base text-slate-300 md:block">
+      <div className="hidden bg-txm-base text-txm-on-dark md:block">
         <div className="txm-container flex h-9 items-center justify-end gap-6">
           {utilityLinks.map((l) =>
             isOpenPath(l.href) ? (
@@ -109,7 +109,7 @@ export function SiteHeader() {
           )}
         >
           <Link href={homeHref} className="txm-focus shrink-0" aria-label="TalentXM home" onNavigate={close}>
-            <Image src="/images/talentxm-logo.png" alt="TalentXM" width={1140} height={460} priority className="h-9 w-auto" />
+            <Image src="/images/brand/logo-horizontal-navy.png" alt="TalentXM" width={893} height={220} priority className="h-9 w-auto" />
           </Link>
 
           <nav ref={navRef} aria-label="Main" className="hidden lg:block">
@@ -226,7 +226,7 @@ function NavLink({ href, children, onNavigate }: { href: string; children: React
     <Link
       href={href}
       onNavigate={onNavigate}
-      className="txm-focus rounded-md px-3 py-2 text-[15px] font-medium text-txm-ink transition-colors hover:text-txm-indigo"
+      className="txm-focus rounded-md px-3 py-2 text-[15px] font-medium text-txm-ink transition-colors hover:text-txm-accent"
     >
       {children}
     </Link>
@@ -260,8 +260,8 @@ function MenuTrigger({
         if (e.pointerType === "mouse") onMouseEnter();
       }}
       className={cn(
-        "txm-focus inline-flex items-center gap-1 rounded-md px-3 py-2 text-[15px] font-medium transition-colors hover:text-txm-indigo",
-        expanded ? "text-txm-indigo" : "text-txm-ink",
+        "txm-focus inline-flex items-center gap-1 rounded-md px-3 py-2 text-[15px] font-medium transition-colors hover:text-txm-accent",
+        expanded ? "text-txm-accent" : "text-txm-ink",
       )}
     >
       {label}
@@ -280,7 +280,7 @@ function ServicesMegaMenu({ onNavigate }: { onNavigate: () => void }) {
               <Link
                 href={col.href}
                 onNavigate={onNavigate}
-                className="txm-focus mb-3 block text-sm font-semibold text-txm-ink hover:text-txm-indigo"
+                className="txm-focus mb-3 block text-sm font-semibold text-txm-ink hover:text-txm-accent"
               >
                 {col.heading}
               </Link>
@@ -290,7 +290,7 @@ function ServicesMegaMenu({ onNavigate }: { onNavigate: () => void }) {
                     <Link
                       href={l.href}
                       onNavigate={onNavigate}
-                      className="txm-focus txm-small text-txm-slate hover:text-txm-indigo"
+                      className="txm-focus txm-small text-txm-slate hover:text-txm-accent"
                     >
                       {l.label}
                     </Link>
@@ -301,11 +301,11 @@ function ServicesMegaMenu({ onNavigate }: { onNavigate: () => void }) {
           ))}
           <div className="txm-mesh-bg rounded-xl p-5 text-white">
             <p className="font-semibold">{servicesPromo.title}</p>
-            <p className="txm-small mt-2 text-slate-300">{servicesPromo.body}</p>
+            <p className="txm-small mt-2 text-txm-on-dark">{servicesPromo.body}</p>
             <Link
               href={servicesPromo.href}
               onNavigate={onNavigate}
-              className="txm-focus-inverse mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-txm-cyan hover:text-white"
+              className="txm-focus-inverse mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-txm-yellow hover:text-white"
             >
               {servicesPromo.label}
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -315,7 +315,7 @@ function ServicesMegaMenu({ onNavigate }: { onNavigate: () => void }) {
             <Link
               href="/services"
               onNavigate={onNavigate}
-              className="txm-focus txm-small inline-flex items-center gap-1.5 font-semibold text-txm-indigo hover:text-txm-base"
+              className="txm-focus txm-small inline-flex items-center gap-1.5 font-semibold text-txm-accent hover:text-txm-base"
             >
               All Enterprise AI Services
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -416,7 +416,7 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
           Menu
         </p>
         <Link href={homeHref} onNavigate={onClose} aria-label="TalentXM home" className="txm-focus">
-          <Image src="/images/talentxm-logo.png" alt="TalentXM" width={1140} height={460} className="h-8 w-auto" />
+          <Image src="/images/brand/logo-horizontal-navy.png" alt="TalentXM" width={893} height={220} className="h-8 w-auto" />
         </Link>
         <button
           type="button"

@@ -27,7 +27,7 @@ export function PresentationEmbed({ presentation }: { presentation: Presentation
             aria-label={`View presentation: ${presentation.title}`}
           >
             <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-txm-card transition-transform group-hover:scale-105">
-              <Presentation className="h-7 w-7 text-txm-indigo" aria-hidden="true" />
+              <Presentation className="h-7 w-7 text-txm-accent" aria-hidden="true" />
             </span>
             <span className="font-semibold text-txm-ink">View the presentation</span>
           </button>

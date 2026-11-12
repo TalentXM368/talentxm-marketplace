@@ -38,20 +38,20 @@ export function StackDiagram({ domains, highlight }: { domains: ServiceDomain[];
                 className={cn(
                   "txm-focus group flex items-center gap-4 rounded-xl border px-5 py-4 transition-colors",
                   active
-                    ? "txm-gradient-bg border-transparent text-white"
-                    : "border-txm-line bg-white text-txm-ink hover:border-txm-indigo/40",
+                    ? "txm-gradient-bg border-transparent text-txm-base"
+                    : "border-txm-line bg-white text-txm-ink hover:border-txm-orange/40",
                   d.stackLayer === 5 && !active && "bg-slate-50",
                 )}
               >
                 <span
-                  className={cn("w-6 font-mono text-sm", active ? "text-white/80" : "text-txm-subtle")}
+                  className={cn("w-6 font-mono text-sm", active ? "text-txm-base/80" : "text-txm-subtle")}
                   aria-hidden="true"
                 >
                   L{d.stackLayer}
                 </span>
                 <span className="flex-1">
                   <span className="block font-semibold">{d.menuLabel}</span>
-                  <span className={cn("txm-small block", active ? "text-white/85" : "text-txm-slate")}>
+                  <span className={cn("txm-small block", active ? "text-txm-base/85" : "text-txm-slate")}>
                     {d.capabilities.map((c) => c.name).join(" · ")}
                   </span>
                 </span>
@@ -72,9 +72,9 @@ export function PodModelDiagram({ lead, roles, note }: { lead: string; roles: st
   return (
     <figure className="txm-card mx-auto max-w-4xl p-6 md:p-8">
       <div className="txm-gradient-bg mb-5 rounded-2xl p-6">
-        <p className="txm-eyebrow text-white/80">Lead layer</p>
-        <p className="mt-1 text-2xl font-bold text-white">{lead}</p>
-        <p className="txm-small mt-1 text-white/85">Owns the brief, the quality bar and the fortnightly readout.</p>
+        <p className="txm-eyebrow text-txm-base/80">Lead layer</p>
+        <p className="mt-1 text-2xl font-bold text-txm-base">{lead}</p>
+        <p className="txm-small mt-1 text-txm-base/85">Owns the brief, the quality bar and the fortnightly readout.</p>
       </div>
       <ul className="grid grid-cols-2 gap-3 md:grid-cols-4">
         {roles.map((role) => (
@@ -136,7 +136,7 @@ export function ComplianceRow() {
           key={f.name}
           className="flex items-center gap-2 rounded-full border border-txm-line bg-white px-4 py-2.5 shadow-sm"
         >
-          <ShieldCheck className="h-4 w-4 text-txm-indigo" aria-hidden="true" />
+          <ShieldCheck className="h-4 w-4 text-txm-accent" aria-hidden="true" />
           <span className="txm-small font-semibold text-txm-ink">{f.name}</span>
           <span className="txm-small hidden text-txm-subtle md:inline">{f.caption}</span>
         </li>
@@ -205,11 +205,11 @@ export function CheckList({ items, tone = "light" }: { items: string[]; tone?: "
           <span
             className={cn(
               "mt-2 h-1.5 w-1.5 shrink-0 rounded-full",
-              tone === "dark" ? "bg-txm-cyan" : "bg-txm-indigo",
+              tone === "dark" ? "bg-txm-yellow" : "bg-txm-orange",
             )}
             aria-hidden="true"
           />
-          <span className={cn("txm-body", tone === "dark" ? "text-slate-300" : "text-txm-slate")}>{item}</span>
+          <span className={cn("txm-body", tone === "dark" ? "text-txm-on-dark" : "text-txm-slate")}>{item}</span>
         </li>
       ))}
     </ul>

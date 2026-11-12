@@ -15,7 +15,7 @@ export function AgentCard({ agent }: { agent: Agent }) {
       </div>
       <p className="txm-small mb-1 font-medium text-txm-subtle">{agent.agentType}</p>
       <h3 className="mb-4 text-xl font-bold text-txm-ink">
-        <Link href={`/ai-agents/${agent.slug}`} className="txm-focus hover:text-txm-indigo">
+        <Link href={`/ai-agents/${agent.slug}`} className="txm-focus hover:text-txm-accent">
           {agent.name}
         </Link>
       </h3>

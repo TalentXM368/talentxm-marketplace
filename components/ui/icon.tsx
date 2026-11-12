@@ -89,7 +89,7 @@ export function IconTile({
     <div
       className={`${box} flex shrink-0 items-center justify-center ${tone === "dark" ? "bg-txm-base" : "txm-gradient-bg"}`}
     >
-      <Icon name={name} className={`${glyph} text-white`} />
+      <Icon name={name} className={`${glyph} ${tone === "dark" ? "text-white" : "text-txm-base"}`} />
     </div>
   );
 }

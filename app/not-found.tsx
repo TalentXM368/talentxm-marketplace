@@ -26,9 +26,9 @@ export default function NotFound() {
   return (
     <section className="txm-mesh-bg flex min-h-[70vh] items-center">
       <div className="txm-container py-20">
-        <p className="txm-eyebrow text-txm-cyan">404</p>
+        <p className="txm-eyebrow text-txm-yellow">404</p>
         <h1 className="txm-h1 mt-3 text-white">We could not find that page.</h1>
-        <p className="txm-lede mt-4 max-w-2xl text-slate-300">
+        <p className="txm-lede mt-4 max-w-2xl text-txm-on-dark">
           It may have moved when we rebuilt the site.
           {topLinks.length > 0 && " These pages are a good place to start."}
         </p>

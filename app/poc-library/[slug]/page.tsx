@@ -31,7 +31,7 @@ function Walkthrough({ poc, moments }: { poc: Poc; moments: VideoMoment[] }) {
   return (
     <div className="grid gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-12">
       <div>
-        <h2 className="txm-eyebrow text-txm-indigo">In the video</h2>
+        <h2 className="txm-eyebrow text-txm-accent">In the video</h2>
         <p className="txm-small mt-2 text-txm-slate">
           {canSeek(poc.video) ? "Select a time to play the video from that point." : "Key moments in the recording."}
         </p>
@@ -123,7 +123,7 @@ export default async function PocPage({ params }: PageProps<"/poc-library/[slug]
             <h3 className="text-lg font-bold text-txm-ink">The problem</h3>
             <p className="txm-body mt-3 text-txm-slate">{p.problem}</p>
           </div>
-          <div className="rounded-2xl border border-txm-indigo/25 bg-white p-7 shadow-txm-card">
+          <div className="rounded-2xl border border-txm-orange/25 bg-white p-7 shadow-txm-card">
             <h3 className="text-lg font-bold text-txm-ink">What the POC does</h3>
             <p className="txm-body mt-3 text-txm-slate">{p.solution}</p>
           </div>
@@ -139,11 +139,11 @@ export default async function PocPage({ params }: PageProps<"/poc-library/[slug]
             </div>
             {p.boundaries && p.boundaries.length > 0 && (
               <div className="mt-10 rounded-2xl border border-txm-line bg-txm-light p-6">
-                <h3 className="txm-eyebrow text-txm-indigo">Boundaries built in</h3>
+                <h3 className="txm-eyebrow text-txm-accent">Boundaries built in</h3>
                 <ul className="mt-4 space-y-3">
                   {p.boundaries.map((b) => (
                     <li key={b} className="flex gap-3">
-                      <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-txm-indigo" aria-hidden="true" />
+                      <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-txm-accent" aria-hidden="true" />
                       <span className="txm-body text-txm-slate">{b}</span>
                     </li>
                   ))}
@@ -152,7 +152,7 @@ export default async function PocPage({ params }: PageProps<"/poc-library/[slug]
             )}
           </div>
           <div>
-            <h2 className="txm-eyebrow mb-6 text-txm-indigo">Technologies used</h2>
+            <h2 className="txm-eyebrow mb-6 text-txm-accent">Technologies used</h2>
             <div className="space-y-6">
               {techGroups.map(({ g, items }) => (
                 <div key={g}>
@@ -162,7 +162,7 @@ export default async function PocPage({ params }: PageProps<"/poc-library/[slug]
                       <li key={t.slug}>
                         <Link
                           href={`${pocLibraryPath}?tech=${t.slug}`}
-                          className="txm-focus inline-flex rounded-lg border border-txm-line bg-white px-3 py-1.5 text-sm font-semibold text-txm-ink hover:border-txm-indigo/40 hover:text-txm-indigo"
+                          className="txm-focus inline-flex rounded-lg border border-txm-line bg-white px-3 py-1.5 text-sm font-semibold text-txm-ink hover:border-txm-orange/40 hover:text-txm-accent"
                         >
                           {t.name}
                         </Link>
@@ -187,7 +187,7 @@ export default async function PocPage({ params }: PageProps<"/poc-library/[slug]
                   className="txm-card group flex h-full flex-col p-6"
                 >
                   <span className="txm-eyebrow text-txm-subtle">AI agent</span>
-                  <span className="mt-2 inline-flex items-center gap-2 text-lg font-bold text-txm-ink group-hover:text-txm-indigo">
+                  <span className="mt-2 inline-flex items-center gap-2 text-lg font-bold text-txm-ink group-hover:text-txm-accent">
                     {agentLink.name}
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
                   </span>
@@ -199,7 +199,7 @@ export default async function PocPage({ params }: PageProps<"/poc-library/[slug]
               <li key={u.href + u.title}>
                 <Link href={u.href} className="txm-card group flex h-full flex-col p-6">
                   <span className="txm-eyebrow text-txm-subtle">Use case · {u.context}</span>
-                  <span className="mt-2 inline-flex items-center gap-2 text-lg font-bold text-txm-ink group-hover:text-txm-indigo">
+                  <span className="mt-2 inline-flex items-center gap-2 text-lg font-bold text-txm-ink group-hover:text-txm-accent">
                     {u.title}
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
                   </span>
@@ -237,7 +237,7 @@ export default async function PocPage({ params }: PageProps<"/poc-library/[slug]
             <SectionHeader id="related-title" align="left" eyebrow="More POCs" title="Related proofs of concept." />
             <Link
               href={pocLibraryPath}
-              className="txm-focus group inline-flex shrink-0 items-center gap-2 font-semibold text-txm-indigo hover:text-txm-base"
+              className="txm-focus group inline-flex shrink-0 items-center gap-2 font-semibold text-txm-accent hover:text-txm-base"
             >
               All POCs
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />

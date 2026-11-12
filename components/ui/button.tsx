@@ -25,15 +25,15 @@ export const buttonStyles = cva(
     },
     compoundVariants: [
       { variant: "primary", tone: "light", className: "bg-txm-base text-white hover:bg-txm-surface" },
-      { variant: "primary", tone: "dark", className: "bg-white text-txm-base hover:bg-slate-200" },
+      { variant: "primary", tone: "dark", className: "bg-txm-yellow text-txm-base hover:bg-white" },
       {
         variant: "secondary",
         tone: "light",
         className: "border-txm-base/20 text-txm-ink hover:border-txm-base/40 hover:bg-slate-50",
       },
       { variant: "secondary", tone: "dark", className: "border-white/35 text-white hover:bg-white/10" },
-      { variant: "text", tone: "light", className: "text-txm-indigo hover:text-txm-base" },
-      { variant: "text", tone: "dark", className: "text-txm-cyan hover:text-white" },
+      { variant: "text", tone: "light", className: "text-txm-accent hover:text-txm-base" },
+      { variant: "text", tone: "dark", className: "text-txm-yellow hover:text-white" },
       { variant: "text", size: "md", className: "px-0 py-0" },
       { variant: "text", size: "sm", className: "px-0 py-0" },
     ],

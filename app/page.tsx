@@ -93,7 +93,7 @@ export default function HomePage() {
           <ComplianceRow />
           <p className="txm-small mt-6 text-center text-txm-slate">
             Workato Silver Partner · Claude Partner Network ·{" "}
-            <Link href="/trust" className="txm-focus font-semibold text-txm-indigo hover:text-txm-base">
+            <Link href="/trust" className="txm-focus font-semibold text-txm-accent hover:text-txm-base">
               Current trust status
             </Link>
           </p>
@@ -195,7 +195,7 @@ export default function HomePage() {
         <div className="mt-12 grid gap-4 md:grid-cols-2">
           {(["talent-led", "outcome-led"] as const).map((group) => (
             <div key={group} className="rounded-2xl border border-white/10 bg-txm-surface p-6">
-              <p className="txm-eyebrow text-txm-cyan">{group === "talent-led" ? "Talent-led" : "Outcome-led"}</p>
+              <p className="txm-eyebrow text-txm-yellow">{group === "talent-led" ? "Talent-led" : "Outcome-led"}</p>
               <ul className="mt-4 space-y-4">
                 {deliveryModels
                   .filter((m) => m.group === group)
@@ -240,7 +240,7 @@ export default function HomePage() {
         <ul className="mt-12 grid gap-6 md:grid-cols-3">
           {evidenceItems.slice(0, 3).map((e) => (
             <li key={e.slug} className="txm-card p-7">
-              <p className="txm-eyebrow text-txm-indigo">{e.label}</p>
+              <p className="txm-eyebrow text-txm-accent">{e.label}</p>
               <h3 className="mt-2 text-lg font-bold text-txm-ink">{e.title}</h3>
               <p className="txm-small mt-2 text-txm-slate">{e.validationSummary}</p>
             </li>
@@ -273,7 +273,7 @@ export default function HomePage() {
             >
               {l.label}
               <ArrowRight
-                className="h-4 w-4 text-txm-indigo transition-transform group-hover:translate-x-0.5"
+                className="h-4 w-4 text-txm-accent transition-transform group-hover:translate-x-0.5"
                 aria-hidden="true"
               />
             </Link>
@@ -291,11 +291,11 @@ export default function HomePage() {
       <section className="txm-section-dark py-16" aria-labelledby="marketplace-title">
         <div className="txm-container flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
           <div className="max-w-2xl">
-            <p className="txm-eyebrow text-txm-cyan">Coming next · Early access</p>
+            <p className="txm-eyebrow text-txm-yellow">Coming next · Early access</p>
             <h2 id="marketplace-title" className="txm-h3 mt-2 text-white">
               Talent Marketplace
             </h2>
-            <p className="txm-body mt-3 text-slate-300">
+            <p className="txm-body mt-3 text-txm-on-dark">
               A marketplace where employers see evidence of work, not just a score. Join the early-access list as an
               employer, or join the talent network as a specialist.
             </p>

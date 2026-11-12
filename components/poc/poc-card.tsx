@@ -32,11 +32,11 @@ export function PocCard({ poc, headingLevel = "h3" }: { poc: Poc; headingLevel?:
         )}
       </div>
       <div className="flex flex-1 flex-col p-6">
-        <p className="txm-eyebrow text-txm-indigo">{pocLabels(poc).join(" · ")}</p>
+        <p className="txm-eyebrow text-txm-accent">{pocLabels(poc).join(" · ")}</p>
         <Heading className="mt-2 text-lg font-bold text-txm-ink">
           <Link
             href={pocPath(poc.slug)}
-            className="txm-focus after:absolute after:inset-0 after:content-[''] hover:text-txm-indigo"
+            className="txm-focus after:absolute after:inset-0 after:content-[''] hover:text-txm-accent"
           >
             {poc.title}
           </Link>

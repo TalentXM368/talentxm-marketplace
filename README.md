@@ -5,9 +5,9 @@ The TalentXM corporate website, rebuilt in Next.js. It follows the **Architectur
 ## Stack
 
 - Next.js 16 (App Router, TypeScript), with Cache Components turned on. Every marketing route is prerendered, and `ensureStatic = "navigation"` in `app/layout.tsx` enforces that.
-- Tailwind CSS v4. The TalentXM v2 design tokens are in `app/globals.css`.
+- Tailwind CSS v4. Brand tokens are in `app/globals.css`; the brand guide (logo, colour, type, usage rules) is `BRANDING.md`.
 - react-hook-form and zod for forms F-01…F-05. The schemas are shared between the client and `/api/forms/[formId]`.
-- lucide-react for icons, and Inter through `next/font`.
+- lucide-react for icons, and Montserrat (headings) plus Inter (body) through `next/font`.
 
 ## Scripts
 

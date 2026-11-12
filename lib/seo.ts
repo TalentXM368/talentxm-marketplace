@@ -33,7 +33,7 @@ export const organizationLd = {
   "@type": "Organization",
   name: site.name,
   url: site.url,
-  logo: `${site.url}/images/talentxm-logo.png`,
+  logo: `${site.url}/images/brand/logo-stacked-navy.png`,
   email: site.email,
   address: { "@type": "PostalAddress", addressLocality: "Columbus", addressRegion: "OH", addressCountry: "US" },
   parentOrganization: { "@type": "Organization", name: site.legalEntity },

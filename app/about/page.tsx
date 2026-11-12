@@ -109,7 +109,7 @@ export default function AboutPage() {
           {deliveryRegions.map((r) => (
             <div key={r.name} className="rounded-2xl border border-white/10 bg-txm-surface p-6">
               <h3 className="text-lg font-bold text-white">{r.name}</h3>
-              <p className="txm-small mt-2 text-slate-300">{r.detail}</p>
+              <p className="txm-small mt-2 text-txm-on-dark">{r.detail}</p>
             </div>
           ))}
         </div>
