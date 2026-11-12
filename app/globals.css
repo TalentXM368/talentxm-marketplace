@@ -48,6 +48,17 @@
   --txm-shadow-card: 0 1px 3px rgba(9, 29, 92, 0.06), 0 8px 24px rgba(9, 29, 92, 0.04);
   --txm-shadow-elev: 0 24px 48px -12px rgba(9, 29, 92, 0.18);
   --txm-header-h: 64px;
+
+  /* Motion tokens. Rules and usage: see MOTION.md. */
+  --txm-dur-fast: 200ms;
+  --txm-dur-base: 400ms;
+  --txm-dur-reveal: 800ms;
+  --txm-dur-slow: 1200ms;
+  --txm-ease-out: cubic-bezier(0.19, 1, 0.22, 1);
+  --txm-ease-sharp: cubic-bezier(0.4, 0, 0.1, 1);
+  --txm-ease-in-out: cubic-bezier(0.645, 0.045, 0.355, 1);
+  --txm-reveal-distance: 24px;
+  --txm-stagger: 80ms;
 }
 
 @theme inline {
@@ -212,12 +223,14 @@ body {
     border-radius: var(--txm-radius-lg);
     box-shadow: var(--txm-shadow-card);
     transition:
-      transform 200ms ease,
-      box-shadow 200ms ease;
+      transform var(--txm-dur-base) var(--txm-ease-out),
+      box-shadow var(--txm-dur-base) var(--txm-ease-out),
+      border-color var(--txm-dur-base) var(--txm-ease-out);
   }
   a.txm-card:hover,
   .txm-card-hover:hover {
-    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--txm-brand-orange) 45%, transparent);
+    transform: translateY(-4px);
     box-shadow: var(--txm-shadow-elev);
   }
 
@@ -304,16 +317,438 @@ body {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .txm-mesh-animate {
-    animation: none;
+/* ------------------------------------------------------------------
+   Motion layer. Every pattern here is documented in MOTION.md.
+   ------------------------------------------------------------------ */
+
+@keyframes txm-rise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--txm-reveal-distance));
   }
-  .txm-card,
-  .txm-card-hover {
-    transition: none;
+}
+@keyframes txm-word-up {
+  from {
+    transform: translateY(115%);
+  }
+}
+@keyframes txm-draw-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+@keyframes txm-nudge {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+@layer components {
+  /* Display type: the large, tight headline used in the hero and closing call to action. */
+  .txm-display {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6.1vw, 5.5rem);
+    line-height: 1.02;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+  .txm-display-xl {
+    font-family: var(--font-display);
+    font-size: clamp(2.75rem, 8.4vw, 7.5rem);
+    line-height: 0.98;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  /* Reveal: hidden only while data-reveal="pending" (set by JS for below-the-fold elements). */
+  .txm-reveal[data-reveal="pending"]:not(.txm-reveal-stagger),
+  .txm-reveal-stagger[data-reveal="pending"] > * {
+    opacity: 0;
+  }
+  .txm-reveal[data-reveal="shown"]:not(.txm-reveal-stagger) {
+    animation: txm-rise var(--txm-dur-reveal) var(--txm-ease-out) backwards;
+  }
+  .txm-reveal-stagger[data-reveal="shown"] > * {
+    animation: txm-rise var(--txm-dur-reveal) var(--txm-ease-out) backwards;
+    animation-delay: calc(var(--txm-stagger) * var(--n, 0));
+  }
+  .txm-reveal-stagger > :nth-child(2) {
+    --n: 1;
+  }
+  .txm-reveal-stagger > :nth-child(3) {
+    --n: 2;
+  }
+  .txm-reveal-stagger > :nth-child(4) {
+    --n: 3;
+  }
+  .txm-reveal-stagger > :nth-child(5) {
+    --n: 4;
+  }
+  .txm-reveal-stagger > :nth-child(6) {
+    --n: 5;
+  }
+  .txm-reveal-stagger > :nth-child(n + 7) {
+    --n: 6;
+  }
+  .txm-reveal-reverse > :nth-last-child(1) {
+    --n: 0;
+  }
+  .txm-reveal-reverse > :nth-last-child(2) {
+    --n: 1;
+  }
+  .txm-reveal-reverse > :nth-last-child(3) {
+    --n: 2;
+  }
+  .txm-reveal-reverse > :nth-last-child(4) {
+    --n: 3;
+  }
+  .txm-reveal-reverse > :nth-last-child(5) {
+    --n: 4;
+  }
+  .txm-reveal-reverse > :nth-last-child(n + 6) {
+    --n: 5;
+  }
+
+  /* Heading reveal: each word rises from behind a mask. */
+  .txm-word {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    padding-bottom: 0.16em;
+    margin-bottom: -0.16em;
+  }
+  .txm-word > span {
+    display: inline-block;
+  }
+  .txm-reveal[data-reveal="pending"] .txm-word > span {
+    transform: translateY(115%);
+  }
+  .txm-words-load .txm-word > span,
+  .txm-reveal[data-reveal="shown"] .txm-word > span {
+    animation: txm-word-up 900ms var(--txm-ease-out) backwards;
+    animation-delay: calc(45ms * var(--i, 0) + 80ms);
+  }
+
+  /* Load-in for the pieces around the hero headline. */
+  .txm-load {
+    animation: txm-rise var(--txm-dur-reveal) var(--txm-ease-out) backwards;
+    animation-delay: calc(90ms * var(--i, 0) + 350ms);
+  }
+
+  /* Hero node field: faded toward the text side so the headline keeps its contrast. */
+  .txm-node-field {
+    opacity: 0.4;
+  }
+  @media (min-width: 1024px) {
+    .txm-node-field {
+      opacity: 0.95;
+      mask-image: linear-gradient(to right, transparent 8%, black 62%);
+    }
+  }
+  .txm-scroll-hint > svg {
+    animation: txm-nudge 1.8s var(--txm-ease-in-out) infinite;
+  }
+
+  /* Rolling label on filled and outline buttons. */
+  .txm-roll {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+  }
+  .txm-roll > span {
+    display: block;
+  }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .txm-roll > span,
+    .txm-roll::after {
+      transition: transform var(--txm-dur-base) var(--txm-ease-sharp);
+    }
+    .txm-roll::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      transform: translateY(110%);
+    }
+    a:hover > .txm-roll > span,
+    a:focus-visible > .txm-roll > span {
+      transform: translateY(-110%);
+    }
+    a:hover > .txm-roll::after,
+    a:focus-visible > .txm-roll::after {
+      transform: translateY(0);
+    }
+  }
+
+  /* A dark section that slides over the one before it like a sheet. */
+  .txm-sheet {
+    position: relative;
+    margin-top: -40px;
+    border-radius: 40px 40px 0 0;
+  }
+
+  /* Journey steps joined by a line that draws itself. */
+  .txm-journey {
+    position: relative;
+    padding-top: 28px;
+  }
+  .txm-journey::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: 3px;
+    background: var(--txm-gradient-primary);
+    transform-origin: left;
+  }
+  .txm-journey[data-reveal="pending"]::before {
+    transform: scaleX(0);
+  }
+  .txm-journey[data-reveal="shown"]::before {
+    animation: txm-draw-x var(--txm-dur-slow) var(--txm-ease-in-out) backwards;
+  }
+
+  /* Rail: horizontal cards with native scroll snap, aligned to the page container. */
+  .txm-rail {
+    --rail-pad: max(24px, calc((100vw - 1200px) / 2 + 24px));
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--rail-pad);
+    padding: 8px var(--rail-pad) 16px;
+    scrollbar-width: none;
+  }
+  .txm-rail::-webkit-scrollbar {
+    display: none;
+  }
+  .txm-rail > li {
+    flex: 0 0 min(84vw, 400px);
+    scroll-snap-align: start;
+  }
+  .txm-rail:focus-visible {
+    outline: 2px solid var(--txm-brand-navy);
+    outline-offset: -2px;
+  }
+  @media (max-width: 640px) {
+    .txm-rail {
+      --rail-pad: 16px;
+    }
+  }
+  .txm-rail-btn {
+    display: inline-flex;
+    height: 48px;
+    width: 48px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid var(--txm-border-default);
+    background: var(--txm-bg-elevated);
+    color: var(--txm-text-primary);
+    transition:
+      background-color var(--txm-dur-fast) var(--txm-ease-in-out),
+      color var(--txm-dur-fast) var(--txm-ease-in-out);
+  }
+  .txm-rail-btn:hover {
+    background: var(--txm-bg-base);
+    color: var(--txm-text-inverse);
+  }
+
+  /* Pinned story. Stacked by default; pins on large screens once JS has enhanced it. */
+  .txm-story {
+    background: var(--txm-bg-base);
+    color: var(--txm-text-inverse);
+  }
+  .txm-story-pin {
+    padding-block: 64px;
+  }
+  .txm-story-stages {
+    display: grid;
+    gap: 16px;
+  }
+  .txm-story-rail {
+    position: relative;
+    display: grid;
+    gap: 18px;
+  }
+  .txm-story-rail::before,
+  .txm-story-rail::after {
+    content: "";
+    position: absolute;
+    left: 13px;
+    top: 14px;
+    bottom: 14px;
+    width: 2px;
+    background: var(--txm-border-subtle);
+  }
+  .txm-story-rail::after {
+    background: var(--txm-brand-yellow);
+    transform-origin: top;
+    transform: scaleY(var(--story-p, 0));
+  }
+  .txm-story-rail > li {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--txm-text-on-dark);
+    transition: color var(--txm-dur-base) var(--txm-ease-in-out);
+  }
+  .txm-story-dot {
+    display: flex;
+    height: 28px;
+    width: 28px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 2px solid var(--txm-tint-cool);
+    background: var(--txm-bg-base);
+    font-size: 12px;
+    font-weight: 700;
+    transition:
+      background-color var(--txm-dur-base) var(--txm-ease-in-out),
+      border-color var(--txm-dur-base) var(--txm-ease-in-out),
+      color var(--txm-dur-base) var(--txm-ease-in-out);
+  }
+  .txm-story-label {
+    font-weight: 600;
+  }
+  .txm-story-rail > li[data-state="active"],
+  .txm-story-rail > li[data-state="done"] {
+    color: var(--txm-text-inverse);
+  }
+  .txm-story-rail > li[data-state="active"] .txm-story-dot,
+  .txm-story-rail > li[data-state="done"] .txm-story-dot {
+    border-color: var(--txm-brand-yellow);
+    background: var(--txm-brand-yellow);
+    color: var(--txm-brand-navy);
+  }
+
+  @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+    .txm-story[data-enhanced] {
+      height: calc(var(--story-steps, 4) * 80vh + 100vh);
+    }
+    .txm-story[data-enhanced] .txm-story-pin {
+      position: sticky;
+      top: 0;
+      display: flex;
+      height: 100vh;
+      align-items: center;
+      padding-block: calc(var(--txm-header-h) + 24px) 24px;
+    }
+    .txm-story[data-enhanced] .txm-story-stages {
+      gap: 0;
+    }
+    .txm-story[data-enhanced] .txm-story-stage {
+      grid-area: 1 / 1;
+      transition:
+        opacity var(--txm-dur-base) linear,
+        transform var(--txm-dur-reveal) var(--txm-ease-out),
+        visibility 0s linear var(--txm-dur-base);
+    }
+    .txm-story[data-enhanced] .txm-story-stage[data-state="todo"] {
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(56px) scale(0.97);
+    }
+    .txm-story[data-enhanced] .txm-story-stage[data-state="done"] {
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(-56px) scale(0.97);
+    }
+    .txm-story[data-enhanced] .txm-story-stage[data-state="active"] {
+      visibility: visible;
+      transition-delay: 0s;
+    }
+    .txm-story[data-enhanced] .txm-story-stage[data-state="active"] .txm-story-item {
+      animation: txm-rise 600ms var(--txm-ease-out) backwards;
+    }
+    .txm-story[data-enhanced] .txm-story-item:nth-child(2) {
+      animation-delay: 70ms;
+    }
+    .txm-story[data-enhanced] .txm-story-item:nth-child(3) {
+      animation-delay: 140ms;
+    }
+    .txm-story[data-enhanced] .txm-story-item:nth-child(4) {
+      animation-delay: 210ms;
+    }
+  }
+}
+
+/* Page transition: old page leaves quickly, new page rises in. The header stays put. */
+::view-transition-old(.txm-page) {
+  animation: 160ms ease-in both txm-vt-out;
+}
+::view-transition-new(.txm-page) {
+  animation: 460ms var(--txm-ease-out) 120ms both txm-vt-in;
+}
+@keyframes txm-vt-out {
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+@keyframes txm-vt-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(site-header) {
+  display: none;
+}
+::view-transition-new(site-header) {
+  animation: none;
+}
+::view-transition {
+  pointer-events: none;
+}
+
+/* Reduced motion: nothing moves, everything is visible. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+  .txm-mesh-animate,
+  .txm-scroll-hint > svg {
+    animation: none !important;
+  }
+  .txm-reveal[data-reveal="pending"],
+  .txm-reveal-stagger[data-reveal="pending"] > * {
+    opacity: 1 !important;
+  }
+  .txm-reveal[data-reveal="pending"] .txm-word > span,
+  .txm-journey[data-reveal="pending"]::before {
+    transform: none !important;
   }
   a.txm-card:hover,
   .txm-card-hover:hover {
     transform: none;
+  }
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
   }
 }

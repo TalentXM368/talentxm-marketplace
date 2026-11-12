@@ -97,6 +97,8 @@ export function SiteHeader() {
       </div>
 
       <header
+        // Anchored during page transitions so only the content moves (MOTION.md).
+        style={{ viewTransitionName: "site-header" }}
         className={cn(
           "sticky top-0 z-40 border-b bg-white/95 backdrop-blur transition-shadow",
           condensed ? "border-txm-line shadow-txm-card" : "border-transparent",

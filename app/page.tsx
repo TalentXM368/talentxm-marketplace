@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { AgentGrid } from "@/components/catalog/agent-catalog";
+import { AgentCard } from "@/components/catalog/agent-card";
+import { AgentFlowStory, type FlowStage } from "@/components/motion/agent-flow-story";
+import { NodeField } from "@/components/motion/node-field";
+import { Rail } from "@/components/motion/rail";
+import { Reveal } from "@/components/motion/reveal";
 import {
   ClientLogoStrip,
   ComplianceRow,
@@ -22,6 +26,7 @@ import { industries } from "@/content/industries";
 import { domainsByStack } from "@/content/services";
 import { clientLogos, site, stats, testimonials } from "@/content/site";
 import { evidenceItems } from "@/content/trust";
+import { getPocs, pocPath } from "@/lib/pocs";
 import { organizationLd, pageMetadata, websiteLd } from "@/lib/seo";
 
 export const metadata = {
@@ -67,8 +72,30 @@ const journey = [
   { title: "Deploy", body: "We build in your environment, report against the measures agreed on day one and hand over runbooks." },
 ];
 
+/** The agent the home page walks through, stage by stage (MOTION.md: "Pinned story"). */
+const featuredAgentSlug = "schedulexm";
+
 export default function HomePage() {
   const domains = domainsByStack();
+  const featured = agents.find((a) => a.slug === featuredAgentSlug) ?? agents[0];
+  const featuredPoc = getPocs().find((p) => p.agent === featured.slug);
+  const flowStages: FlowStage[] = [
+    { key: "inputs", label: "Inputs", title: "What the agent reads", items: featured.inputs.map((text) => ({ text })) },
+    { key: "agent", label: "Agent", title: "What the agent does", items: featured.actions.map((text) => ({ text })) },
+    {
+      key: "human",
+      label: "Human decision",
+      title: "Where a person decides",
+      items: featured.humanDecisionPoints.map((d) => ({ text: `${d.step}: ${d.who}`, detail: d.why })),
+    },
+    {
+      key: "systems",
+      label: "Systems",
+      title: "What it runs on",
+      items: featured.techTags.map((t) => ({ text: t.name })),
+    },
+  ];
+
   return (
     <>
       <JsonLd data={organizationLd} />
@@ -76,6 +103,9 @@ export default function HomePage() {
 
       <Hero
         size="lg"
+        display
+        visual={<NodeField />}
+        scrollHint={{ label: "See an agent at work", href: "#agent-flow" }}
         eyebrow="Enterprise AI services · US · LATAM · India"
         title="Enterprise AI, built into the systems you already run."
         lede="TalentXM is a services firm. We prepare your platforms and data, build AI agents for specific workflows and staff the teams that run them, with a person in charge of every decision."
@@ -86,7 +116,7 @@ export default function HomePage() {
       <ClientLogoStrip logos={clientLogos} />
 
       <section className="border-b border-txm-line bg-white py-10" aria-label="Frameworks and partnerships">
-        <div className="txm-container">
+        <Reveal className="txm-container">
           <p className="txm-eyebrow mb-6 text-center text-txm-subtle">
             Designed against the frameworks security teams ask for
           </p>
@@ -97,27 +127,56 @@ export default function HomePage() {
               Current trust status
             </Link>
           </p>
-        </div>
+        </Reveal>
+      </section>
+
+      <section id="agent-flow" aria-labelledby="flow-title">
+        <AgentFlowStory
+          stages={flowStages}
+          header={
+            <div>
+              <p className="txm-eyebrow mb-3 text-txm-yellow">Inside {featured.name}</p>
+              <h2 id="flow-title" className="txm-h2 text-white">
+                Follow one request from start to finish.
+              </h2>
+              <p className="txm-lede mt-4 text-txm-on-dark">{featured.summary}</p>
+            </div>
+          }
+          footer={
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <ButtonLink href={`/ai-agents/${featured.slug}`} tone="dark">
+                View agent
+              </ButtonLink>
+              {featuredPoc && (
+                <ButtonLink href={pocPath(featuredPoc.slug)} tone="dark" variant="secondary">
+                  Watch the walkthrough
+                </ButtonLink>
+              )}
+            </div>
+          }
+        />
       </section>
 
       <Section labelledBy="holistic-title">
         <SectionHeader
+          reveal
           id="holistic-title"
           eyebrow="What we do"
           title="One partner from the platform to the agent."
           description="Most AI work fails between teams: the platform team, the integration partner and the AI vendor. We cover the whole path, so one team is accountable for the outcome."
         />
-        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <Reveal stagger className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {holistic.map((h, i) => (
             <ServiceCard key={h.href} number={String(i + 1).padStart(2, "0")} {...h} />
           ))}
-        </div>
+        </Reveal>
       </Section>
 
       <Section tone="light" labelledBy="stack-title">
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div>
             <SectionHeader
+              reveal
               id="stack-title"
               align="left"
               eyebrow="Enterprise AI Services"
@@ -130,25 +189,27 @@ export default function HomePage() {
               </ButtonLink>
             </div>
           </div>
-          <StackDiagram domains={domains} />
+          <StackDiagram domains={domains} reveal />
         </div>
       </Section>
 
       <Section labelledBy="journey-title">
         <SectionHeader
+          reveal
           id="journey-title"
           eyebrow="How it works"
           title="Define. Match. Deploy."
           description="Three steps from the first conversation to work running in your environment."
         />
         <div className="mt-12">
-          <JourneySteps steps={journey} />
+          <JourneySteps steps={journey} reveal />
         </div>
       </Section>
 
-      <Section tone="light" labelledBy="agents-title">
-        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+      <section className="txm-section txm-section-light" aria-labelledby="agents-title">
+        <div className="txm-container flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <SectionHeader
+            reveal
             id="agents-title"
             align="left"
             eyebrow="AI Agents"
@@ -160,18 +221,25 @@ export default function HomePage() {
           </ButtonLink>
         </div>
         <div className="mt-12">
-          <AgentGrid items={agents} />
+          <Rail label="AI agents">
+            {agents.map((a) => (
+              <li key={a.slug}>
+                <AgentCard agent={a} />
+              </li>
+            ))}
+          </Rail>
         </div>
-      </Section>
+      </section>
 
-      <Section labelledBy="industries-title">
+      <Section labelledBy="industries-title" className="pb-28 lg:pb-36">
         <SectionHeader
+          reveal
           id="industries-title"
           eyebrow="Industries"
           title="Depth where the workflows are hardest."
           description="We concentrate on two industries where administrative and operational load is highest, and bring the same services to enterprise operations everywhere."
         />
-        <div className="mx-auto mt-12 grid max-w-4xl gap-6 md:grid-cols-3">
+        <Reveal stagger className="mx-auto mt-12 grid max-w-4xl gap-6 md:grid-cols-3">
           {industries.map((i) => (
             <IndustryCard key={i.slug} title={i.name} description={i.summary} href={`/industries/${i.slug}`} icon={i.icon} />
           ))}
@@ -181,18 +249,19 @@ export default function HomePage() {
             href="/industries"
             icon="building"
           />
-        </div>
+        </Reveal>
       </Section>
 
-      <Section tone="dark" labelledBy="delivery-title">
+      <Section tone="dark" labelledBy="delivery-title" className="txm-sheet">
         <SectionHeader
+          reveal
           id="delivery-title"
           inverse
           eyebrow="Delivery models"
           title="From one specialist to a team that owns the outcome."
           description="Talent-led models add people to your team. Outcome-led models make us accountable for the result."
         />
-        <div className="mt-12 grid gap-4 md:grid-cols-2">
+        <Reveal stagger className="mt-12 grid gap-4 md:grid-cols-2">
           {(["talent-led", "outcome-led"] as const).map((group) => (
             <div key={group} className="rounded-2xl border border-white/10 bg-txm-surface p-6">
               <p className="txm-eyebrow text-txm-yellow">{group === "talent-led" ? "Talent-led" : "Outcome-led"}</p>
@@ -211,7 +280,7 @@ export default function HomePage() {
               </ul>
             </div>
           ))}
-        </div>
+        </Reveal>
         <div className="mt-10 text-center">
           <ButtonLink href="/flexible-talent" tone="dark" variant="secondary">
             Compare delivery models
@@ -227,6 +296,7 @@ export default function HomePage() {
       <Section labelledBy="evidence-title">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <SectionHeader
+            reveal
             id="evidence-title"
             align="left"
             eyebrow="Work"
@@ -237,7 +307,7 @@ export default function HomePage() {
             See the work
           </ButtonLink>
         </div>
-        <ul className="mt-12 grid gap-6 md:grid-cols-3">
+        <Reveal as="ul" stagger className="mt-12 grid gap-6 md:grid-cols-3">
           {evidenceItems.slice(0, 3).map((e) => (
             <li key={e.slug} className="txm-card p-7">
               <p className="txm-eyebrow text-txm-accent">{e.label}</p>
@@ -245,7 +315,7 @@ export default function HomePage() {
               <p className="txm-small mt-2 text-txm-slate">{e.validationSummary}</p>
             </li>
           ))}
-        </ul>
+        </Reveal>
         {testimonials.length > 0 && (
           <div className="mt-12">
             <TestimonialGrid items={testimonials} />
@@ -255,12 +325,13 @@ export default function HomePage() {
 
       <Section tone="light" labelledBy="trust-title">
         <SectionHeader
+          reveal
           id="trust-title"
           eyebrow="Trust"
           title="What we hold today, and what is in progress."
           description="Our trust page lists partnerships, controls and programmes with the date each was last reviewed."
         />
-        <div className="mx-auto mt-12 grid max-w-4xl gap-4 md:grid-cols-3">
+        <Reveal stagger className="mx-auto mt-12 grid max-w-4xl gap-4 md:grid-cols-3">
           {[
             { label: "Security & status", href: "/trust" },
             { label: "Responsible AI", href: "/trust#responsible-ai" },
@@ -278,17 +349,18 @@ export default function HomePage() {
               />
             </Link>
           ))}
-        </div>
+        </Reveal>
       </Section>
 
       <CTABand
+        size="xl"
         title="Start with one workflow."
         description="Tell us the workflow and the systems involved. We will come back with a view on where AI helps, and where it does not."
         primary={site.primaryCta}
         secondary={{ label: "Explore AI Agents", href: "/ai-agents" }}
       />
 
-      <section className="txm-section-dark py-16" aria-labelledby="marketplace-title">
+      <section className="txm-section-dark border-t border-white/10 py-16" aria-labelledby="marketplace-title">
         <div className="txm-container flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
           <div className="max-w-2xl">
             <p className="txm-eyebrow text-txm-yellow">Coming next · Early access</p>

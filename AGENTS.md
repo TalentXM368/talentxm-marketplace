@@ -11,3 +11,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 ## Brand
 
 Read `BRANDING.md` before changing any UI. Use the `txm-*` tokens from `app/globals.css`; do not add raw hex colours in components.
+
+## Motion
+
+Read `MOTION.md` before adding animation, transitions or scroll effects. Reuse the patterns in `components/motion/` and the motion tokens in `app/globals.css`; every effect needs a reduced-motion fallback and must leave content readable without JavaScript.
