@@ -14,9 +14,9 @@ export const metadata = pageMetadata({
 /** Shown in place of every locked page while the site is under development (lib/site-lock.ts). */
 export default function UnderDevelopment() {
   return (
-    <section className="txm-mesh-bg flex min-h-[70vh] items-center">
+    <section className="txm-under-header flex min-h-[70vh] items-center bg-txm-base">
       <div className="txm-container py-20">
-        <p className="txm-eyebrow text-txm-yellow">Under development</p>
+        <p className="txm-small font-semibold text-txm-yellow">Under development</p>
         <h1 className="txm-h1 mt-3 max-w-3xl text-white">This part of TalentXM.ai is still being built.</h1>
         <p className="txm-lede mt-4 max-w-2xl text-txm-on-dark">
           The POC Library is open now. Watch the proofs of concept we have built and recorded, and filter them by

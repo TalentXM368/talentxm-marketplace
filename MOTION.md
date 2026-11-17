@@ -13,15 +13,15 @@ The site should sell by sight: a visitor should see how an agent works, not only
 | Squarespace | One shared scroll reveal, a small set of easing curves, cards that respond on hover, a rail of large cards, full support for reduced motion | Hero video (we have no footage yet), counting stats (we have no sourced numbers) |
 | Lusion | Very large display type against small text, headings that rise from behind a mask, rolling button labels, one signature visual in the hero, a huge closing call to action, sections that slide over each other | Hijacked scrolling, blocked zoom, sound, a heavy 3D scene, no reduced-motion support |
 
-**Level chosen:** hybrid. A refined base on every section, plus two signature moments on the home page: the ribbon field in the hero and the pinned agent story.
+**Level chosen:** hybrid. A refined base on every section, plus signature moments on the home page: the logo form in the hero, the agent flow, and scroll-linked type in place of card grids. Home sections are built as one idea each, set large, not as rows of identical cards.
 
 ## Principles
 
 1. **Motion explains the product.** The strongest animation on a page shows an agent doing its job: inputs arrive, the agent acts, a person decides, systems update.
 2. **One idea per section.** A section gets one motion pattern, not three.
 3. **Content never depends on motion.** Everything is in the server HTML and readable with JavaScript off, with reduced motion on, and on a slow phone.
-4. **Play once.** Reveals run the first time an element enters the screen and never replay while scrolling up and down.
-5. **Fast in, calm after.** Entrances are quick and ease out; nothing loops except the ribbon field, the slow background mesh and the small scroll hint.
+4. **Play once.** Reveals run the first time an element enters the screen and never replay while scrolling up and down. The exception is depth on scroll, which is tied to scroll position by design and settles flat.
+5. **Fast in, calm after.** Entrances are quick and ease out; nothing loops except the logo form and the small scroll hint.
 6. **The page scrolls natively.** No smooth-scroll library and no scroll hijacking.
 
 ## Tokens
@@ -72,21 +72,22 @@ Each pattern has one implementation. Reuse it; do not build a second version.
 - **How:** `.txm-display` (hero, up to 88px) and `.txm-display-xl` (closing call, up to 120px). Enable with `<Hero display>` and `<CTABand size="xl">`.
 - **Limit:** one display headline per screen.
 
-### Ribbon field (brand shapes)
+### Logo form
 
-- **What:** the large flowing forms from the brand board's website concept: an orange ribbon with a glowing rim and a fine dot texture, over a teal crescent and a yellow lobe, with two hairline arcs and light film grain. They wipe in from the right on load, drift slowly, shift a little with the pointer and slide as the page scrolls.
-- **Colour:** Energy Orange-Red, Human Teal and Opportunity Yellow on deep navy. On an orange surface (`palette="on-orange"`) the ribbon becomes Trust Blue.
-- **How:** `<RibbonField />` in `components/motion/ribbon-field.tsx`. Every `Hero` shows it: the home hero at full strength, interior heroes with `tone="soft"`. One inline SVG moved with CSS; no canvas and no 3D library.
-- **Rules:** shapes stay on the right so the headline on the left keeps its contrast; on small screens they sit behind the text at 38% opacity; decorative and hidden from assistive technology.
-- **Limit:** hero and closing call only. Do not place it behind body content.
+- **What:** the TalentXM mark larger than the hero and cut by its top, bottom and right edges, as on the brand essence board ("Human Intelligence Extended"). Orange, yellow and teal blend inside it; its rims glow against deep navy. It is drawn in 3D from its first frame: it breathes slowly, catches light from the pointer and recedes as the page scrolls.
+- **How:** `<LogoForm />` in `components/motion/logo-form.tsx`, with the mark's paths in `components/brand/mark-paths.ts`. On deep navy, WebGL (`components/motion/logo-form-gl.ts`) starts as soon as the component mounts: the mark is turned into a signed distance field and drawn by one fragment shader. Raw WebGL, no library. The inline SVG is in the HTML but stays hidden while WebGL starts (CSS `@media (scripting: enabled)`), so the flat version never flashes first.
+- **Variants:** `tone="hero"` on the home page; `tone="soft"`, placed further right and dimmer, on every interior `Hero` and inner-page closing band. `palette="on-orange"` draws the mark flat in Trust Blue for the home closing call.
+- **Rules:** the form stays on the right so the headline on the left keeps its contrast; on small screens it sits behind the text at reduced opacity; decorative and hidden from assistive technology.
+- **Fallback:** without JavaScript, without WebGL (`data-gl="off"`), if the WebGL context is lost, if the first frame has not arrived after 2.5 seconds, or with reduced motion, the still SVG shows.
+- **Limit:** heroes and closing bands only, so at most two per page. Do not place it behind body content.
 
-### Pinned story (the agent at work)
+### Agent flow (the agent at work)
 
-- **What:** the section stays fixed while scrolling walks through four stages: Inputs, Agent, Human decision, Systems. A progress rail on the left fills as you go.
-- **Why:** this is the main "show, don't tell" moment. The human decision stage is the only one on the brand gradient, so the eye lands on the point that a person stays in charge.
-- **How:** `<AgentFlowStory>` in `components/motion/agent-flow-story.tsx`. The home page builds the stages from a real agent record in `content/agents.ts` (`inputs`, `actions`, `humanDecisionPoints`, `techTags`); change `featuredAgentSlug` in `app/page.tsx` to feature another agent.
-- **Fallback:** on screens under 1024px, with reduced motion, or without JavaScript, the four stages are simply stacked in the page.
-- **Limit:** one pinned section per page. Each stage holds about 80% of a screen of scrolling; do not make it longer.
+- **What:** one request travels along a line through the four stations of an agent: Inputs, Agent, Human decision, Systems. The current station is lit, the line fills in Energy Orange-Red behind it, and a yellow packet rides the line. It rests longest at the human decision, the only station drawn in Opportunity Yellow.
+- **Why:** this is the main "show, don't tell" moment. It plays by itself, so there is no card-by-card scrolling to get through, and the eye lands on the point where a person stays in charge.
+- **How:** `<AgentFlow>` in `components/motion/agent-flow.tsx`. It plays only while at least a third of it is on screen; a pause button stops it, and clicking any station opens that one and stops playback. Items can link (`href`).
+- **Where:** the home page uses it to explain the whole offer (platforms and data, AI agents, people decide, teams), each item linking to the page that covers it. Every agent page (`/ai-agents/[slug]`) uses it for that agent, built from its record in `content/agents.ts` (`inputs`, `actions`, `humanDecisionPoints`, `techTags`).
+- **Fallback:** without JavaScript, or with reduced motion, every station is shown at full strength and nothing plays. Under 1024px the stations stack, joined by short connectors.
 
 ### Rail
 
@@ -102,8 +103,19 @@ Each pattern has one implementation. Reuse it; do not build a second version.
 
 ### Drawn line
 
-- **What:** a gradient line draws from left to right above a row of steps, then the steps rise in.
+- **What:** a solid orange line draws from left to right above a row of steps, then the steps rise in.
 - **How:** `<JourneySteps reveal>`.
+
+### Scroll-linked type and layout
+
+CSS scroll-driven animations (`animation-timeline`) in `app/globals.css`, used in place of card grids on the home page. They are tied to scroll position, so they also run backwards, and everything comes to rest fully visible. With reduced motion, or in browsers without support, the layout is shown still and complete.
+
+- **Scroll-lit statement** (`<ScrubStatement>` in `components/motion/scroll-type.tsx`): a large sentence whose words brighten one after another as it moves up the screen. One per page.
+- **Step words** (`<StepWords>`, same file): a real sequence set as very large words that start as outlines and fill in, one after another. Use only for content that is a sequence.
+- **Spotlight index** (`<StackIndex>` in `components/sections/stack-index.tsx`): the service domains as large type rows, top layer first; each row's words drift in and brighten as it passes the middle of the screen. From 768px up.
+- **Coverflow rail** (`<Rail coverflow>`): cards near the edges of the rail turn away in depth and fade; cards fully in view face forward. Driven by the rail's own sideways scroll. From 768px up.
+- **Hours band** (`<FollowTheSun>` in `components/motion/follow-the-sun.tsx`): each delivery hub's working day on one 24-hour axis in the visitor's time zone, with a line at the current time. Bars grow in on scroll. Before the visitor's clock is known (server render), it is drawn in UTC.
+- **Expanding panels** (`<IndustryPanels>` in `components/sections/industry-panels.tsx`): industries as tall photo panels side by side; the one under the pointer or keyboard focus widens. This answers the visitor, it is not scroll-linked. Stacked under 1024px.
 
 ### Sheet
 
@@ -118,21 +130,20 @@ Each pattern has one implementation. Reuse it; do not build a second version.
 
 ### Closing call
 
-- **What:** a full-width Energy Orange-Red band with the largest type on the page, the ribbon field in Trust Blue, and the primary action as a deep navy pill. It is the one full-colour surface on a page.
+- **What:** a full-width Energy Orange-Red band with the largest type on the page, the logo form in Trust Blue, and the primary action as a deep navy pill. It is the one full-colour surface on a page.
 - **How:** `<CTABand size="xl">`.
 
 ## Scroll triggers
 
 - Threshold: 10% of the element visible, with the trigger line 6% above the bottom of the screen.
 - Once only. If a visitor leaves the page and comes back, revealed elements stay revealed.
-- Pinned content must clear the fixed header; use `--txm-header-h`.
+- Sticky or fixed content must clear the fixed header; use `--txm-header-h`.
 - In-page links land below the header (`scroll-padding-top` is already set).
 
 ## Brand in motion
 
-- Moving colour is limited to the brand shapes (ribbon field) and the brand gradient, on deep navy or on Energy Orange-Red.
-- The background mesh keeps its low opacity; white text sits on it.
-- Text on the gradient is navy, never white.
+- Moving colour is limited to the logo form, on deep navy or on Energy Orange-Red. The brand colours never blend in UI fills (BRANDING.md, "Gradient").
+- Text on yellow or orange is navy, never white.
 - One bright colour per component still applies when things move.
 
 ## Accessibility
@@ -140,30 +151,33 @@ Each pattern has one implementation. Reuse it; do not build a second version.
 | Pattern | With "reduce motion" on |
 |---|---|
 | Reveal, heading reveal, load-in | Content is visible immediately, no movement |
-| Ribbon field | Still shapes, no drift, no pointer or scroll movement |
-| Pinned story | Stages stacked in the page, no pinning |
+| Logo form | Still SVG, no WebGL, no drift |
+| Scroll-linked type and layout | Shown still and complete |
+| Agent flow | Does not play; every station at full strength; stations can still be opened |
 | Rail | Still scrolls; buttons jump without animation |
 | Hover lift and rolling labels | Off |
 | Drawn line | Shown complete |
 | Page transition | Instant page change |
-| Background mesh, scroll hint | Still |
+| Scroll hint | Still |
 
 Also:
 - Keyboard focus is always visible, and focus order follows the reading order.
-- Nothing flashes, and nothing moves by itself for more than a few seconds apart from slow background drift.
+- Nothing flashes. The only thing that moves by itself for long is the agent flow, which can be paused and stops when it leaves the screen, plus slow background drift.
 - Zoom and text selection are never disabled.
 
 ## Performance
 
-- No animation library is installed. Reveals use `IntersectionObserver` plus CSS; the story uses one scroll listener throttled to a frame; the ribbon field is one inline SVG moved with CSS.
+- No animation library is installed. Reveals use `IntersectionObserver` plus CSS; the agent flow uses one timer and one `IntersectionObserver`; scroll-linked type and layout is pure CSS; the logo form is an inline SVG plus, on the home hero, one raw WebGL fragment shader.
+- The WebGL logo form starts when the browser is idle, is code-split, caps the pixel ratio at 1.5, and pauses when the hero is off screen or the tab is hidden.
 - The hero headline is real text and appears within the first second; the canvas starts after the page is interactive.
 - Every observer, listener and animation loop is cleaned up when a page is hidden, because Next keeps previous pages mounted.
 - Before adding a dependency (Motion, GSAP, three.js), show that the pattern cannot be built with what is here.
 
 ## Mobile
 
-- Pinned story becomes four stacked cards.
-- Ribbon field sits behind the text at 38% opacity.
+- Agent flow stations stack, joined by short connectors.
+- Logo form sits behind the text at reduced opacity.
+- The spotlight index and coverflow are still below 768px; the statement, step words and hours band still animate.
 - Rails use native swipe with snap.
 - Hover effects do not run on touch.
 
@@ -171,24 +185,22 @@ Also:
 
 | # | Section | Motion |
 |---|---|---|
-| 1 | Hero | Display headline rises word by word; ribbon field; brand signature line; load-in; scroll hint |
-| 2 | Frameworks strip | Reveal |
-| 3 | Inside an agent | Pinned story |
-| 4 | What we do | Heading reveal; four cards staggered |
-| 5 | Five domains, one stack | Layers build from the foundation up |
-| 6 | Define. Match. Deploy. | Drawn line, then steps |
-| 7 | Six agents | Rail |
-| 8 | Industries | Cards staggered |
-| 9 | Delivery models | Sheet; two panels staggered |
-| 10 | Work, Trust | Cards staggered |
-| 11 | Closing call | Display-XL headline on orange with the ribbon field in Trust Blue |
-| 12 | Marketplace teaser | Still |
+| 1 | Hero | Display headline rises word by word; logo form (WebGL); tagline under a hairline rule; load-in; scroll hint |
+| 2 | Client logos (when there are any) | Reveal |
+| 3 | How it works: platforms and data, agents, people decide, teams | Agent flow, every step linking to its page |
+| 4 | Five domains, one stack | Scroll-lit statement, then spotlight index |
+| 5 | Define. Match. Deploy. | Step words |
+| 6 | Six agents | Coverflow rail |
+| 7 | Industries | Expanding panels |
+| 8 | Hours and delivery models | Hours band; delivery models on one line |
+| 9 | Work and trust | Rows staggered; frameworks |
+| 10 | Closing call | Display-XL headline on orange with the logo form in Trust Blue |
+| 11 | Marketplace teaser | Still |
 
 ## Roadmap for other pages
 
 Not built yet; apply with the same components.
 
-- **Agent page (`/ai-agents/[slug]`):** replace the static four-box flow with `AgentFlowStory` for that agent; reveal on current versus assisted workflow.
 - **POC Library:** staggered grid; on the POC page, a progress line on the walkthrough timeline tied to the video.
 - **Services:** stack diagram reveal with the current layer highlighted; capability cards staggered.
 - **Industries:** use-case rows revealed in sequence.

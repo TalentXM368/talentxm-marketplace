@@ -31,20 +31,19 @@ export function Section({
 }
 
 /**
- * Eyebrow + H2 + subtitle that opens every section (UX01: reuse).
+ * H2 and an optional one-line description that open a section (UX01: reuse). Left aligned by default.
+ * No label above the headline: the headline says what the section is.
  * `reveal` animates it in on scroll, with the title rising word by word (MOTION.md).
  */
 export function SectionHeader({
-  eyebrow,
   title,
   description,
-  align = "center",
+  align = "left",
   inverse = false,
   reveal = false,
   id,
   className,
 }: {
-  eyebrow?: string;
   title: React.ReactNode;
   description?: React.ReactNode;
   align?: "left" | "center";
@@ -56,12 +55,11 @@ export function SectionHeader({
   const classes = cn("max-w-3xl", align === "center" ? "mx-auto text-center" : "text-left", className);
   const content = (
     <>
-      {eyebrow && <p className={cn("txm-eyebrow mb-3", inverse ? "text-txm-yellow" : "text-txm-accent")}>{eyebrow}</p>}
       <h2 id={id} className={cn("txm-h2", inverse ? "text-white" : "text-txm-ink")}>
         {reveal && typeof title === "string" ? <SplitText text={title} /> : title}
       </h2>
       {description && (
-        <p className={cn("txm-lede mt-4", inverse ? "text-txm-on-dark" : "text-txm-slate")}>{description}</p>
+        <p className={cn("txm-lede mt-5 max-w-2xl", inverse ? "text-txm-on-dark" : "text-txm-slate")}>{description}</p>
       )}
     </>
   );

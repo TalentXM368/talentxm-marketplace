@@ -50,7 +50,7 @@ export default function ContactPage() {
       />
 
       <Section labelledBy="next-title">
-        <SectionHeader id="next-title" eyebrow="What happens next" title="Three steps after you send this." />
+        <SectionHeader id="next-title" title="Three steps after you send this." />
         <div className="mt-12">
           <JourneySteps steps={nextSteps} />
         </div>
@@ -68,14 +68,14 @@ export default function ContactPage() {
           </div>
 
           <aside className="space-y-4" aria-label="Other ways to reach us">
-            <div className="rounded-2xl border border-txm-line bg-white p-6">
+            <div className="border-t border-txm-line pt-6">
               <Mail className="h-5 w-5 text-txm-accent" aria-hidden="true" />
               <p className="mt-3 font-semibold text-txm-ink">Email</p>
               <a href={`mailto:${site.email}`} className="txm-focus txm-small text-txm-accent hover:text-txm-base">
                 {site.email}
               </a>
             </div>
-            <div className="rounded-2xl border border-txm-line bg-white p-6">
+            <div className="border-t border-txm-line pt-6">
               <MessageCircle className="h-5 w-5 text-txm-accent" aria-hidden="true" />
               <p className="mt-3 font-semibold text-txm-ink">WhatsApp</p>
               <a
@@ -87,7 +87,7 @@ export default function ContactPage() {
                 {site.whatsapp.display}
               </a>
             </div>
-            <div className="rounded-2xl border border-txm-line bg-white p-6">
+            <div className="border-t border-txm-line pt-6">
               <MapPin className="h-5 w-5 text-txm-accent" aria-hidden="true" />
               <p className="mt-3 font-semibold text-txm-ink">Location</p>
               <p className="txm-small text-txm-slate">
@@ -95,8 +95,8 @@ export default function ContactPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-txm-line bg-white p-2">
-              <p className="txm-eyebrow px-4 pt-4 pb-2 text-txm-subtle">Other routes</p>
+            <div className="border-t border-txm-line pt-2">
+              <p className="txm-small font-semibold px-4 pt-4 pb-2 text-txm-subtle">Other routes</p>
               <ul>
                 {otherRoutes.map((r) => (
                   <li key={r.href}>

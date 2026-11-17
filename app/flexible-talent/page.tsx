@@ -1,10 +1,12 @@
 import { FormSection } from "@/components/forms/form-section";
+import { FollowTheSun } from "@/components/motion/follow-the-sun";
 import { FAQ, PodModelDiagram, QuestionCards } from "@/components/sections/blocks";
+import { DeliveryScale } from "@/components/sections/delivery-scale";
 import { Hero } from "@/components/sections/hero";
 import { Section, SectionHeader } from "@/components/sections/section";
 import { JsonLd } from "@/components/seo/json-ld";
-import { IconTile } from "@/components/ui/icon";
-import { deliveryModels, deliveryRegions, firstCallQuestions, ownershipRows, progression } from "@/content/delivery";
+import { Icon } from "@/components/ui/icon";
+import { deliveryModels, deliveryRegions, firstCallQuestions, ownershipRows } from "@/content/delivery";
 import { pageMetadata, serviceLd } from "@/lib/seo";
 
 const description =
@@ -41,63 +43,38 @@ export default function FlexibleTalentPage() {
         breadcrumbs={[{ label: "Flexible Talent", href: "/flexible-talent" }]}
       />
 
-      <Section labelledBy="progression-title">
+      <Section tone="dark" labelledBy="progression-title" className="border-t border-white/10">
         <SectionHeader
           id="progression-title"
-          eyebrow="Progression"
+          inverse
           title="From supplying a person to owning an outcome."
-          description="Each step moves more delivery responsibility to us."
+          description="Each step to the right moves more delivery responsibility to us."
         />
-        <ol className="mt-12 grid gap-3 md:grid-cols-5">
-          {progression.map((p, i) => (
-            <li key={p.label} className="relative rounded-xl border border-txm-line bg-white p-5">
-              <div
-                className="txm-gradient-bg absolute inset-x-0 top-0 h-1 rounded-t-xl"
-                style={{ opacity: 0.35 + i * 0.16 }}
-                aria-hidden="true"
-              />
-              <p className="font-mono text-sm text-txm-subtle">{String(i + 1).padStart(2, "0")}</p>
-              <p className="mt-2 font-semibold text-txm-ink">{p.label}</p>
-              <p className="txm-small mt-1 text-txm-slate">{p.detail}</p>
-            </li>
-          ))}
-        </ol>
+        <div className="mt-14">
+          <DeliveryScale models={deliveryModels} />
+        </div>
       </Section>
 
       {(["talent-led", "outcome-led"] as const).map((group) => (
-        <Section key={group} tone={group === "talent-led" ? "light" : "dark"} labelledBy={`${group}-title`}>
+        <Section key={group} tone={group === "talent-led" ? "light" : "white"} labelledBy={`${group}-title`}>
           <SectionHeader
             id={`${group}-title`}
-            align="left"
-            inverse={group === "outcome-led"}
-            eyebrow={group === "talent-led" ? "Talent-led" : "Outcome-led"}
-            title={group === "talent-led" ? "People who join your team." : "Teams accountable for the result."}
+            title={group === "talent-led" ? "Talent-led: people who join your team." : "Outcome-led: teams accountable for the result."}
             description={
               group === "talent-led"
                 ? "You direct the work. We find, screen and support the specialists."
                 : "We own delivery against measures agreed on day one, and report on them every two weeks."
             }
           />
-          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-12 grid gap-x-10 gap-y-10 md:grid-cols-2 lg:grid-cols-4">
             {deliveryModels
               .filter((m) => m.group === group)
               .map((m) => (
-                <div
-                  key={m.slug}
-                  className={
-                    group === "talent-led"
-                      ? "txm-card h-full p-6"
-                      : "h-full rounded-2xl border border-white/10 bg-txm-surface p-6"
-                  }
-                >
-                  <IconTile name={m.icon} size="sm" />
-                  <h3 className={group === "talent-led" ? "mt-4 text-lg font-bold text-txm-ink" : "mt-4 text-lg font-bold text-white"}>
-                    {m.name}
-                  </h3>
-                  <p className={group === "talent-led" ? "txm-small mt-2 text-txm-slate" : "txm-small mt-2 text-txm-on-dark"}>
-                    {m.description}
-                  </p>
-                  <p className={group === "talent-led" ? "txm-small mt-4 text-txm-subtle" : "txm-small mt-4 text-slate-400"}>
+                <div key={m.slug} className="h-full border-t border-txm-line pt-6">
+                  <Icon name={m.icon} className="h-6 w-6 text-txm-accent" />
+                  <h3 className="txm-h3 mt-4 text-txm-ink">{m.name}</h3>
+                  <p className="txm-small mt-2 text-txm-slate">{m.description}</p>
+                  <p className="txm-small mt-4 text-txm-subtle">
                     <span className="font-semibold">Best when:</span> {m.buyerNeed}
                   </p>
                 </div>
@@ -107,17 +84,17 @@ export default function FlexibleTalentPage() {
       ))}
 
       <Section labelledBy="ownership-title">
-        <SectionHeader id="ownership-title" eyebrow="Ownership" title="Who owns what." />
-        <div className="mx-auto mt-12 max-w-4xl overflow-x-auto rounded-2xl border border-txm-line">
+        <SectionHeader id="ownership-title" title="Who owns what." />
+        <div className="mt-12 max-w-4xl overflow-x-auto border-t border-txm-line">
           <table className="w-full min-w-[520px] text-left">
-            <thead className="bg-txm-light text-xs font-semibold tracking-wide text-txm-subtle uppercase">
+            <thead className="text-xs font-semibold text-txm-subtle">
               <tr>
                 <th scope="col" className="px-5 py-4">Responsibility</th>
                 <th scope="col" className="px-5 py-4">Talent-led</th>
                 <th scope="col" className="px-5 py-4">Outcome-led</th>
               </tr>
             </thead>
-            <tbody className="txm-small divide-y divide-txm-line bg-white text-txm-slate">
+            <tbody className="txm-small divide-y divide-txm-line border-y border-txm-line text-txm-slate">
               {ownershipRows.map((r) => (
                 <tr key={r.item}>
                   <th scope="row" className="px-5 py-4 font-semibold text-txm-ink">{r.item}</th>
@@ -133,7 +110,6 @@ export default function FlexibleTalentPage() {
       <Section id="pod-model" tone="light" labelledBy="pod-title">
         <SectionHeader
           id="pod-title"
-          eyebrow="The pod model"
           title="One lead. A small execution layer. Clear ownership."
           description="A senior lead carries the brief and the quality bar. The execution layer delivers the work."
         />
@@ -146,21 +122,19 @@ export default function FlexibleTalentPage() {
         </div>
       </Section>
 
-      <Section tone="dark" labelledBy="global-title">
-        <SectionHeader id="global-title" inverse eyebrow="Global delivery" title="US · LATAM · India." />
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {deliveryRegions.map((r) => (
-            <div key={r.name} className="rounded-2xl border border-white/10 bg-txm-surface p-6">
-              <IconTile name="globe" size="sm" />
-              <h3 className="mt-4 text-lg font-bold text-white">{r.name}</h3>
-              <p className="txm-small mt-2 text-txm-on-dark">{r.detail}</p>
-            </div>
-          ))}
+      <Section tone="dark" labelledBy="global-title" className="border-t border-white/10">
+        <SectionHeader
+          id="global-title"
+          inverse
+          title="US, LATAM and India: normal hours, work that keeps moving."
+        />
+        <div className="mt-14">
+          <FollowTheSun regions={deliveryRegions} />
         </div>
       </Section>
 
       <Section labelledBy="questions-title">
-        <SectionHeader id="questions-title" eyebrow="The first call" title="Four questions we will ask you." />
+        <SectionHeader id="questions-title" title="Four questions we will ask you." />
         <div className="mt-12">
           <QuestionCards items={firstCallQuestions} />
         </div>
@@ -173,7 +147,6 @@ export default function FlexibleTalentPage() {
         id="structure-my-team"
         formId="F-03"
         sourcePage="/flexible-talent"
-        eyebrow="Structure My Team"
         title="Tell us about the work."
         description="Share the skills and timing you have in mind. We will propose a delivery model and the people for it."
       />

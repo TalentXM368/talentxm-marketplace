@@ -1,3 +1,4 @@
+import { FollowTheSun } from "@/components/motion/follow-the-sun";
 import { JourneySteps } from "@/components/sections/blocks";
 import { InfoCard } from "@/components/sections/cards";
 import { CTABand } from "@/components/sections/cta-band";
@@ -67,7 +68,7 @@ export default function AboutPage() {
 
       <Section labelledBy="story-title">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-          <SectionHeader id="story-title" align="left" eyebrow="Our story" title="Why we started TalentXM." />
+          <SectionHeader id="story-title" align="left" title="Why we started TalentXM." />
           <div className="txm-prose max-w-none">
             <p>
               TalentXM began inside the XM ecosystem because the people building AI work kept meeting the same
@@ -88,8 +89,8 @@ export default function AboutPage() {
       </Section>
 
       <Section tone="light" labelledBy="beliefs-title">
-        <SectionHeader id="beliefs-title" eyebrow="What we believe" title="Four principles." />
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
+        <SectionHeader id="beliefs-title" title="What we believe." />
+        <div className="mt-12 grid gap-x-10 gap-y-12 md:grid-cols-2">
           {beliefs.map((b) => (
             <InfoCard key={b.title} icon={b.icon} title={b.title} body={b.body} />
           ))}
@@ -97,21 +98,20 @@ export default function AboutPage() {
       </Section>
 
       <Section labelledBy="how-title">
-        <SectionHeader id="how-title" eyebrow="How we work" title="Listen. Match. Deliver." />
+        <SectionHeader id="how-title" title="Listen. Match. Deliver." />
         <div className="mt-12">
           <JourneySteps steps={howWeWork} />
         </div>
       </Section>
 
-      <Section tone="dark" labelledBy="where-title">
-        <SectionHeader id="where-title" inverse eyebrow="Where we operate" title="US · LATAM · India." />
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {deliveryRegions.map((r) => (
-            <div key={r.name} className="rounded-2xl border border-white/10 bg-txm-surface p-6">
-              <h3 className="text-lg font-bold text-white">{r.name}</h3>
-              <p className="txm-small mt-2 text-txm-on-dark">{r.detail}</p>
-            </div>
-          ))}
+      <Section tone="dark" labelledBy="where-title" className="border-t border-white/10">
+        <SectionHeader
+          id="where-title"
+          inverse
+          title="Led from Columbus, Ohio. Delivered across the US, LATAM and India."
+        />
+        <div className="mt-14">
+          <FollowTheSun regions={deliveryRegions} />
         </div>
       </Section>
 
@@ -120,12 +120,11 @@ export default function AboutPage() {
           <SectionHeader
             id="partners-title"
             align="left"
-            eyebrow="Partners"
             title="Partnerships, and the platforms we know."
             description="We keep formal partnerships separate from delivery experience, so you know which is which."
           />
           <div className="grid gap-6 sm:grid-cols-2">
-            <div className="rounded-2xl border border-txm-line bg-white p-6">
+            <div className="border-t border-txm-line pt-6">
               <h3 className="font-semibold text-txm-ink">Partnerships</h3>
               <ul className="txm-small mt-3 space-y-2 text-txm-slate">
                 {partnershipsVsExperience.partnerships.map((p) => (
@@ -133,7 +132,7 @@ export default function AboutPage() {
                 ))}
               </ul>
             </div>
-            <div className="rounded-2xl border border-txm-line bg-white p-6">
+            <div className="border-t border-txm-line pt-6">
               <h3 className="font-semibold text-txm-ink">Delivery experience</h3>
               <ul className="txm-small mt-3 space-y-2 text-txm-slate">
                 {partnershipsVsExperience.experience.map((p) => (
@@ -146,7 +145,7 @@ export default function AboutPage() {
       </Section>
 
       <Section labelledBy="ecosystem-title">
-        <SectionHeader id="ecosystem-title" eyebrow="The XM ecosystem" title="Part of a wider group." />
+        <SectionHeader id="ecosystem-title" title="Part of a wider group." />
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {ecosystem.map((e) => (
             <InfoCard key={e.name} title={e.name} body={e.body} />

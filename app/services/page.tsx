@@ -1,8 +1,9 @@
-import { FAQ, JourneySteps, StackDiagram } from "@/components/sections/blocks";
-import { ServiceCard } from "@/components/sections/cards";
+import { ScrubStatement } from "@/components/motion/scroll-type";
+import { FAQ, JourneySteps } from "@/components/sections/blocks";
 import { CTABand } from "@/components/sections/cta-band";
 import { Hero } from "@/components/sections/hero";
 import { Section, SectionHeader } from "@/components/sections/section";
+import { StackIndex } from "@/components/sections/stack-index";
 import { JsonLd } from "@/components/seo/json-ld";
 import { ButtonLink } from "@/components/ui/button";
 import { domainsByStack, serviceDomains } from "@/content/services";
@@ -59,45 +60,26 @@ export default function ServicesPage() {
         breadcrumbs={[{ label: "Services", href: "/services" }]}
       />
 
-      <Section id="stack" tone="light" labelledBy="stack-title">
-        <SectionHeader
+      <Section id="stack" tone="dark" labelledBy="stack-title" className="border-t border-white/10">
+        <ScrubStatement
           id="stack-title"
-          eyebrow="The Enterprise AI stack"
-          title="Each layer depends on the one beneath it."
-          description="Agents sit on top. Underneath are the integrations that feed them, the platforms that hold the records and the foundation that secures it all."
+          text="Agents sit on top. Underneath are the integrations that feed them, the platforms that hold the records and the foundation that secures it all."
         />
-        <div className="mt-12">
-          <StackDiagram domains={domainsByStack()} />
+        <div className="mt-20">
+          <StackIndex domains={domainsByStack()} detail="summary" />
         </div>
       </Section>
 
-      <Section labelledBy="domains-title">
-        <SectionHeader id="domains-title" eyebrow="Service domains" title="Five domains." />
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
-          {serviceDomains.map((d) => (
-            <ServiceCard
-              key={d.slug}
-              layout="wide"
-              title={d.name}
-              description={d.summary}
-              href={`/services/${d.slug}`}
-              icon={d.icon}
-              linkLabel={`Explore ${d.name}`}
-            />
-          ))}
-        </div>
-      </Section>
-
-      <Section tone="light" labelledBy="journey-title">
-        <SectionHeader id="journey-title" eyebrow="How an engagement runs" title="Discover. Prepare. Build. Operate." />
-        <div className="mt-12">
-          <JourneySteps steps={journey} />
-        </div>
+      <Section labelledBy="journey-title">
+        <h2 id="journey-title" className="sr-only">
+          How an engagement runs
+        </h2>
+        <JourneySteps steps={journey} label="How an engagement runs" />
       </Section>
 
       <Section tone="dark" labelledBy="discovery-title">
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="txm-eyebrow text-txm-yellow">Discovery offer</p>
+        <div className="max-w-3xl">
+          <p className="txm-small font-semibold text-txm-yellow">Discovery offer</p>
           <h2 id="discovery-title" className="txm-h2 mt-3 text-white">
             {servicesPromo.title}
           </h2>
@@ -114,7 +96,7 @@ export default function ServicesPage() {
       </Section>
 
       <Section labelledBy="faq-title">
-        <SectionHeader id="faq-title" eyebrow="FAQ" title="Common questions." />
+        <SectionHeader id="faq-title" title="Common questions." />
         <div className="mt-10">
           <FAQ items={faqs} />
         </div>

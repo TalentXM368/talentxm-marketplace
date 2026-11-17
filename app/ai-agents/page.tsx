@@ -56,7 +56,6 @@ export default function AgentsCatalogPage() {
           <SectionHeader
             id="status-title"
             align="left"
-            eyebrow="Status"
             title="How status is assigned."
             description="Status describes evidence, not ambition. It changes only when the evidence does, and the delivery lead signs off every change."
           />
@@ -76,7 +75,6 @@ export default function AgentsCatalogPage() {
         id="request-pilot"
         formId="F-02"
         sourcePage="/ai-agents"
-        eyebrow="Request an Agent Pilot"
         title="Run an agent on your workflow."
         description="Choose an agent and tell us about the systems involved. We will scope a pilot with clear measures and human decision points."
       />

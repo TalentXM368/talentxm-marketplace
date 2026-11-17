@@ -25,7 +25,7 @@ export const buttonStyles = cva(
     },
     compoundVariants: [
       { variant: "primary", tone: "light", className: "bg-txm-navy text-white hover:bg-txm-base" },
-      { variant: "primary", tone: "dark", className: "bg-txm-yellow text-txm-base hover:bg-white" },
+      { variant: "primary", tone: "dark", className: "bg-white text-txm-base hover:bg-txm-neutral" },
       {
         variant: "secondary",
         tone: "light",

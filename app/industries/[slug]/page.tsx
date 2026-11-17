@@ -48,12 +48,12 @@ export default async function IndustryPage({ params }: PageProps<"/industries/[s
       />
 
       <Section id="use-cases" labelledBy="use-cases-title">
-        <SectionHeader id="use-cases-title" eyebrow="Use-case map" title={`${ind.name} workflows we work on.`} description={ind.useCaseIntro} />
+        <SectionHeader id="use-cases-title" title={`${ind.name} workflows we work on.`} description={ind.useCaseIntro} />
 
-        <div className="mt-12 hidden overflow-hidden rounded-2xl border border-txm-line lg:block">
+        <div className="mt-12 hidden border-y border-txm-line lg:block">
           <table className="w-full text-left">
-            <thead className="bg-txm-light">
-              <tr className="text-xs font-semibold tracking-wide text-txm-subtle uppercase">
+            <thead>
+              <tr className="text-xs font-semibold text-txm-subtle">
                 <th scope="col" className="px-5 py-4">Workflow</th>
                 <th scope="col" className="px-5 py-4">Status</th>
                 <th scope="col" className="px-5 py-4">Systems</th>
@@ -62,7 +62,7 @@ export default async function IndustryPage({ params }: PageProps<"/industries/[s
                 <th scope="col" className="px-5 py-4">Measures</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-txm-line bg-white">
+            <tbody className="divide-y divide-txm-line border-t border-txm-line">
               {ind.useCaseRows.map((r) => (
                 <tr key={r.workflow} className="txm-small align-top text-txm-slate">
                   <th scope="row" className="px-5 py-4 font-semibold text-txm-ink">
@@ -80,9 +80,9 @@ export default async function IndustryPage({ params }: PageProps<"/industries/[s
           </table>
         </div>
 
-        <ul className="mt-12 space-y-4 lg:hidden">
+        <ul className="mt-12 space-y-8 lg:hidden">
           {ind.useCaseRows.map((r) => (
-            <li key={r.workflow} className="rounded-2xl border border-txm-line bg-white p-5">
+            <li key={r.workflow} className="border-t border-txm-line pt-5">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <p className="font-semibold text-txm-ink">{r.workflow}</p>
                 <StatusChip status={r.status} />
@@ -96,7 +96,7 @@ export default async function IndustryPage({ params }: PageProps<"/industries/[s
                   ["Measures", r.measures],
                 ].map(([k, v]) => (
                   <div key={k}>
-                    <dt className="text-xs font-semibold tracking-wide text-txm-subtle uppercase">{k}</dt>
+                    <dt className="text-xs font-semibold text-txm-subtle">{k}</dt>
                     <dd className="mt-0.5">{v}</dd>
                   </div>
                 ))}
@@ -109,7 +109,7 @@ export default async function IndustryPage({ params }: PageProps<"/industries/[s
       {featured.length > 0 && (
         <Section tone="light" labelledBy="featured-title">
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-            <SectionHeader id="featured-title" align="left" eyebrow="Featured agents" title={`Agents for ${ind.name.toLowerCase()}.`} />
+            <SectionHeader id="featured-title" align="left" title={`Agents for ${ind.name.toLowerCase()}.`} />
             <ButtonLink href={`/ai-agents?industry=${ind.slug}`} variant="text" className="shrink-0">
               Filter the catalogue
             </ButtonLink>
@@ -122,13 +122,13 @@ export default async function IndustryPage({ params }: PageProps<"/industries/[s
 
       <Section labelledBy="standards-title">
         <div className="grid gap-8 lg:grid-cols-2">
-          <div className="rounded-2xl border border-txm-line bg-white p-7">
+          <div className="border-t border-txm-line pt-6">
             <h2 id="standards-title" className="text-xl font-bold text-txm-ink">Standards and practices</h2>
             <div className="mt-4">
               <CheckList items={ind.standards} />
             </div>
           </div>
-          <div className="rounded-2xl border border-amber-200 bg-amber-50/70 p-7">
+          <div className="border-t-2 border-txm-ink pt-6">
             <h2 className="text-xl font-bold text-txm-ink">What we do not claim</h2>
             <div className="mt-4">
               <CheckList items={ind.notClaimed} />
@@ -140,14 +140,13 @@ export default async function IndustryPage({ params }: PageProps<"/industries/[s
       <Section tone="light" labelledBy="pod-title">
         <SectionHeader
           id="pod-title"
-          eyebrow="Pod composition"
           title={`A typical ${ind.name.toLowerCase()} pod.`}
           description="A senior lead who knows the industry, plus a small execution team sized to the workflow."
         />
         <div className="mt-12">
           <PodModelDiagram lead={ind.pod.lead} roles={ind.pod.roles} note={ind.pod.note} />
         </div>
-        <div className="mt-8 text-center">
+        <div className="mt-8">
           <ButtonLink href="/flexible-talent" variant="secondary">
             See all delivery models
           </ButtonLink>
@@ -156,7 +155,7 @@ export default async function IndustryPage({ params }: PageProps<"/industries/[s
 
       {ind.faqs.length > 0 && (
         <Section labelledBy="faq-title">
-          <SectionHeader id="faq-title" eyebrow="FAQ" title={`${ind.name}: common questions.`} />
+          <SectionHeader id="faq-title" title={`${ind.name}: common questions.`} />
           <div className="mt-10">
             <FAQ items={ind.faqs} />
           </div>
@@ -168,7 +167,6 @@ export default async function IndustryPage({ params }: PageProps<"/industries/[s
         formId="F-01"
         sourcePage={path}
         defaults={{ priority: `industry:${ind.slug}` }}
-        eyebrow="Discuss Your AI Priority"
         title={`Talk to us about ${ind.name.toLowerCase()}.`}
         description="Tell us about the workflow and the systems involved. A named person will reply."
       />

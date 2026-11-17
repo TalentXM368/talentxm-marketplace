@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
-import { ArrowDown } from "lucide-react";
 import { AgentGrid } from "@/components/catalog/agent-catalog";
 import { FormSection } from "@/components/forms/form-section";
 import { VideoEmbed } from "@/components/media/video-embed";
+import { AgentFlow } from "@/components/motion/agent-flow";
 import { PocGrid } from "@/components/poc/poc-card";
 import { CheckList, FAQ } from "@/components/sections/blocks";
 import { Hero } from "@/components/sections/hero";
@@ -39,7 +39,7 @@ export default async function AgentPage({ params }: PageProps<"/ai-agents/[slug]
     <>
       <JsonLd data={serviceLd(a.name, a.summary, path)} />
       <Hero
-        eyebrow={`${a.agentType} · ${agentIndustryLabel(a)}`}
+        eyebrow={`${a.agentType}, ${agentIndustryLabel(a)}`}
         title={a.name}
         lede={a.outcomeLine}
         image="/images/neural-bg.webp"
@@ -59,22 +59,22 @@ export default async function AgentPage({ params }: PageProps<"/ai-agents/[slug]
       <Section labelledBy="outcome-title">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
           <div>
-            <p className="txm-eyebrow text-txm-accent">Outcome</p>
+            <p className="txm-small font-semibold text-txm-accent">Outcome</p>
             <h2 id="outcome-title" className="txm-h3 mt-3 text-txm-ink">
               {a.summary}
             </h2>
           </div>
-          <dl className="space-y-5 rounded-2xl border border-txm-line bg-txm-light p-6">
+          <dl className="space-y-5 border-t border-txm-line pt-6">
             <div>
-              <dt className="txm-eyebrow text-txm-subtle">Intended user</dt>
+              <dt className="txm-small font-semibold text-txm-subtle">Intended user</dt>
               <dd className="txm-body mt-1 text-txm-ink">{a.intendedUser}</dd>
             </div>
             <div>
-              <dt className="txm-eyebrow text-txm-subtle">Status</dt>
+              <dt className="txm-small font-semibold text-txm-subtle">Status</dt>
               <dd className="txm-body mt-1 text-txm-ink">{statusLabels[a.status]}</dd>
             </div>
             <div>
-              <dt className="txm-eyebrow text-txm-subtle">Inputs</dt>
+              <dt className="txm-small font-semibold text-txm-subtle">Inputs</dt>
               <dd className="mt-2">
                 <CheckList items={a.inputs} />
               </dd>
@@ -84,10 +84,10 @@ export default async function AgentPage({ params }: PageProps<"/ai-agents/[slug]
       </Section>
 
       <Section id="workflow" tone="light" labelledBy="workflow-title">
-        <SectionHeader id="workflow-title" eyebrow="Workflow" title="Today, and with the agent." />
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
-          <div className="rounded-2xl border border-txm-line bg-white p-7">
-            <h3 className="text-lg font-bold text-txm-ink">Current workflow</h3>
+        <SectionHeader id="workflow-title" title="Today, and with the agent." />
+        <div className="mt-12 grid gap-x-10 gap-y-10 md:grid-cols-2">
+          <div className="border-t border-txm-line pt-6">
+            <h3 className="txm-h3 text-txm-ink">Current workflow</h3>
             <ol className="mt-4 space-y-3">
               {a.currentWorkflow.map((s) => (
                 <li key={s} className="txm-body flex gap-3 text-txm-slate">
@@ -97,8 +97,8 @@ export default async function AgentPage({ params }: PageProps<"/ai-agents/[slug]
               ))}
             </ol>
           </div>
-          <div className="rounded-2xl border border-txm-orange/25 bg-white p-7 shadow-txm-card">
-            <h3 className="text-lg font-bold text-txm-ink">Assisted workflow</h3>
+          <div className="border-t-2 border-txm-orange pt-6">
+            <h3 className="txm-h3 text-txm-ink">Assisted workflow</h3>
             <ol className="mt-4 space-y-3">
               {a.assistedWorkflow.map((s) => (
                 <li key={s} className="txm-body flex gap-3 text-txm-slate">
@@ -114,12 +114,12 @@ export default async function AgentPage({ params }: PageProps<"/ai-agents/[slug]
       <Section labelledBy="capabilities-title">
         <div className="grid gap-12 lg:grid-cols-2">
           <div>
-            <SectionHeader id="capabilities-title" align="left" eyebrow="Capabilities" title="What the agent does." />
+            <SectionHeader id="capabilities-title" align="left" title="What the agent does." />
             <div className="mt-8">
               <CheckList items={a.actions} />
             </div>
           </div>
-          <div className="rounded-2xl border border-red-100 bg-red-50/60 p-7">
+          <div className="border-t-2 border-txm-ink pt-6">
             <h2 className="text-xl font-bold text-txm-ink">What it does not do</h2>
             <ul className="mt-4 space-y-3">
               {a.doesNot.map((d) => (
@@ -133,47 +133,36 @@ export default async function AgentPage({ params }: PageProps<"/ai-agents/[slug]
         </div>
       </Section>
 
-      <Section tone="light" labelledBy="architecture-title">
-        <SectionHeader
-          id="architecture-title"
-          eyebrow="Architecture"
-          title="How information moves."
-          description="Inputs are read with scoped access. The agent prepares the work. A person decides before anything is written back."
+      <section aria-labelledby="architecture-title" className="txm-section-dark border-t border-white/10 py-24 lg:py-32">
+        <AgentFlow
+          stages={[
+            { key: "inputs", label: "Inputs", title: "What the agent reads", items: a.inputs.map((text) => ({ text })) },
+            { key: "agent", label: "Agent", title: "What the agent does", items: a.actions.map((text) => ({ text })) },
+            {
+              key: "human",
+              label: "Human decision",
+              title: "Where a person decides",
+              items: a.humanDecisionPoints.map((d) => ({ text: `${d.step}: ${d.who}`, detail: d.why })),
+            },
+            { key: "systems", label: "Systems", title: "What it runs on", items: a.techTags.map((t) => ({ text: t.name })) },
+          ]}
+          header={
+            <>
+              <h2 id="architecture-title" className="txm-h2 text-white">
+                How information moves.
+              </h2>
+              <p className="txm-lede mt-4 text-txm-on-dark">
+                Inputs are read with scoped access. The agent prepares the work. A person decides before anything is
+                written back.
+              </p>
+            </>
+          }
         />
-        <ol className="mx-auto mt-12 grid max-w-4xl gap-3 md:grid-cols-4" aria-label="Agent data flow">
-          {[
-            { t: "Inputs", d: a.inputs[0] },
-            { t: "Agent", d: a.actions[0] },
-            { t: "Human decision", d: a.humanDecisionPoints[0].step },
-            { t: "Systems", d: a.techTags.map((t) => t.name).slice(0, 2).join(", ") },
-          ].map((step, i, arr) => (
-            <li key={step.t} className="relative">
-              <div
-                className={
-                  step.t === "Human decision"
-                    ? "txm-gradient-bg h-full rounded-xl p-5 text-txm-base"
-                    : "h-full rounded-xl border border-txm-line bg-white p-5"
-                }
-              >
-                <p className={step.t === "Human decision" ? "txm-eyebrow text-txm-base/80" : "txm-eyebrow text-txm-subtle"}>
-                  {step.t}
-                </p>
-                <p className={step.t === "Human decision" ? "mt-2 font-semibold" : "mt-2 font-semibold text-txm-ink"}>
-                  {step.d}
-                </p>
-              </div>
-              {i < arr.length - 1 && (
-                <ArrowDown className="mx-auto my-1 h-4 w-4 text-txm-subtle md:hidden" aria-hidden="true" />
-              )}
-            </li>
-          ))}
-        </ol>
-      </Section>
+      </section>
 
       <Section labelledBy="oversight-title">
         <SectionHeader
           id="oversight-title"
-          eyebrow="Human oversight"
           title="Where a person decides."
           description="These decision points are part of the design, not an optional setting."
         />
@@ -186,20 +175,20 @@ export default async function AgentPage({ params }: PageProps<"/ai-agents/[slug]
         <h2 id="controls-title" className="sr-only">
           Security, evaluation and deployment
         </h2>
-        <div className="grid gap-6 lg:grid-cols-3">
-          <div className="rounded-2xl border border-txm-line bg-white p-7">
+        <div className="grid gap-x-10 gap-y-10 lg:grid-cols-3">
+          <div className="border-t border-txm-line pt-6">
             <h3 className="text-lg font-bold text-txm-ink">Security controls</h3>
             <div className="mt-4">
               <CheckList items={a.securityControls} />
             </div>
           </div>
-          <div className="rounded-2xl border border-txm-line bg-white p-7">
+          <div className="border-t border-txm-line pt-6">
             <h3 className="text-lg font-bold text-txm-ink">Evaluation measures</h3>
             <div className="mt-4">
               <CheckList items={a.evaluationMeasures} />
             </div>
           </div>
-          <div className="rounded-2xl border border-txm-line bg-white p-7">
+          <div className="border-t border-txm-line pt-6">
             <h3 className="text-lg font-bold text-txm-ink">Deployment options</h3>
             <div className="mt-4">
               <CheckList items={a.deploymentOptions} />
@@ -213,7 +202,6 @@ export default async function AgentPage({ params }: PageProps<"/ai-agents/[slug]
           <SectionHeader
             id="tech-title"
             align="left"
-            eyebrow="Technologies"
             title="Built with, and connects to."
             description="Tested means used in the proof of concept. Designed for means the connection is designed but not yet tested with live data."
           />
@@ -223,13 +211,13 @@ export default async function AgentPage({ params }: PageProps<"/ai-agents/[slug]
 
       {demoVideo && (
         <Section tone="light" labelledBy="demo-title">
-          <SectionHeader id="demo-title" eyebrow="Demo" title={`See ${a.name} work.`} />
-          <div className="mx-auto mt-10 max-w-5xl">
+          <SectionHeader id="demo-title" title={`See ${a.name} work.`} />
+          <div className="mt-10 max-w-5xl">
             <VideoEmbed video={demoVideo} />
           </div>
           {agentPocs.length > 0 && (
             <div className="mt-16">
-              <p className="txm-eyebrow mb-6 text-center text-txm-accent">From the POC Library</p>
+              <p className="txm-small mb-6 font-semibold text-txm-accent">From the POC Library</p>
               <PocGrid items={agentPocs} />
             </div>
           )}
@@ -238,7 +226,7 @@ export default async function AgentPage({ params }: PageProps<"/ai-agents/[slug]
 
       {a.faqs.length > 0 && (
         <Section labelledBy="faq-title">
-          <SectionHeader id="faq-title" eyebrow="FAQ" title="Common questions." />
+          <SectionHeader id="faq-title" title="Common questions." />
           <div className="mt-10">
             <FAQ items={a.faqs} />
           </div>
@@ -250,14 +238,13 @@ export default async function AgentPage({ params }: PageProps<"/ai-agents/[slug]
         formId="F-02"
         sourcePage={path}
         defaults={{ agent: a.slug }}
-        eyebrow="Request an Agent Pilot"
         title={`Pilot ${a.name} on your workflow.`}
         description="Tell us about your systems and timeline. We will scope a pilot with agreed measures and the human decision points above."
       />
 
       {others.length > 0 && (
         <Section labelledBy="more-title">
-          <SectionHeader id="more-title" eyebrow="More agents" title="Related agents." />
+          <SectionHeader id="more-title" title="Related agents." />
           <div className="mt-12">
             <AgentGrid items={others.slice(0, 3)} />
           </div>

@@ -45,7 +45,7 @@ export function ContactLauncher() {
           aria-label="Contact TalentXM"
           className="w-[min(340px,calc(100vw-32px))] overflow-hidden rounded-2xl border border-txm-line bg-white shadow-txm-elev"
         >
-          <div className="txm-mesh-bg px-5 py-4">
+          <div className="bg-txm-base px-5 py-4">
             <p className="font-semibold text-white">How can we help?</p>
             <p className="txm-small text-txm-on-dark">
               {routes.length > 0 ? "Pick a route and a named person will reply." : "Message us and a named person will reply."}
@@ -93,7 +93,7 @@ export function ContactLauncher() {
         aria-expanded={open}
         aria-controls={panelId}
         onClick={() => setOpen((o) => !o)}
-        className="txm-focus txm-gradient-bg flex h-14 items-center gap-2 rounded-full px-5 font-semibold text-txm-base shadow-txm-elev"
+        className="txm-focus flex h-14 items-center gap-2 rounded-full bg-white px-5 font-semibold text-txm-base shadow-txm-elev ring-1 ring-txm-base/10 transition-colors hover:bg-txm-neutral"
       >
         {open ? <X className="h-5 w-5" aria-hidden="true" /> : <MessageCircle className="h-5 w-5" aria-hidden="true" />}
         <span className="hidden sm:inline">{open ? "Close" : "Contact us"}</span>

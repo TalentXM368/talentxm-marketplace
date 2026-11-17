@@ -46,7 +46,7 @@ export default function TrustPage() {
   return (
     <>
       <Hero
-        eyebrow={`Trust · Reviewed ${reviewed}`}
+        eyebrow={`Trust, reviewed ${reviewed}`}
         title="What we hold today, and what is in progress."
         lede="Buyers check claims. This page lists our partnerships, controls and programmes as they stand, with the date of the last review."
         primary={{ label: "Request programme status", href: "#request-status" }}
@@ -73,7 +73,6 @@ export default function TrustPage() {
       <Section tone="light" labelledBy="frameworks-title">
         <SectionHeader
           id="frameworks-title"
-          eyebrow="Frameworks"
           title="Frameworks we design against."
           description="These shape how we design and document our work. They are not certifications."
         />
@@ -83,8 +82,8 @@ export default function TrustPage() {
       </Section>
 
       <Section id="responsible-ai" labelledBy="rai-title">
-        <SectionHeader id="rai-title" eyebrow="Responsible AI" title="How we keep people in control." />
-        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <SectionHeader id="rai-title" title="How we keep people in control." />
+        <div className="mt-12 grid gap-x-10 gap-y-10 md:grid-cols-2 lg:grid-cols-4">
           {responsibleAi.map((r) => (
             <InfoCard key={r.title} title={r.title} body={r.body} />
           ))}
@@ -94,18 +93,17 @@ export default function TrustPage() {
       <Section tone="light" labelledBy="partners-title">
         <SectionHeader
           id="partners-title"
-          eyebrow="Partnerships vs experience"
-          title="Which is which."
+          title="Partnerships, and where we have delivery experience."
           description="A partnership is a formal relationship with the vendor. Experience means our team has delivered on the platform."
         />
-        <div className="mx-auto mt-12 grid max-w-3xl gap-6 md:grid-cols-2">
-          <div className="rounded-2xl border border-txm-line bg-white p-6">
+        <div className="mt-12 grid max-w-4xl gap-x-10 gap-y-10 md:grid-cols-2">
+          <div className="border-t border-txm-line pt-6">
             <h3 className="font-semibold text-txm-ink">Formal partnerships</h3>
             <div className="mt-3">
               <CheckList items={partnershipsVsExperience.partnerships} />
             </div>
           </div>
-          <div className="rounded-2xl border border-txm-line bg-white p-6">
+          <div className="border-t border-txm-line pt-6">
             <h3 className="font-semibold text-txm-ink">Delivery experience</h3>
             <div className="mt-3">
               <CheckList items={partnershipsVsExperience.experience} />
@@ -116,7 +114,7 @@ export default function TrustPage() {
 
       <Section id="website-data" labelledBy="data-title">
         <div className="grid gap-12 lg:grid-cols-2">
-          <SectionHeader id="data-title" align="left" eyebrow="Website data" title="What happens to what you send us." />
+          <SectionHeader id="data-title" align="left" title="What happens to what you send us." />
           <CheckList items={websiteData} />
         </div>
       </Section>
@@ -126,7 +124,6 @@ export default function TrustPage() {
         formId="F-01"
         sourcePage="/trust"
         defaults={{ priority: "security" }}
-        eyebrow="Request programme status"
         title="Ask for our current security status."
         description="Tell us what your review needs. A named person will reply with the current scope and documents we can share."
       />

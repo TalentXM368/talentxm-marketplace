@@ -42,7 +42,7 @@ export default function MarketplacePage() {
   return (
     <>
       <Hero
-        eyebrow="Talent Marketplace · Early access"
+        eyebrow="Talent Marketplace, in early access"
         title="Hire for the work, with evidence you can check."
         lede="We are building a marketplace for enterprise AI and integration specialists. Employers see delivered work and practitioner reviews, not just a profile."
         image="/images/tech-bg-vibrant.webp"
@@ -52,22 +52,22 @@ export default function MarketplacePage() {
       />
 
       <Section labelledBy="employer-journey-title">
-        <SectionHeader id="employer-journey-title" eyebrow="For employers" title="How it will work for employers." />
+        <SectionHeader id="employer-journey-title" title="How it will work for employers." />
         <div className="mt-12">
           <JourneySteps steps={employerJourney} />
         </div>
       </Section>
 
       <Section tone="light" labelledBy="talent-journey-title">
-        <SectionHeader id="talent-journey-title" eyebrow="For specialists" title="How it will work for talent." />
+        <SectionHeader id="talent-journey-title" title="How it will work for talent." />
         <div className="mt-12">
           <JourneySteps steps={talentJourney} />
         </div>
       </Section>
 
       <Section tone="dark" labelledBy="evidence-title">
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="txm-eyebrow text-txm-yellow">Evidence, not a score</p>
+        <div className="max-w-3xl">
+          <p className="txm-small font-semibold text-txm-yellow">Evidence, not a score</p>
           <h2 id="evidence-title" className="txm-h2 mt-3 text-white">
             People decide who to hire.
           </h2>
@@ -83,7 +83,6 @@ export default function MarketplacePage() {
         formId="F-04"
         sourcePage="/marketplace"
         tone="white"
-        eyebrow="Employer early access"
         title="Join the employer waiting list."
         description="Tell us about your hiring needs. We will contact you when early access opens for your region."
       />
@@ -92,13 +91,12 @@ export default function MarketplacePage() {
         id="talent"
         formId="F-05"
         sourcePage="/marketplace"
-        eyebrow="Join Talent Network"
         title="Join as a specialist."
         description="Your details go to our recruiting team only and are never used for sales outreach."
       />
 
       <Section labelledBy="faq-title">
-        <SectionHeader id="faq-title" eyebrow="FAQ" title="Common questions." />
+        <SectionHeader id="faq-title" title="Common questions." />
         <div className="mt-10">
           <FAQ items={faqs} />
         </div>

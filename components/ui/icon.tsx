@@ -73,23 +73,26 @@ export function Icon({ name, className }: { name: IconName; className?: string }
   return <Component className={className} aria-hidden="true" />;
 }
 
-/** Gradient icon tile used on every card (UX01: reuse). */
+/**
+ * Icon tile used on every card (UX01: reuse). Solid colour only: deep navy with a white icon on
+ * light surfaces, a faint white tile with a yellow icon on dark panels (BRANDING.md: no gradient fills).
+ */
 export function IconTile({
   name,
   size = "md",
-  tone = "gradient",
+  tone = "dark",
 }: {
   name: IconName;
   size?: "sm" | "md";
-  tone?: "gradient" | "dark";
+  tone?: "dark" | "on-dark";
 }) {
   const box = size === "sm" ? "h-10 w-10 rounded-lg" : "h-12 w-12 rounded-xl";
   const glyph = size === "sm" ? "h-5 w-5" : "h-6 w-6";
   return (
     <div
-      className={`${box} flex shrink-0 items-center justify-center ${tone === "dark" ? "bg-txm-base" : "txm-gradient-bg"}`}
+      className={`${box} flex shrink-0 items-center justify-center ${tone === "on-dark" ? "bg-white/10" : "bg-txm-base"}`}
     >
-      <Icon name={name} className={`${glyph} ${tone === "dark" ? "text-white" : "text-txm-base"}`} />
+      <Icon name={name} className={`${glyph} ${tone === "on-dark" ? "text-txm-yellow" : "text-white"}`} />
     </div>
   );
 }

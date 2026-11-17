@@ -98,8 +98,42 @@ export const firstCallQuestions: Faq[] = [
   { q: "What does success look like?", a: "We agree measures on day one and report against them every two weeks." },
 ];
 
-export const deliveryRegions = [
-  { name: "United States", detail: "Engagement leadership and client-facing roles, based from Columbus, Ohio." },
-  { name: "LATAM", detail: "Nearshore engineering in overlapping US time zones." },
-  { name: "India", detail: "Engineering depth and extended-hours coverage." },
+/**
+ * Delivery hubs. `timeZone` and `hours` (local start and end of the working day) drive the hours band
+ * on the home page. LATAM teams sit in several time zones that overlap US hours, so they are drawn on
+ * US Eastern hours and show no single clock.
+ */
+export const deliveryRegions: {
+  name: string;
+  detail: string;
+  timeZone: string;
+  /** Standard offset from UTC in hours, used before the visitor's clock is known. */
+  baseOffset: number;
+  hours: [number, number];
+  clock: boolean;
+}[] = [
+  {
+    name: "United States",
+    detail: "Engagement leadership and client-facing roles, based from Columbus, Ohio.",
+    timeZone: "America/New_York",
+    baseOffset: -5,
+    hours: [9, 17],
+    clock: true,
+  },
+  {
+    name: "LATAM",
+    detail: "Nearshore engineering in overlapping US time zones.",
+    timeZone: "America/New_York",
+    baseOffset: -5,
+    hours: [9, 17],
+    clock: false,
+  },
+  {
+    name: "India",
+    detail: "Engineering depth and extended-hours coverage.",
+    timeZone: "Asia/Kolkata",
+    baseOffset: 5.5,
+    hours: [9, 18],
+    clock: true,
+  },
 ];

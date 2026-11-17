@@ -2,12 +2,22 @@
 
 import { useRef } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { cn } from "@/lib/cn";
 
 /**
  * Horizontal card rail (MOTION.md: "Rail"). Native scroll with snap, so touch, trackpad and
  * keyboard all work; the buttons just scroll by one card. Children are `<li>` elements.
  */
-export function Rail({ label, children }: { label: string; children: React.ReactNode }) {
+export function Rail({
+  label,
+  coverflow = false,
+  children,
+}: {
+  label: string;
+  /** Cards at the edges of the rail turn away in depth (MOTION.md: "Coverflow rail"). */
+  coverflow?: boolean;
+  children: React.ReactNode;
+}) {
   const listRef = useRef<HTMLUListElement | null>(null);
 
   const scrollByCard = (direction: 1 | -1) => {
@@ -21,7 +31,7 @@ export function Rail({ label, children }: { label: string; children: React.React
 
   return (
     <div>
-      <ul ref={listRef} className="txm-rail" aria-label={label} tabIndex={0}>
+      <ul ref={listRef} className={cn("txm-rail", coverflow && "txm-coverflow")} aria-label={label} tabIndex={0}>
         {children}
       </ul>
       <div className="txm-container mt-6 flex justify-end gap-2">

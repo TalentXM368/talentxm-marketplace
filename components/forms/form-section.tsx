@@ -7,7 +7,6 @@ export function FormSection({
   id,
   formId,
   sourcePage,
-  eyebrow,
   title,
   description,
   defaults,
@@ -17,7 +16,6 @@ export function FormSection({
   id: string;
   formId: FormId;
   sourcePage: string;
-  eyebrow?: string;
   title: string;
   description?: string;
   defaults?: Record<string, string>;
@@ -29,7 +27,6 @@ export function FormSection({
     <section id={id} aria-labelledby={`${id}-title`} className={tone === "light" ? "txm-section txm-section-light" : "txm-section bg-white"}>
       <div className="txm-container grid gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
         <div>
-          {eyebrow && <p className="txm-eyebrow mb-3 text-txm-accent">{eyebrow}</p>}
           <h2 id={`${id}-title`} className="txm-h2 text-txm-ink">
             {title}
           </h2>

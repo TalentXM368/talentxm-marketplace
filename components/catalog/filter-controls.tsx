@@ -11,7 +11,7 @@ function FilterRow({ label, children }: { label: string; children: React.ReactNo
   const id = `filter-${label.toLowerCase().replace(/\s+/g, "-")}`;
   return (
     <div role="group" aria-labelledby={id} className="flex flex-col gap-3 md:flex-row md:items-start">
-      <p id={id} className="txm-eyebrow w-32 shrink-0 text-txm-subtle md:pt-2.5">
+      <p id={id} className="txm-small font-semibold w-32 shrink-0 text-txm-subtle md:pt-2.5">
         {label}
       </p>
       <div className="flex flex-wrap gap-2">{children}</div>

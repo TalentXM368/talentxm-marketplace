@@ -84,7 +84,7 @@ export function TechTags({ tags, inverse = false }: { tags: TechTag[]; inverse?:
     <div className="grid gap-6 sm:grid-cols-2">
       {groups.map((g) => (
         <div key={g.category}>
-          <p className={cn("txm-eyebrow mb-3", inverse ? "text-slate-400" : "text-txm-subtle")}>
+          <p className={cn("txm-small font-semibold mb-3", inverse ? "text-slate-400" : "text-txm-subtle")}>
             {categoryLabels[g.category]}
           </p>
           <ul className="flex flex-wrap gap-2">

@@ -1,14 +1,16 @@
 import { notFound } from "next/navigation";
 import { AgentGrid } from "@/components/catalog/agent-catalog";
 import { FormSection } from "@/components/forms/form-section";
-import { FAQ, StackDiagram } from "@/components/sections/blocks";
+import { FAQ } from "@/components/sections/blocks";
 import { IndustryCard } from "@/components/sections/cards";
+import { DeliveryScale } from "@/components/sections/delivery-scale";
 import { Hero } from "@/components/sections/hero";
 import { Section, SectionHeader } from "@/components/sections/section";
+import { StackIndex } from "@/components/sections/stack-index";
 import { JsonLd } from "@/components/seo/json-ld";
 import { TechTags } from "@/components/signature/signature";
 import { ButtonLink } from "@/components/ui/button";
-import { IconTile } from "@/components/ui/icon";
+import { Icon } from "@/components/ui/icon";
 import { getAgents } from "@/content/agents";
 import { getDeliveryModels } from "@/content/delivery";
 import { industries } from "@/content/industries";
@@ -55,25 +57,24 @@ export default async function ServiceDomainPage({ params }: PageProps<"/services
         ]}
       />
 
-      <Section tone="light" labelledBy="position-title">
-        <div className="grid items-center gap-12 lg:grid-cols-2">
-          <SectionHeader
-            id="position-title"
-            align="left"
-            eyebrow="Where it sits"
-            title={`${d.menuLabel} in the Enterprise AI stack`}
-            description={d.stackPosition}
-          />
-          <StackDiagram domains={domainsByStack()} highlight={d.slug} />
+      <Section tone="dark" labelledBy="position-title" className="border-t border-white/10">
+        <SectionHeader
+          id="position-title"
+          inverse
+          title={`${d.menuLabel} in the Enterprise AI stack.`}
+          description={d.stackPosition}
+        />
+        <div className="mt-14">
+          <StackIndex domains={domainsByStack()} current={d.slug} />
         </div>
       </Section>
 
       <Section id="capabilities" labelledBy="capabilities-title">
-        <SectionHeader id="capabilities-title" eyebrow="Capabilities" title="What we deliver." />
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
+        <SectionHeader id="capabilities-title" title="What we deliver." />
+        <div className="mt-12 grid gap-x-10 gap-y-10 md:grid-cols-2">
           {d.capabilities.map((c) => (
-            <article key={c.anchor} id={c.anchor} className="txm-card scroll-mt-28 p-7">
-              <h3 className="text-xl font-bold text-txm-ink">{c.name}</h3>
+            <article key={c.anchor} id={c.anchor} className="scroll-mt-28 border-t border-txm-line pt-6">
+              <h3 className="txm-h3 text-txm-ink">{c.name}</h3>
               <p className="txm-body mt-2 text-txm-slate">{c.description}</p>
             </article>
           ))}
@@ -86,7 +87,6 @@ export default async function ServiceDomainPage({ params }: PageProps<"/services
             <SectionHeader
               id="platforms-title"
               align="left"
-              eyebrow="Platforms"
               title="Platforms and standards we work with."
               description="Each tag shows our evidence level: tested in a proof of concept, designed for, or team delivery experience."
             />
@@ -94,9 +94,9 @@ export default async function ServiceDomainPage({ params }: PageProps<"/services
               <TechTags tags={d.platforms} />
             </div>
           </div>
-          <div className="rounded-2xl border border-txm-line bg-white p-7">
-            <IconTile name="sparkles" size="sm" />
-            <h3 className="mt-5 text-xl font-bold text-txm-ink">How this connects to AI</h3>
+          <div className="border-t border-txm-line pt-6">
+            <Icon name="sparkles" className="h-6 w-6 text-txm-accent" />
+            <h3 className="txm-h3 mt-4 text-txm-ink">How this connects to AI</h3>
             <p className="txm-body mt-2 text-txm-slate">{d.connectsToAi}</p>
             <div className="mt-6">
               <ButtonLink href="/ai-agents" variant="text">
@@ -109,11 +109,11 @@ export default async function ServiceDomainPage({ params }: PageProps<"/services
 
       {relatedAgents.length > 0 && (
         <Section labelledBy="related-title">
-          <SectionHeader id="related-title" eyebrow="Related" title="Agents and industries that use this domain." />
+          <SectionHeader id="related-title" title="Agents and industries that use this domain." />
           <div className="mt-12">
             <AgentGrid items={relatedAgents} />
           </div>
-          <div className="mx-auto mt-6 grid max-w-3xl gap-6 md:grid-cols-2">
+          <div className="mt-12 grid gap-x-10 gap-y-8 md:grid-cols-2">
             {relatedIndustries.map((i) => (
               <IndustryCard key={i.slug} title={i.name} description={i.summary} href={`/industries/${i.slug}`} icon={i.icon} />
             ))}
@@ -122,17 +122,11 @@ export default async function ServiceDomainPage({ params }: PageProps<"/services
       )}
 
       <Section tone="dark" labelledBy="models-title">
-        <SectionHeader id="models-title" inverse eyebrow="Delivery models" title="How we can deliver it." />
-        <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {models.map((m) => (
-            <div key={m.slug} className="rounded-2xl border border-white/10 bg-txm-surface p-6">
-              <IconTile name={m.icon} size="sm" />
-              <p className="mt-4 font-semibold text-white">{m.name}</p>
-              <p className="txm-small mt-1 text-slate-400">{m.description}</p>
-            </div>
-          ))}
+        <SectionHeader id="models-title" inverse title="How we can deliver it." />
+        <div className="mt-12">
+          <DeliveryScale models={models} />
         </div>
-        <div className="mt-10 text-center">
+        <div className="mt-12">
           <ButtonLink href="/flexible-talent" tone="dark" variant="secondary">
             Compare delivery models
           </ButtonLink>
@@ -140,7 +134,7 @@ export default async function ServiceDomainPage({ params }: PageProps<"/services
       </Section>
 
       <Section labelledBy="faq-title">
-        <SectionHeader id="faq-title" eyebrow="FAQ" title={`${d.name}: common questions.`} />
+        <SectionHeader id="faq-title" title={`${d.name}: common questions.`} />
         <div className="mt-10">
           <FAQ items={d.faqs} />
         </div>
@@ -151,7 +145,6 @@ export default async function ServiceDomainPage({ params }: PageProps<"/services
           id="structure-my-team"
           formId="F-03"
           sourcePage={path}
-          eyebrow="Structure My Team"
           title="Tell us what needs to keep running."
           description="Share the scope and the skills involved. We will propose a delivery model and the people to run it."
         />
@@ -161,7 +154,6 @@ export default async function ServiceDomainPage({ params }: PageProps<"/services
           formId="F-01"
           sourcePage={path}
           defaults={{ priority: `service:${d.slug}` }}
-          eyebrow="Discuss Your AI Priority"
           title={`Talk to us about ${d.name.toLowerCase()}.`}
           description="Tell us about the workflow and the systems involved. A named person will reply."
         />

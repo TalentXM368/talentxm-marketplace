@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
-import { IconTile } from "@/components/ui/icon";
+import { Icon, IconTile } from "@/components/ui/icon";
 import type { IconName } from "@/content/types";
 import { cn } from "@/lib/cn";
 
@@ -62,9 +62,9 @@ export function IndustryCard({
   icon: IconName;
 }) {
   return (
-    <Link href={href} className="txm-card txm-focus group block h-full p-6">
+    <Link href={href} className="txm-focus group block h-full border-t border-txm-line pt-6">
       <div className="mb-4 flex items-start justify-between">
-        <IconTile name={icon} size="sm" tone="dark" />
+        <Icon name={icon} className="h-6 w-6 text-txm-accent" />
         <ArrowUpRight
           className="h-5 w-5 text-txm-subtle transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
           aria-hidden="true"
@@ -90,15 +90,11 @@ export function InfoCard({
   className?: string;
 }) {
   return (
-    <div className={cn("txm-card h-full p-7", className)}>
-      {icon && (
-        <div className="mb-5">
-          <IconTile name={icon} size="sm" />
-        </div>
-      )}
-      {label && <p className="mb-2 font-mono text-sm text-txm-subtle">{label}</p>}
-      <h3 className="mb-2 text-xl font-bold text-txm-ink">{title}</h3>
-      <p className="txm-body text-txm-slate">{body}</p>
+    <div className={cn("h-full border-t border-txm-line pt-6", className)}>
+      {icon && <Icon name={icon} className="mb-4 h-6 w-6 text-txm-accent" />}
+      {label && <p className="txm-small mb-2 font-semibold text-txm-accent">{label}</p>}
+      <h3 className="txm-h3 text-txm-ink">{title}</h3>
+      <p className="txm-body mt-3 max-w-[48ch] text-txm-slate">{body}</p>
     </div>
   );
 }

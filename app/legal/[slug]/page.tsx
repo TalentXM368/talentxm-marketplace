@@ -21,8 +21,8 @@ export default async function LegalPage({ params }: PageProps<"/legal/[slug]">) 
 
   return (
     <>
-      <section className="txm-mesh-bg py-16 md:py-20">
-        <div className="txm-container">
+      <section className="txm-under-header bg-txm-base pb-16 md:pb-20">
+        <div className="txm-container pt-16 md:pt-20">
           <Breadcrumb items={[{ label: page.title, href: `/legal/${page.slug}` }]} />
           <h1 className="txm-h1 text-white">{page.title}</h1>
           <p className="txm-small mt-4 text-txm-on-dark">Last updated {page.updated}</p>

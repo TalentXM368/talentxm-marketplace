@@ -35,9 +35,9 @@ All in `public/images/brand/`. Transparent PNGs unless noted.
 
 | File | What it is | Used in |
 |---|---|---|
-| `logo-horizontal-navy.png` | Mark + wordmark side by side, navy | Header, mobile menu |
+| `logo-horizontal-navy.png` | Mark + wordmark side by side, navy | Mobile menu |
 | `logo-horizontal-gradient.png` | Gradient mark + neutral wordmark | Footer (on navy) |
-| `logo-horizontal-neutral.png` | All neutral, for dark surfaces | Available |
+| `logo-horizontal-neutral.png` | All neutral, for dark surfaces | Header |
 | `logo-stacked-navy.png` | Mark above wordmark, navy | Organization schema in `lib/seo.ts` |
 | `logo-stacked-gradient.png` | Stacked, gradient mark | Available |
 | `mark-navy.png`, `mark-neutral.png`, `mark-gradient.png` | Mark only | Available |
@@ -119,17 +119,19 @@ Small text needs 4.5:1; large text and icons need 3:1.
 - **On light surfaces:** text is ink or slate; links, eyebrows and small icons use `text-txm-accent`. Never set small text in raw orange, yellow or teal.
 - **Dark surfaces are deep navy `#0d1725`**, as on the brand board's website concept, not Trust Blue. Trust Blue `#091d5c` is a colour used on top: buttons on light surfaces, shapes, chips, the logo tiles.
 - **On deep navy:** headings white, body `text-txm-on-dark`, eyebrows and text links `text-txm-yellow`. Teal and orange are also allowed for accents.
-- **On the gradient or on yellow:** text and icons are deep navy (`text-txm-base`), never white.
+- **On yellow or orange fills:** text and icons are deep navy (`text-txm-base`), never white.
 - **On orange (closing call only):** the display headline is white (large text only, 3.3:1); all smaller text and buttons are deep navy.
-- **Header:** deep navy with the neutral logo, white navigation and a white pill call to action.
-- **Proportion:** deep navy, white and cream do most of the work. Orange, teal and yellow appear as large brand shapes in the hero and closing call, and otherwise one bright colour per component; the gradient is for small, high-value moments.
+- **Header:** fixed, with the neutral logo, white navigation and a white pill call to action. It is transparent over the dark first section of every page and becomes a deep navy bar once the page scrolls.
+- **Proportion:** deep navy, white and cream do most of the work. Orange, teal and yellow blend only inside the logo form in the hero and closing call; everywhere else a component uses one solid bright colour.
 - Focus rings are navy on light (`.txm-focus`) and yellow on dark (`.txm-focus-inverse`).
 
 ### Gradient
 
-- **Brand gradient** (`--txm-gradient-primary`, class `.txm-gradient-bg`): left to right, `#f95e29` 0% → `#fa8c1c` 25% → `#fce403` 50% → `#d4dc2f` 64% → `#94cf76` 82% → `#61c4ae` 100%. Named on the slide as Energy Orange-Red → Opportunity Yellow → Human Teal. Used for icon tiles, the active item in a list, the contact button, thin accent bars.
-- **Mesh** (`--txm-gradient-mesh`, class `.txm-mesh-bg`): a quiet Trust Blue glow and a trace of teal over deep navy, for depth behind dark heroes and panels. It carries no orange or yellow; the bright colours come from the brand shapes.
-- **Brand shapes:** the orange ribbon, teal crescent and yellow lobe from the board. See `MOTION.md`, "Ribbon field".
+- **The brand colours blend only inside the logo**: the gradient logo files and the logo form (`components/motion/logo-form.tsx`), as on the brand essence board. Orange → yellow → teal is never a fill for UI: not on buttons, icon tiles, panels, bars or backgrounds.
+- **UI uses solid colour.** Filled buttons on deep navy, including the floating contact button and the header call to action, are white with navy text: the highest contrast, and the brand colours stay accents. Highlighted items use one solid colour: Opportunity Yellow for the human decision stage, Opportunity Yellow for the current domain in the stack index, Trust Blue for the lead layer in the pod diagram, orange for thin accent lines.
+- **Dark sections are flat deep navy.** There is no background mesh.
+- **Allowed exception:** a dark fade over a photo where text sits on it (industry cards), because it is there for legibility, not decoration.
+- **Logo form:** the mark at hero scale with the brand colours blending inside it. See `MOTION.md`, "Logo form".
 
 ## Typography
 
@@ -166,11 +168,11 @@ Carried over from the previous design system; the slides do not change them.
 
 ## Components
 
-- **Buttons are pills** (fully rounded). Primary: on light, Trust Blue fill with white text; on dark, yellow fill with deep navy text (hover: white); on orange, deep navy fill. The header call to action is a white pill. See `components/ui/button.tsx`.
+- **Buttons are pills** (fully rounded). Primary: on light, Trust Blue fill with white text; on dark, white fill with deep navy text (hover: Neutral Base); on orange, deep navy fill. The header call to action and the floating contact button are white pills. See `components/ui/button.tsx`.
 - **Secondary button:** outline; navy-tinted border on light, white border on dark.
 - **Text link button:** `text-txm-accent` on light (hover navy), `text-txm-yellow` on dark (hover white).
 - **Eyebrow:** `txm-eyebrow` plus `text-txm-accent` on light or `text-txm-yellow` on dark.
-- **Icon tile:** gradient background with a navy icon, or navy background with a white icon (`components/ui/icon.tsx`).
+- **Icon tile:** deep navy with a white icon on light surfaces; a faint white tile with a yellow icon on dark panels (`tone="on-dark"`). No gradient (`components/ui/icon.tsx`).
 - **Cards:** `.txm-card`, white on cream or white sections.
 - **Status chips** (`components/signature/signature.tsx`): Validated POC uses the navy tint. Available (emerald), Pilot (sky) and Concept (slate) are functional status colours, not brand colours.
 
@@ -179,11 +181,11 @@ Carried over from the previous design system; the slides do not change them.
 - POC videos, thumbnails and embedded decks keep their own styling. POC data is read only through `lib/pocs.ts`.
 - Form error (red) and success (emerald) states, and the WhatsApp green dot.
 - Neutral greys from Tailwind's `slate` scale for input borders, hover fills and tech pills.
-- Background photos in `public/images/` predate this brand. Heroes no longer use them; they show the brand shapes instead (`components/motion/ribbon-field.tsx`).
+- Background photos in `public/images/` predate this brand. Heroes no longer use them; they show the logo form instead (`components/motion/logo-form.tsx`).
 
 ## Changing the brand in code
 
-1. Colours, gradients, fonts and type scale live in `app/globals.css` (`:root` for values, `@theme inline` for Tailwind class names).
+1. Colours, fonts and type scale live in `app/globals.css` (`:root` for values, `@theme inline` for Tailwind class names).
 2. Use the `txm-*` classes above. Do not add raw hex values or `bg-[#...]` classes in components.
 3. Logo files live in `public/images/brand/`; icons in `app/icon.png` and `app/apple-icon.png`; the social image in `public/og.png`.
 4. Update this file in the same change.

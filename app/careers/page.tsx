@@ -32,7 +32,7 @@ export default function CareersPage() {
       />
 
       <Section labelledBy="skills-title">
-        <SectionHeader id="skills-title" eyebrow="What we look for" title="Skills we work with." />
+        <SectionHeader id="skills-title" title="Skills we work with." />
         <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {skills.map((s) => (
             <InfoCard key={s.title} title={s.title} body={s.body} />
@@ -44,7 +44,6 @@ export default function CareersPage() {
         id="join"
         formId="F-05"
         sourcePage="/careers"
-        eyebrow="Join Talent Network"
         title="Tell us what you do best."
         description="Your details go to our recruiting team only. They are never used for sales outreach."
         aside={

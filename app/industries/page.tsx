@@ -1,10 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { CTABand } from "@/components/sections/cta-band";
 import { Hero } from "@/components/sections/hero";
+import { IndustryPanels } from "@/components/sections/industry-panels";
 import { Section, SectionHeader } from "@/components/sections/section";
-import { IconTile } from "@/components/ui/icon";
 import { agentsForIndustry, getAgent } from "@/content/agents";
 import { industries } from "@/content/industries";
 import { site } from "@/content/site";
@@ -29,69 +28,48 @@ export default function IndustriesPage() {
         breadcrumbs={[{ label: "Industries", href: "/industries" }]}
       />
 
-      <Section labelledBy="industries-title">
-        <h2 id="industries-title" className="sr-only">
-          Industries we serve
-        </h2>
-        <div className="grid gap-8 lg:grid-cols-2">
-          {industries.map((i) => (
-            <Link
-              key={i.slug}
-              href={`/industries/${i.slug}`}
-              className="txm-card txm-focus group flex flex-col overflow-hidden"
-            >
-              <div className="relative h-48 bg-txm-base">
-                <Image src={i.image} alt="" fill sizes="(min-width: 1024px) 560px, 100vw" className="object-cover opacity-70" />
-                <div className="absolute inset-0 bg-gradient-to-t from-txm-base/80 to-transparent" />
-                <div className="absolute bottom-5 left-6 flex items-center gap-3">
-                  <IconTile name={i.icon} size="sm" />
-                  <span className="text-2xl font-bold text-white">{i.name}</span>
-                </div>
-              </div>
-              <div className="flex flex-1 flex-col p-7">
-                <p className="txm-body text-txm-slate">{i.summary}</p>
-                <p className="txm-small mt-4 text-txm-subtle">
-                  {agentsForIndustry(i.slug).length} validated agents · {i.useCaseRows.length} mapped workflows
-                </p>
-                <span className="mt-6 flex items-center gap-2 font-semibold text-txm-accent">
-                  Explore {i.name}
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-                </span>
-              </div>
-            </Link>
-          ))}
+      <section aria-labelledby="industries-title" className="txm-section-dark border-t border-white/10 py-20 lg:py-28">
+        <div className="txm-container">
+          <h2 id="industries-title" className="sr-only">
+            Industries we serve
+          </h2>
+          <IndustryPanels
+            panels={industries.map((i) => ({
+              title: i.name,
+              description: `${i.summary} ${agentsForIndustry(i.slug).length} validated agents and ${i.useCaseRows.length} mapped workflows.`,
+              href: `/industries/${i.slug}`,
+              image: i.image,
+            }))}
+          />
         </div>
-      </Section>
+      </section>
 
       <Section tone="light" labelledBy="ops-title">
-        <div className="grid items-center gap-12 lg:grid-cols-2">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
           <SectionHeader
             id="ops-title"
-            align="left"
-            eyebrow="Enterprise operations"
             title="Finance, IT and operations work in any sector."
             description="Accounts payable, integration, platform support and governance look similar across industries. Our service domains and cross-industry agents cover them."
           />
-          <div className="grid gap-4">
-            {ap && (
-              <Link href={`/ai-agents/${ap.slug}`} className="txm-card txm-focus group flex items-center gap-4 p-5">
-                <IconTile name={ap.icon} size="sm" />
-                <span className="flex-1">
-                  <span className="block font-semibold text-txm-ink">{ap.name}</span>
-                  <span className="txm-small block text-txm-slate">Cross-industry · {ap.businessFunction}</span>
-                </span>
-                <ArrowRight className="h-4 w-4 text-txm-accent" aria-hidden="true" />
-              </Link>
-            )}
-            <Link href="/services" className="txm-card txm-focus group flex items-center gap-4 p-5">
-              <IconTile name="layers" size="sm" />
-              <span className="flex-1">
-                <span className="block font-semibold text-txm-ink">Enterprise AI Services</span>
-                <span className="txm-small block text-txm-slate">Five domains from the foundation to managed services</span>
-              </span>
-              <ArrowRight className="h-4 w-4 text-txm-accent" aria-hidden="true" />
-            </Link>
-          </div>
+          <ul className="border-t border-txm-line">
+            {[
+              ...(ap ? [{ href: `/ai-agents/${ap.slug}`, title: ap.name, detail: `Cross-industry agent for ${ap.businessFunction.toLowerCase()}` }] : []),
+              { href: "/services", title: "Enterprise AI Services", detail: "Five domains, from the foundation to managed services" },
+            ].map((l) => (
+              <li key={l.href} className="border-b border-txm-line">
+                <Link href={l.href} className="txm-focus group flex items-start justify-between gap-6 py-6">
+                  <span>
+                    <span className="txm-h3 block text-txm-ink group-hover:text-txm-accent">{l.title}</span>
+                    <span className="txm-body mt-1 block text-txm-slate">{l.detail}</span>
+                  </span>
+                  <ArrowUpRight
+                    className="mt-1 h-6 w-6 shrink-0 text-txm-accent transition-transform group-hover:-translate-y-1 group-hover:translate-x-1"
+                    aria-hidden="true"
+                  />
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </Section>
 

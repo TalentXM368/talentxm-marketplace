@@ -28,20 +28,6 @@
   --txm-text-on-dark: var(--txm-tint-cool);
   --txm-text-muted: #94a3b8;
   --txm-text-subtle: #5a6578;
-  --txm-gradient-primary: linear-gradient(
-    90deg,
-    #f95e29 0%,
-    #fa8c1c 25%,
-    #fce403 50%,
-    #d4dc2f 64%,
-    #94cf76 82%,
-    #61c4ae 100%
-  );
-  /* Quiet depth only: Trust Blue and a trace of teal over deep navy. White text sits directly on it. */
-  --txm-gradient-mesh:
-    radial-gradient(at 12% 0%, rgba(9, 29, 92, 0.55) 0%, transparent 55%),
-    radial-gradient(at 88% 100%, rgba(87, 195, 187, 0.12) 0%, transparent 50%),
-    radial-gradient(at 50% 120%, rgba(9, 29, 92, 0.6) 0%, transparent 55%);
   --txm-border-subtle: rgba(255, 255, 255, 0.1);
   --txm-border-default: rgba(9, 29, 92, 0.12);
   --txm-radius-sm: 8px;
@@ -49,7 +35,9 @@
   --txm-radius-lg: 20px;
   --txm-shadow-card: 0 1px 3px rgba(9, 29, 92, 0.06), 0 8px 24px rgba(9, 29, 92, 0.04);
   --txm-shadow-elev: 0 24px 48px -12px rgba(9, 29, 92, 0.18);
+  /* Header height once condensed (scroll padding, pinned content) and at the top of the page. */
   --txm-header-h: 64px;
+  --txm-header-h-top: 72px;
 
   /* Motion tokens. Rules and usage: see MOTION.md. */
   --txm-dur-fast: 200ms;
@@ -159,10 +147,10 @@ body {
   }
   .txm-h2 {
     font-family: var(--font-display);
-    font-size: 40px;
-    line-height: 48px;
-    font-weight: 400;
-    letter-spacing: -0.02em;
+    font-size: clamp(30px, 3.6vw, 50px);
+    line-height: 1.1;
+    font-weight: 300;
+    letter-spacing: -0.025em;
     text-wrap: balance;
   }
   .txm-h3 {
@@ -197,10 +185,6 @@ body {
       font-size: 38px;
       line-height: 46px;
     }
-    .txm-h2 {
-      font-size: 30px;
-      line-height: 38px;
-    }
     .txm-h3 {
       font-size: 22px;
       line-height: 30px;
@@ -211,12 +195,9 @@ body {
     }
   }
 
-  .txm-gradient-bg {
-    background: var(--txm-gradient-primary);
-  }
-  .txm-mesh-bg {
-    background-color: var(--txm-bg-base);
-    background-image: var(--txm-gradient-mesh);
+  /* The header is fixed and transparent over the first section; this keeps that section's content clear of it. */
+  .txm-under-header {
+    padding-top: var(--txm-header-h-top);
   }
 
   .txm-card {
@@ -246,14 +227,6 @@ body {
     outline: 2px solid var(--txm-brand-yellow);
     outline-offset: 2px;
     border-radius: 6px;
-  }
-
-  .txm-mesh-animate {
-    animation: txm-mesh-drift 40s ease-in-out infinite;
-    background-size:
-      200% 200%,
-      200% 200%,
-      200% 200%;
   }
 
   /* Long-form text: legal pages and rich text blocks. */
@@ -298,27 +271,6 @@ body {
   }
 }
 
-@keyframes txm-mesh-drift {
-  0% {
-    background-position:
-      0% 0%,
-      100% 0%,
-      50% 100%;
-  }
-  50% {
-    background-position:
-      20% 30%,
-      80% 20%,
-      30% 70%;
-  }
-  100% {
-    background-position:
-      0% 0%,
-      100% 0%,
-      50% 100%;
-  }
-}
-
 /* ------------------------------------------------------------------
    Motion layer. Every pattern here is documented in MOTION.md.
    ------------------------------------------------------------------ */
@@ -339,27 +291,88 @@ body {
     transform: scaleX(0);
   }
 }
-@keyframes txm-ribbon-wipe {
+@keyframes txm-form-in {
   from {
-    clip-path: inset(0 0 0 100%);
+    opacity: 0;
+  }
+}
+@keyframes txm-form-drift {
+  to {
+    translate: -16px 12px;
+    rotate: -1.6deg;
+  }
+}
+/* Scroll-linked keyframes. Individual transform properties, so hover lifts (which use transform) still work. */
+@keyframes txm-lit {
+  from {
+    opacity: 0.2;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes txm-spotlight {
+  0% {
+    opacity: 0.25;
+    translate: 3vw 0;
+  }
+  42%,
+  58% {
+    opacity: 1;
+    translate: 0 0;
+  }
+  100% {
+    opacity: 0.25;
+    translate: -1vw 0;
+  }
+}
+@keyframes txm-dim {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  42%,
+  58% {
+    opacity: 1;
+  }
+}
+@keyframes txm-fill-in {
+  from {
+    clip-path: inset(0 100% 0 0);
   }
   to {
     clip-path: inset(0 0 0 0);
   }
 }
-@keyframes txm-ribbon-a {
-  to {
-    transform: translate(-22px, 16px) rotate(-1.8deg);
+@keyframes txm-grow-x {
+  from {
+    scale: 0 1;
   }
 }
-@keyframes txm-ribbon-b {
-  to {
-    transform: translate(24px, -12px) rotate(1.6deg);
+@keyframes txm-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--txm-brand-yellow) 55%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 18px color-mix(in srgb, var(--txm-brand-yellow) 0%, transparent);
   }
 }
-@keyframes txm-ribbon-c {
-  to {
-    transform: translate(-28px, -14px) rotate(2.2deg);
+@keyframes txm-coverflow {
+  0% {
+    opacity: 0.45;
+    rotate: y -38deg;
+    scale: 0.86;
+  }
+  18%,
+  82% {
+    opacity: 1;
+    rotate: y 0deg;
+    scale: 1;
+  }
+  100% {
+    opacity: 0.45;
+    rotate: y 38deg;
+    scale: 0.86;
   }
 }
 @keyframes txm-nudge {
@@ -466,65 +479,98 @@ body {
     animation-delay: calc(90ms * var(--i, 0) + 350ms);
   }
 
-  /* Ribbon field: the flowing brand shapes, kept to the right and dimmed on small screens for text contrast. */
-  .txm-ribbons {
-    --rb-1: var(--txm-brand-orange);
-    --rb-2: var(--txm-brand-teal);
-    --rb-3: var(--txm-brand-yellow);
-    --rb-rim: var(--txm-tint-warm);
-    --rb-depth: var(--txm-brand-navy);
+  /*
+   * Logo form: the brand mark larger than the hero, cut by its top, bottom and right edges, as on the
+   * brand essence board. The box is sized from the hero's height; `left` places the mark's own left
+   * edge (13% into the box, hence the translate). Dimmed behind the text on small screens.
+   */
+  .txm-form {
     position: absolute;
     inset: 0;
     overflow: hidden;
-    opacity: 0.38;
-    animation: txm-ribbon-wipe 1600ms var(--txm-ease-out) backwards;
+    pointer-events: none;
+    opacity: 0.32;
   }
-  .txm-ribbons[data-palette="on-orange"] {
-    --rb-1: var(--txm-brand-navy);
-    --rb-o2: 0.96;
-    --rb-o3: 0.88;
-    --rb-o4: 0.85;
-    --rb-rim: var(--txm-tint-cool);
-    --rb-depth: var(--txm-brand-yellow);
+  .txm-form[data-tone="soft"] {
+    opacity: 0.22;
+  }
+  .txm-form[data-palette="on-orange"] {
+    opacity: 0.5;
+  }
+  .txm-form-box {
+    position: absolute;
+    top: 18%;
+    left: 34%;
+    height: 112%;
+    translate: -13% 0;
+    animation: txm-form-in 1600ms var(--txm-ease-out) backwards;
+  }
+  .txm-form[data-tone="soft"] .txm-form-box,
+  .txm-form[data-palette="on-orange"] .txm-form-box {
+    top: 8%;
+    left: 46%;
+    height: 120%;
+  }
+  .txm-form-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    animation: txm-form-drift 26s var(--txm-ease-in-out) infinite alternate;
+    transition: opacity 1400ms var(--txm-ease-out);
+  }
+  .txm-form-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 900ms var(--txm-ease-out);
+  }
+  .txm-form[data-gl="on"] .txm-form-canvas {
+    opacity: 1;
+  }
+  .txm-form[data-gl="on"] .txm-form-svg {
+    opacity: 0;
+  }
+  /* While WebGL starts, the flat SVG stays hidden, so the form appears in 3D from its first frame. */
+  @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+    .txm-form[data-palette="on-dark"]:not([data-gl="off"]) .txm-form-svg {
+      opacity: 0;
+    }
   }
   @media (min-width: 1024px) {
-    .txm-ribbons {
+    .txm-form {
       opacity: 1;
     }
-    .txm-ribbons[data-tone="soft"] {
-      opacity: 0.85;
+    .txm-form[data-tone="soft"] {
+      opacity: 0.5;
+    }
+    .txm-form[data-palette="on-orange"] {
+      opacity: 0.9;
+    }
+    .txm-form-box {
+      top: -27%;
+      left: 54%;
+      height: 162%;
+    }
+    .txm-form[data-tone="soft"] .txm-form-box,
+    .txm-form[data-palette="on-orange"] .txm-form-box {
+      top: -34%;
+      left: 62%;
+      height: 170%;
     }
   }
-  .txm-ribbon-layer {
-    transform: translate3d(
-      calc(var(--rb-px, 0) * var(--rb-depth-k, 1) * -14px),
-      calc(var(--rb-py, 0) * var(--rb-depth-k, 1) * -10px + var(--rb-sy, 0) * var(--rb-depth-k, 1) * 110px),
-      0
-    );
-    transition: transform 700ms var(--txm-ease-out);
-  }
-  .txm-ribbon-drift {
-    transform-box: view-box;
-    transform-origin: 100% 100%;
-    animation: txm-ribbon-a 24s var(--txm-ease-in-out) infinite alternate;
-  }
-  .txm-ribbon-drift-b {
-    animation-name: txm-ribbon-b;
-    animation-duration: 30s;
-  }
-  .txm-ribbon-drift-c {
-    animation-name: txm-ribbon-c;
-    animation-duration: 36s;
-  }
 
-  /* Brand signature line: wide-tracked capitals, as on the brand board. */
-  .txm-signature {
+  /* Hero tagline: plain capitals under a hairline rule, as on the brand essence board. */
+  .txm-tagline {
     font-family: var(--font-display);
-    font-size: 12px;
-    line-height: 22px;
-    font-weight: 500;
-    letter-spacing: 0.32em;
+    font-size: clamp(15px, 1.35vw, 20px);
+    line-height: 1.6;
+    font-weight: 400;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
+    max-width: 28ch;
   }
   .txm-scroll-hint > svg {
     animation: txm-nudge 1.8s var(--txm-ease-in-out) infinite;
@@ -581,7 +627,7 @@ body {
     right: 0;
     height: 3px;
     border-radius: 3px;
-    background: var(--txm-gradient-primary);
+    background: var(--txm-brand-orange);
     transform-origin: left;
   }
   .txm-journey[data-reveal="pending"]::before {
@@ -637,124 +683,550 @@ body {
     color: var(--txm-text-inverse);
   }
 
-  /* Pinned story. Stacked by default; pins on large screens once JS has enhanced it. */
-  .txm-story {
-    background: var(--txm-bg-base);
-    color: var(--txm-text-inverse);
-  }
-  .txm-story-pin {
-    padding-block: 64px;
-  }
-  .txm-story-stages {
-    display: grid;
-    gap: 16px;
-  }
-  .txm-story-rail {
+  /*
+   * Agent flow (MOTION.md: "Agent flow"). One request travels a line through four stations.
+   * Without JS every station is fully shown; once enhanced, the current one is lit and the rest dim.
+   */
+  .txm-flow-stage {
+    --g: 32px;
     position: relative;
-    display: grid;
-    gap: 18px;
+    margin-top: 72px;
   }
-  .txm-story-rail::before,
-  .txm-story-rail::after {
+  .txm-flow-list {
+    display: grid;
+    gap: 40px;
+  }
+  .txm-flow-step {
+    position: relative;
+    padding-left: 80px;
+  }
+  /* Phones: a short connector from each station down to the next. */
+  .txm-flow-step:not(:last-child)::before {
     content: "";
     position: absolute;
-    left: 13px;
-    top: 14px;
-    bottom: 14px;
+    left: 27px;
+    top: 64px;
+    bottom: -32px;
     width: 2px;
     background: var(--txm-border-subtle);
+    transition: background-color var(--txm-dur-base) var(--txm-ease-in-out);
   }
-  .txm-story-rail::after {
-    background: var(--txm-brand-yellow);
-    transform-origin: top;
-    transform: scaleY(var(--story-p, 0));
+  .txm-flow-step[data-state="done"]::before {
+    background: var(--txm-brand-orange);
   }
-  .txm-story-rail > li {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    color: var(--txm-text-on-dark);
-    transition: color var(--txm-dur-base) var(--txm-ease-in-out);
-  }
-  .txm-story-dot {
-    display: flex;
-    height: 28px;
-    width: 28px;
+  .txm-flow-node {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: inline-flex;
+    width: 56px;
+    height: 56px;
     align-items: center;
     justify-content: center;
     border-radius: 999px;
-    border: 2px solid var(--txm-tint-cool);
+    border: 1px solid color-mix(in srgb, var(--txm-text-inverse) 22%, transparent);
     background: var(--txm-bg-base);
-    font-size: 12px;
-    font-weight: 700;
+    color: var(--txm-text-on-dark);
+    cursor: pointer;
     transition:
       background-color var(--txm-dur-base) var(--txm-ease-in-out),
       border-color var(--txm-dur-base) var(--txm-ease-in-out),
-      color var(--txm-dur-base) var(--txm-ease-in-out);
+      color var(--txm-dur-base) var(--txm-ease-in-out),
+      scale var(--txm-dur-base) var(--txm-ease-out);
   }
-  .txm-story-label {
-    font-weight: 600;
-  }
-  .txm-story-rail > li[data-state="active"],
-  .txm-story-rail > li[data-state="done"] {
+  .txm-flow-node:hover {
+    border-color: var(--txm-text-inverse);
     color: var(--txm-text-inverse);
   }
-  .txm-story-rail > li[data-state="active"] .txm-story-dot,
-  .txm-story-rail > li[data-state="done"] .txm-story-dot {
+  .txm-flow-step[data-state="done"] .txm-flow-node {
+    border-color: var(--txm-brand-orange);
+    color: var(--txm-brand-orange);
+  }
+  .txm-flow-step[data-state="active"] .txm-flow-node {
+    border-color: var(--txm-brand-orange);
+    background: var(--txm-brand-orange);
+    color: var(--txm-bg-base);
+    scale: 1.08;
+  }
+  /* The person's decision is the one station drawn in yellow. */
+  .txm-flow-step[data-kind="human"][data-state="active"] .txm-flow-node {
     border-color: var(--txm-brand-yellow);
     background: var(--txm-brand-yellow);
-    color: var(--txm-brand-navy);
   }
-
-  @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
-    .txm-story[data-enhanced] {
-      height: calc(var(--story-steps, 4) * 80vh + 100vh);
+  .txm-flow-body {
+    transition:
+      opacity var(--txm-dur-reveal) var(--txm-ease-out),
+      translate var(--txm-dur-reveal) var(--txm-ease-out);
+  }
+  .txm-flow-item {
+    border-top: 1px solid var(--txm-border-subtle);
+    padding-top: 10px;
+  }
+  .txm-flow-rail {
+    display: none;
+  }
+  @media (min-width: 1024px) {
+    .txm-flow-list {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--g);
     }
-    .txm-story[data-enhanced] .txm-story-pin {
-      position: sticky;
-      top: 0;
-      display: flex;
-      height: 100vh;
-      align-items: center;
-      padding-block: calc(var(--txm-header-h) + 24px) 24px;
+    .txm-flow-step {
+      padding-left: 0;
+      padding-top: 96px;
     }
-    .txm-story[data-enhanced] .txm-story-stages {
-      gap: 0;
+    .txm-flow-step:not(:last-child)::before {
+      display: none;
     }
-    .txm-story[data-enhanced] .txm-story-stage {
-      grid-area: 1 / 1;
+    /* Large screens: one line from the first station to the last; the packet rides along it. */
+    .txm-flow-rail {
+      display: block;
+      position: absolute;
+      top: 27px;
+      left: 28px;
+      width: calc((100% - 3 * var(--g)) * 0.75 + 3 * var(--g));
+      height: 2px;
+      background: var(--txm-border-subtle);
+      pointer-events: none;
+    }
+    .txm-flow-fill,
+    .txm-flow-runner {
+      position: absolute;
+      inset: 0;
       transition:
-        opacity var(--txm-dur-base) linear,
-        transform var(--txm-dur-reveal) var(--txm-ease-out),
-        visibility 0s linear var(--txm-dur-base);
+        scale 1100ms var(--txm-ease-in-out),
+        translate 1100ms var(--txm-ease-in-out);
     }
-    .txm-story[data-enhanced] .txm-story-stage[data-state="todo"] {
-      visibility: hidden;
+    .txm-flow-fill {
+      background: var(--txm-brand-orange);
+      transform-origin: 0 50%;
+      scale: var(--flow-k, 0) 1;
+    }
+    .txm-flow-runner {
+      translate: calc(var(--flow-k, 0) * 100%) 0;
+    }
+    .txm-flow-packet {
+      position: absolute;
+      left: -7px;
+      top: -6px;
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      background: var(--txm-brand-yellow);
       opacity: 0;
-      transform: translateY(56px) scale(0.97);
     }
-    .txm-story[data-enhanced] .txm-story-stage[data-state="done"] {
-      visibility: hidden;
-      opacity: 0;
-      transform: translateY(-56px) scale(0.97);
+    .txm-flow[data-enhanced] .txm-flow-packet {
+      opacity: 1;
     }
-    .txm-story[data-enhanced] .txm-story-stage[data-state="active"] {
-      visibility: visible;
-      transition-delay: 0s;
+    .txm-flow[data-jump] .txm-flow-fill,
+    .txm-flow[data-jump] .txm-flow-runner {
+      transition: none;
     }
-    .txm-story[data-enhanced] .txm-story-stage[data-state="active"] .txm-story-item {
+    .txm-flow[data-enhanced] .txm-flow-step[data-state="active"] .txm-flow-body {
+      translate: 0 -6px;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    /* With reduced motion nothing plays, so every station stays at full strength. */
+    .txm-flow[data-enhanced] .txm-flow-step[data-state="todo"] .txm-flow-body,
+    .txm-flow[data-enhanced] .txm-flow-step[data-state="done"] .txm-flow-body {
+      opacity: 0.4;
+    }
+    .txm-flow[data-enhanced] .txm-flow-packet {
+      animation: txm-pulse 1.6s var(--txm-ease-out) infinite;
+    }
+    .txm-flow[data-enhanced] .txm-flow-step[data-state="active"] .txm-flow-item {
       animation: txm-rise 600ms var(--txm-ease-out) backwards;
     }
-    .txm-story[data-enhanced] .txm-story-item:nth-child(2) {
-      animation-delay: 70ms;
+    .txm-flow[data-enhanced] .txm-flow-step[data-state="active"] .txm-flow-item:nth-child(2) {
+      animation-delay: 90ms;
     }
-    .txm-story[data-enhanced] .txm-story-item:nth-child(3) {
-      animation-delay: 140ms;
+    .txm-flow[data-enhanced] .txm-flow-step[data-state="active"] .txm-flow-item:nth-child(3) {
+      animation-delay: 180ms;
     }
-    .txm-story[data-enhanced] .txm-story-item:nth-child(4) {
-      animation-delay: 210ms;
+    .txm-flow[data-enhanced] .txm-flow-step[data-state="active"] .txm-flow-item:nth-child(n + 4) {
+      animation-delay: 270ms;
+    }
+  }
+
+  /* Scroll-lit statement (MOTION.md: "Scroll-lit type"). */
+  .txm-statement {
+    max-width: 24ch;
+    font-family: var(--font-display);
+    font-size: clamp(30px, 4.4vw, 60px);
+    line-height: 1.14;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: var(--txm-text-inverse);
+    text-wrap: pretty;
+  }
+
+  /* Spotlight index: the five service domains as a large type list (MOTION.md: "Spotlight index"). */
+  .txm-index {
+    border-top: 1px solid var(--txm-border-subtle);
+  }
+  .txm-index-row {
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 16px;
+    row-gap: 8px;
+    padding-block: 24px;
+    border-bottom: 1px solid var(--txm-border-subtle);
+    color: var(--txm-text-inverse);
+  }
+  .txm-index-layer {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--txm-brand-orange);
+    font-variant-numeric: tabular-nums;
+  }
+  .txm-index-name {
+    font-family: var(--font-display);
+    font-size: clamp(30px, 5.6vw, 76px);
+    line-height: 1.05;
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    overflow-wrap: anywhere;
+    transition: color var(--txm-dur-base) var(--txm-ease-in-out);
+  }
+  .txm-index-row:hover .txm-index-name,
+  .txm-index-row:focus-visible .txm-index-name,
+  .txm-index-row[aria-current="page"] .txm-index-name {
+    color: var(--txm-brand-yellow);
+  }
+  /* On a domain page, the other layers step back so the current one reads first. */
+  .txm-index-row.is-muted .txm-index-name {
+    color: color-mix(in srgb, var(--txm-text-inverse) 55%, transparent);
+  }
+  .txm-index-caps {
+    grid-column: 2 / -1;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--txm-text-on-dark);
+  }
+  .txm-index-arrow {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  @media (min-width: 1024px) {
+    .txm-index-row {
+      grid-template-columns: 4rem minmax(0, 1fr) minmax(0, 18rem) auto;
+      column-gap: 32px;
+      padding-block: 28px;
+    }
+    .txm-index-caps {
+      grid-column: 3;
+      grid-row: 1;
+    }
+    .txm-index-arrow {
+      grid-column: 4;
+    }
+  }
+
+  /* Step words: a sequence set as very large words that fill in as they scroll through. */
+  .txm-steps {
+    display: grid;
+    gap: 56px;
+  }
+  .txm-steps > li {
+    border-top: 1px solid var(--txm-border-subtle);
+    padding-top: 24px;
+  }
+  .txm-steps-word {
+    position: relative;
+    font-family: var(--font-display);
+    font-size: clamp(56px, 7.4vw, 100px);
+    line-height: 1;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+  }
+  .txm-steps[data-size="lg"] .txm-steps-word {
+    font-size: clamp(44px, 4.4vw, 58px);
+  }
+  .txm-steps[data-size="md"] .txm-steps-word {
+    font-size: clamp(30px, 3vw, 42px);
+    line-height: 1.08;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+  .txm-steps-fill {
+    display: block;
+    color: var(--txm-text-inverse);
+  }
+  .txm-steps-outline {
+    position: absolute;
+    inset: 0;
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--txm-text-inverse) 40%, transparent);
+    pointer-events: none;
+  }
+  .txm-steps[data-tone="light"] > li {
+    border-top-color: var(--txm-border-default);
+  }
+  .txm-steps[data-tone="light"] .txm-steps-fill {
+    color: var(--txm-text-primary);
+  }
+  .txm-steps[data-tone="light"] .txm-steps-outline {
+    -webkit-text-stroke-color: color-mix(in srgb, var(--txm-text-primary) 35%, transparent);
+  }
+  @media (min-width: 768px) {
+    .txm-steps[data-size="md"] {
+      grid-template-columns: repeat(min(var(--n, 3), 3), minmax(0, 1fr));
+      gap: 40px;
+    }
+  }
+  @media (min-width: 1024px) {
+    .txm-steps {
+      grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr));
+      gap: 40px;
+    }
+  }
+
+  /* Expanding panels (MOTION.md: "Expanding panels"). */
+  .txm-panels {
+    display: grid;
+    gap: 16px;
+  }
+  .txm-panel-link {
+    position: relative;
+    display: flex;
+    min-height: 360px;
+    height: 100%;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: var(--txm-radius-md);
+    isolation: isolate;
+  }
+  .txm-panel-image {
+    z-index: -2;
+    transition: scale 1200ms var(--txm-ease-out);
+  }
+  .txm-panel-tint {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: color-mix(in srgb, var(--txm-bg-base) 62%, transparent);
+    transition: background-color var(--txm-dur-base) var(--txm-ease-in-out);
+  }
+  .txm-panel-link:hover .txm-panel-image {
+    scale: 1.05;
+  }
+  .txm-panel-link:hover .txm-panel-tint,
+  .txm-panel-link:focus-visible .txm-panel-tint {
+    background: color-mix(in srgb, var(--txm-bg-base) 48%, transparent);
+  }
+  @media (min-width: 1024px) {
+    .txm-panels {
+      display: flex;
+      height: 560px;
+    }
+    .txm-panel {
+      flex: 1 1 0;
+      min-width: 0;
+      transition: flex-grow 900ms var(--txm-ease-out);
+    }
+    .txm-panel:first-child,
+    .txm-panels:has(.txm-panel:hover, .txm-panel:focus-within) .txm-panel:hover,
+    .txm-panels:has(.txm-panel:hover, .txm-panel:focus-within) .txm-panel:focus-within {
+      flex-grow: 2;
+    }
+    .txm-panels:has(.txm-panel:hover, .txm-panel:focus-within) .txm-panel:first-child:not(:hover, :focus-within) {
+      flex-grow: 1;
+    }
+  }
+
+  /* Hours band: each hub's working day on one 24-hour axis (MOTION.md: "Hours band"). */
+  .txm-hours-row {
+    display: grid;
+    gap: 16px;
+    padding-block: 20px;
+    border-top: 1px solid var(--txm-border-subtle);
+  }
+  .txm-hours-row:last-child {
+    border-top: 0;
+    padding-top: 4px;
+  }
+  .txm-hours-track {
+    position: relative;
+    height: 40px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--txm-text-inverse) 6%, transparent);
+  }
+  .txm-hours-bar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-radius: 999px;
+    background: var(--txm-brand-orange);
+    transform-origin: 0 50%;
+  }
+  .txm-hours-row:nth-child(2) .txm-hours-bar {
+    background: var(--txm-brand-yellow);
+  }
+  .txm-hours-row:nth-child(3) .txm-hours-bar {
+    background: var(--txm-brand-teal);
+  }
+  .txm-hours-line {
+    position: absolute;
+    top: -6px;
+    bottom: -6px;
+    width: 2px;
+    margin-left: -1px;
+    background: var(--txm-text-inverse);
+  }
+  .txm-hours-axis {
+    position: relative;
+    height: 22px;
+    font-size: 12px;
+    line-height: 22px;
+    color: var(--txm-text-on-dark);
+    font-variant-numeric: tabular-nums;
+  }
+  .txm-hours-axis > span {
+    position: absolute;
+    top: 0;
+    translate: -50% 0;
+  }
+  .txm-hours-axis > span:first-child {
+    translate: 0 0;
+  }
+  .txm-hours-axis > span:nth-last-child(1 of :not(.txm-hours-now)) {
+    translate: -100% 0;
+  }
+  .txm-hours-axis > .txm-hours-now {
+    padding-inline: 6px;
+    background: var(--txm-bg-base);
+    color: var(--txm-brand-yellow);
+    font-weight: 600;
+  }
+  @media (min-width: 768px) {
+    .txm-hours-row {
+      grid-template-columns: minmax(0, 17rem) minmax(0, 1fr);
+      align-items: center;
+      gap: 40px;
+    }
+  }
+
+  /* Delivery scale: models on one line, from people joining your team to TalentXM owning the outcome. */
+  .txm-scale-groups {
+    display: none;
+  }
+  .txm-scale-list {
+    display: grid;
+    gap: 24px;
+  }
+  .txm-scale-list > li {
+    position: relative;
+    padding-left: 28px;
+  }
+  .txm-scale-dot {
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
+    border: 2px solid var(--txm-text-on-dark);
+    background: var(--txm-bg-base);
+  }
+  .txm-scale-list > li[data-group="outcome-led"] .txm-scale-dot {
+    border-color: var(--txm-brand-orange);
+    background: var(--txm-brand-orange);
+  }
+  .txm-scale-tag {
+    display: block;
+    margin-bottom: 2px;
+    font-weight: 600;
+    color: var(--txm-text-on-dark);
+  }
+  li[data-group="outcome-led"] .txm-scale-tag {
+    color: var(--txm-brand-yellow);
+  }
+  @media (min-width: 1024px) {
+    .txm-scale-groups {
+      display: grid;
+      grid-template-columns: repeat(var(--n, 7), minmax(0, 1fr));
+      gap: 24px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--txm-text-on-dark);
+    }
+    .txm-scale-groups > p:last-child {
+      color: var(--txm-brand-yellow);
+    }
+    .txm-scale-list {
+      grid-template-columns: repeat(var(--n, 7), minmax(0, 1fr));
+    }
+    .txm-scale-list > li {
+      padding-left: 0;
+      padding-top: 32px;
+      border-top: 2px solid var(--txm-border-subtle);
+    }
+    .txm-scale-list > li[data-group="outcome-led"] {
+      border-top-color: var(--txm-brand-orange);
+    }
+    .txm-scale-dot {
+      top: -7px;
+    }
+    .txm-scale-tag {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+  }
+
+  /*
+   * Scroll-linked motion (MOTION.md: "Scroll-lit type", "Spotlight index", "Hours band", "Coverflow rail").
+   * CSS scroll-driven animations only: tied to scroll position, so they also run in reverse, and every
+   * element comes to rest fully visible. Reduced motion and browsers without support keep the still layout.
+   */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .txm-scrub {
+        view-timeline: --txm-scrub block;
+      }
+      .txm-scrub > span {
+        animation: txm-lit linear both;
+        animation-timeline: --txm-scrub;
+        animation-range: cover calc(18% + var(--k, 0) * 30%) cover calc(24% + var(--k, 0) * 30%);
+      }
+
+      .txm-steps-fill {
+        animation: txm-fill-in linear both;
+        animation-timeline: view();
+        animation-range: entry calc(60% + var(--k, 0) * 40%) cover calc(48% + var(--k, 0) * 12%);
+      }
+
+      .txm-hours-bar {
+        animation: txm-grow-x linear both;
+        animation-timeline: view();
+        animation-range: entry 40% cover 40%;
+      }
+    }
+    @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+      /* The words drift in and brighten; the row and its rules stay put. */
+      .txm-index-row {
+        view-timeline: --txm-row block;
+      }
+      .txm-index-row > * {
+        animation: txm-dim linear both;
+        animation-timeline: --txm-row;
+      }
+      .txm-index-row > .txm-index-name {
+        animation-name: txm-spotlight;
+      }
+
+      .txm-coverflow {
+        perspective: 1600px;
+      }
+      .txm-coverflow > li {
+        animation: txm-coverflow linear both;
+        animation-timeline: view(inline);
+      }
     }
   }
 }
@@ -804,14 +1276,10 @@ body {
     transition-delay: 0s !important;
     scroll-behavior: auto !important;
   }
-  .txm-mesh-animate,
   .txm-scroll-hint > svg,
-  .txm-ribbons,
-  .txm-ribbon-drift {
+  .txm-form-box,
+  .txm-form-svg {
     animation: none !important;
-  }
-  .txm-ribbon-layer {
-    transform: none !important;
   }
   .txm-reveal[data-reveal="pending"],
   .txm-reveal-stagger[data-reveal="pending"] > * {

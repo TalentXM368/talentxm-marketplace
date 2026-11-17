@@ -31,7 +31,7 @@ function Walkthrough({ poc, moments }: { poc: Poc; moments: VideoMoment[] }) {
   return (
     <div className="grid gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-12">
       <div>
-        <h2 className="txm-eyebrow text-txm-accent">In the video</h2>
+        <h2 className="txm-small font-semibold text-txm-accent">In the video</h2>
         <p className="txm-small mt-2 text-txm-slate">
           {canSeek(poc.video) ? "Select a time to play the video from that point." : "Key moments in the recording."}
         </p>
@@ -83,7 +83,7 @@ export default async function PocPage({ params }: PageProps<"/poc-library/[slug]
     <>
       <JsonLd data={videoLd(p.video, p.title, p.summary, p.publishedAt, path)} />
       <Hero
-        eyebrow={`Proof of concept · ${pocLabels(p).join(" · ")}`}
+        eyebrow={`Proof of concept: ${pocLabels(p).join(", ")}`}
         title={p.title}
         lede={p.summary}
         image="/images/neural-bg.webp"
@@ -117,13 +117,13 @@ export default async function PocPage({ params }: PageProps<"/poc-library/[slug]
       </Section>
 
       <Section tone="light" labelledBy="overview-title">
-        <SectionHeader id="overview-title" eyebrow="Overview" title="The problem, and what the POC does." />
+        <SectionHeader id="overview-title" title="The problem, and what the POC does." />
         <div className="mt-12 grid gap-6 md:grid-cols-2">
-          <div className="rounded-2xl border border-txm-line bg-white p-7">
+          <div className="border-t border-txm-line pt-6">
             <h3 className="text-lg font-bold text-txm-ink">The problem</h3>
             <p className="txm-body mt-3 text-txm-slate">{p.problem}</p>
           </div>
-          <div className="rounded-2xl border border-txm-orange/25 bg-white p-7 shadow-txm-card">
+          <div className="border-t-2 border-txm-orange pt-6">
             <h3 className="text-lg font-bold text-txm-ink">What the POC does</h3>
             <p className="txm-body mt-3 text-txm-slate">{p.solution}</p>
           </div>
@@ -133,13 +133,13 @@ export default async function PocPage({ params }: PageProps<"/poc-library/[slug]
       <Section labelledBy="outcomes-title">
         <div className="grid gap-12 lg:grid-cols-2">
           <div>
-            <SectionHeader id="outcomes-title" align="left" eyebrow="Outcomes" title="What it is built to improve." />
+            <SectionHeader id="outcomes-title" align="left" title="What it is built to improve." />
             <div className="mt-8">
               <CheckList items={p.outcomes} />
             </div>
             {p.boundaries && p.boundaries.length > 0 && (
               <div className="mt-10 rounded-2xl border border-txm-line bg-txm-light p-6">
-                <h3 className="txm-eyebrow text-txm-accent">Boundaries built in</h3>
+                <h3 className="txm-small font-semibold text-txm-accent">Boundaries built in</h3>
                 <ul className="mt-4 space-y-3">
                   {p.boundaries.map((b) => (
                     <li key={b} className="flex gap-3">
@@ -152,11 +152,11 @@ export default async function PocPage({ params }: PageProps<"/poc-library/[slug]
             )}
           </div>
           <div>
-            <h2 className="txm-eyebrow mb-6 text-txm-accent">Technologies used</h2>
+            <h2 className="txm-small font-semibold mb-6 text-txm-accent">Technologies used</h2>
             <div className="space-y-6">
               {techGroups.map(({ g, items }) => (
                 <div key={g}>
-                  <p className="txm-eyebrow mb-3 text-txm-subtle">{groupLabels[g]}</p>
+                  <p className="txm-small font-semibold mb-3 text-txm-subtle">{groupLabels[g]}</p>
                   <ul className="flex flex-wrap gap-2">
                     {items.map((t) => (
                       <li key={t.slug}>
@@ -178,15 +178,15 @@ export default async function PocPage({ params }: PageProps<"/poc-library/[slug]
 
       {(agentLink || useCases.length > 0) && (
         <Section tone="light" labelledBy="applies-title">
-          <SectionHeader id="applies-title" eyebrow="Where this applies" title="Related agent and use cases." />
-          <ul className="mx-auto mt-10 grid max-w-4xl gap-4 md:grid-cols-2">
+          <SectionHeader id="applies-title" title="Related agent and use cases." />
+          <ul className="mt-10 grid max-w-4xl gap-4 md:grid-cols-2">
             {agentLink && (
               <li>
                 <Link
                   href={`/ai-agents/${agentLink.slug}`}
                   className="txm-card group flex h-full flex-col p-6"
                 >
-                  <span className="txm-eyebrow text-txm-subtle">AI agent</span>
+                  <span className="txm-small font-semibold text-txm-subtle">AI agent</span>
                   <span className="mt-2 inline-flex items-center gap-2 text-lg font-bold text-txm-ink group-hover:text-txm-accent">
                     {agentLink.name}
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
@@ -198,7 +198,7 @@ export default async function PocPage({ params }: PageProps<"/poc-library/[slug]
             {useCases.map((u) => (
               <li key={u.href + u.title}>
                 <Link href={u.href} className="txm-card group flex h-full flex-col p-6">
-                  <span className="txm-eyebrow text-txm-subtle">Use case · {u.context}</span>
+                  <span className="txm-small font-semibold text-txm-subtle">Use case: {u.context}</span>
                   <span className="mt-2 inline-flex items-center gap-2 text-lg font-bold text-txm-ink group-hover:text-txm-accent">
                     {u.title}
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
@@ -216,7 +216,6 @@ export default async function PocPage({ params }: PageProps<"/poc-library/[slug]
           formId="F-02"
           sourcePage={path}
           defaults={{ agent: agent.slug }}
-          eyebrow="Request an Agent Pilot"
           title={`Run ${agent.name} on your workflow.`}
           description="Tell us about your systems and timeline. We will scope a pilot with agreed measures and human decision points."
         />
@@ -225,7 +224,6 @@ export default async function PocPage({ params }: PageProps<"/poc-library/[slug]
           id="request"
           formId="F-01"
           sourcePage={path}
-          eyebrow="Discuss This Workflow"
           title="Want this on your systems?"
           description="Tell us about the workflow and the systems involved. We will reply with how we would scope it."
         />
@@ -234,7 +232,7 @@ export default async function PocPage({ params }: PageProps<"/poc-library/[slug]
       {related.length > 0 && (
         <Section labelledBy="related-title">
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-            <SectionHeader id="related-title" align="left" eyebrow="More POCs" title="Related proofs of concept." />
+            <SectionHeader id="related-title" align="left" title="Related proofs of concept." />
             <Link
               href={pocLibraryPath}
               className="txm-focus group inline-flex shrink-0 items-center gap-2 font-semibold text-txm-accent hover:text-txm-base"

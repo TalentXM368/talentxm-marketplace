@@ -36,12 +36,12 @@ export default function WorkPage() {
       />
 
       <Section tone="light" labelledBy="legend-title" className="pt-12 md:pt-16">
-        <h2 id="legend-title" className="txm-eyebrow mb-4 text-txm-subtle">
+        <h2 id="legend-title" className="txm-small font-semibold mb-4 text-txm-subtle">
           Evidence labels
         </h2>
         <dl className="grid gap-4 md:grid-cols-3">
           {labels.map((l) => (
-            <div key={l.label} className="rounded-xl border border-txm-line bg-white p-5">
+            <div key={l.label} className="border-t border-txm-line pt-5">
               <dt className="font-semibold text-txm-ink">{l.label}</dt>
               <dd className="txm-small mt-1 text-txm-slate">{l.body}</dd>
             </div>
@@ -52,17 +52,17 @@ export default function WorkPage() {
           {evidenceItems.map((e) => {
             const agent = getAgent(e.agent);
             return (
-              <li key={e.slug} className="txm-card flex h-full flex-col p-7">
-                <p className="txm-eyebrow text-txm-accent">{e.label}</p>
+              <li key={e.slug} className="flex h-full flex-col border-t border-txm-line pt-6">
+                <p className="txm-small font-semibold text-txm-accent">{e.label}</p>
                 <h3 className="mt-2 text-xl font-bold text-txm-ink">{e.title}</h3>
                 <p className="txm-body mt-2 text-txm-slate">{e.summary}</p>
                 <dl className="txm-small mt-5 grid gap-3 border-t border-txm-line pt-5 text-txm-slate sm:grid-cols-2">
                   <div>
-                    <dt className="text-xs font-semibold tracking-wide text-txm-subtle uppercase">Validation</dt>
+                    <dt className="text-xs font-semibold text-txm-subtle">Validation</dt>
                     <dd className="mt-0.5">{e.validationSummary}</dd>
                   </div>
                   <div>
-                    <dt className="text-xs font-semibold tracking-wide text-txm-subtle uppercase">Engagement model</dt>
+                    <dt className="text-xs font-semibold text-txm-subtle">Engagement model</dt>
                     <dd className="mt-0.5">{e.engagementModel}</dd>
                   </div>
                 </dl>

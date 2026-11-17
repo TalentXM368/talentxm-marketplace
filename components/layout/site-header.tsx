@@ -18,6 +18,8 @@ const menuIsOpen: Record<MenuKey, boolean> = {
   company: companyMenu.some((l) => isOpenPath(l.href)),
 };
 const showPrimaryCta = isOpenPath(site.primaryCta.href);
+// The old utility bar's links (marketplace, talent network) now sit at the end of the Company menu.
+const companyLinks = [...companyMenu, ...utilityLinks.filter((l) => isOpenPath(l.href))];
 
 const flatLinks = [
   { label: "AI Agents", href: "/ai-agents" },
@@ -80,28 +82,15 @@ export function SiteHeader() {
 
   return (
     <>
-      <div className="hidden border-b border-white/10 bg-txm-base text-txm-on-dark md:block">
-        <div className="txm-container flex h-9 items-center justify-end gap-6">
-          {utilityLinks.map((l) =>
-            isOpenPath(l.href) ? (
-              <Link key={l.href} href={l.href} className="txm-focus-inverse txm-small hover:text-white">
-                {l.label}
-              </Link>
-            ) : (
-              <LockedLabel key={l.href} className="txm-small">
-                {l.label}
-              </LockedLabel>
-            ),
-          )}
-        </div>
-      </div>
-
       <header
         // Anchored during page transitions so only the content moves (MOTION.md).
         style={{ viewTransitionName: "site-header" }}
+        // Transparent over the hero at the top of the page; a solid bar once the page scrolls (BRANDING.md).
         className={cn(
-          "sticky top-0 z-40 border-b bg-txm-base/90 backdrop-blur-md transition-shadow",
-          condensed ? "border-white/10 shadow-txm-elev" : "border-transparent",
+          "fixed inset-x-0 top-0 z-40 border-b transition-[background-color,border-color,box-shadow] duration-300",
+          condensed
+            ? "border-white/10 bg-txm-base/90 shadow-txm-elev backdrop-blur-md"
+            : "border-transparent bg-transparent",
         )}
       >
         <div
@@ -185,7 +174,7 @@ export function SiteHeader() {
                 ) : (
                   <LockedLabel className={navItemClass}>Company</LockedLabel>
                 )}
-                {open === "company" && <Dropdown id="menu-company" links={companyMenu} onNavigate={close} align="right" />}
+                {open === "company" && <Dropdown id="menu-company" links={companyLinks} onNavigate={close} align="right" />}
               </li>
             </ul>
           </nav>
@@ -195,7 +184,7 @@ export function SiteHeader() {
               <Link
                 href={site.primaryCta.href}
                 onNavigate={close}
-                className="txm-focus-inverse hidden shrink-0 items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold whitespace-nowrap text-txm-base transition-colors hover:bg-txm-yellow sm:inline-flex lg:hidden xl:inline-flex"
+                className="txm-focus-inverse hidden shrink-0 items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold whitespace-nowrap text-txm-base transition-colors hover:bg-txm-neutral sm:inline-flex lg:hidden xl:inline-flex"
               >
                 {site.primaryCta.label}
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -301,7 +290,7 @@ function ServicesMegaMenu({ onNavigate }: { onNavigate: () => void }) {
               </ul>
             </div>
           ))}
-          <div className="txm-mesh-bg rounded-xl p-5 text-white">
+          <div className="rounded-xl bg-txm-base p-5 text-white">
             <p className="font-semibold">{servicesPromo.title}</p>
             <p className="txm-small mt-2 text-txm-on-dark">{servicesPromo.body}</p>
             <Link

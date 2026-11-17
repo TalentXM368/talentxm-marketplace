@@ -1,121 +1,45 @@
 import Image from "next/image";
-import Link from "next/link";
 import { ChevronDown, ShieldCheck } from "lucide-react";
-import { Reveal } from "@/components/motion/reveal";
+import { StepWords } from "@/components/motion/scroll-type";
 import { JsonLd } from "@/components/seo/json-ld";
 import { IconTile } from "@/components/ui/icon";
 import { frameworks } from "@/content/trust";
-import type { ClientLogo, Faq, ServiceDomain, Stat, Testimonial } from "@/content/types";
+import type { ClientLogo, Faq, Stat, Testimonial } from "@/content/types";
 import { faqLd } from "@/lib/seo";
 import { cn } from "@/lib/cn";
 
-/** Numbered steps: what working with TalentXM looks like (UX01: reuse). */
+/** Steps of a process, as large words that fill in on scroll (MOTION.md: "Step words"; UX01: reuse). */
 export function JourneySteps({
   steps,
-  reveal = false,
+  tone = "light",
+  label,
 }: {
   steps: { title: string; body: string }[];
-  /** Steps rise in one by one under a line that draws itself (MOTION.md). */
-  reveal?: boolean;
+  /** Match the section behind it. */
+  tone?: "light" | "dark";
+  label?: string;
 }) {
-  const classes = cn("grid gap-6", steps.length === 4 ? "md:grid-cols-2 lg:grid-cols-4" : "md:grid-cols-3");
-  const items = steps.map((s, i) => (
-    <li key={s.title} className="txm-card p-7">
-      <p className="mb-3 font-mono text-sm text-txm-subtle">{String(i + 1).padStart(2, "0")}</p>
-      <h3 className="mb-2 text-xl font-bold text-txm-ink">{s.title}</h3>
-      <p className="txm-body text-txm-slate">{s.body}</p>
-    </li>
-  ));
-  if (reveal) {
-    return (
-      <Reveal as="ol" stagger className={cn(classes, "txm-journey")}>
-        {items}
-      </Reveal>
-    );
-  }
-  return <ol className={classes}>{items}</ol>;
-}
-
-/** Enterprise AI stack: five service domains as layers, foundation at the bottom. */
-export function StackDiagram({
-  domains,
-  highlight,
-  reveal = false,
-}: {
-  domains: ServiceDomain[];
-  highlight?: string;
-  /** Layers build up from the foundation as the diagram scrolls into view (MOTION.md). */
-  reveal?: boolean;
-}) {
-  const layers = domains.map((d) => {
-          const active = highlight === d.slug;
-          return (
-            <li key={d.slug}>
-              <Link
-                href={`/services/${d.slug}`}
-                aria-current={active ? "page" : undefined}
-                className={cn(
-                  "txm-focus group flex items-center gap-4 rounded-xl border px-5 py-4 transition-colors",
-                  active
-                    ? "txm-gradient-bg border-transparent text-txm-base"
-                    : "border-txm-line bg-white text-txm-ink hover:border-txm-orange/40",
-                  d.stackLayer === 5 && !active && "bg-slate-50",
-                )}
-              >
-                <span
-                  className={cn("w-6 font-mono text-sm", active ? "text-txm-base/80" : "text-txm-subtle")}
-                  aria-hidden="true"
-                >
-                  L{d.stackLayer}
-                </span>
-                <span className="flex-1">
-                  <span className="block font-semibold">{d.menuLabel}</span>
-                  <span className={cn("txm-small block", active ? "text-txm-base/85" : "text-txm-slate")}>
-                    {d.capabilities.map((c) => c.name).join(" · ")}
-                  </span>
-                </span>
-              </Link>
-            </li>
-          );
-  });
-  const listClass = "flex flex-col gap-2";
-  const listLabel = "Enterprise AI stack, top layer first";
-  return (
-    <figure className="mx-auto max-w-3xl">
-      {reveal ? (
-        <Reveal as="ol" stagger reverse className={listClass} aria-label={listLabel}>
-          {layers}
-        </Reveal>
-      ) : (
-        <ol className={listClass} aria-label={listLabel}>
-          {layers}
-        </ol>
-      )}
-      <figcaption className="txm-small mt-4 text-center text-txm-subtle">
-        Each layer depends on the one beneath it. Operate &amp; Scale wraps the whole stack.
-      </figcaption>
-    </figure>
-  );
+  return <StepWords steps={steps} tone={tone} label={label} />;
 }
 
 /** Lead layer + execution layer explainer (UX01: reuse). */
 export function PodModelDiagram({ lead, roles, note }: { lead: string; roles: string[]; note: string }) {
   return (
-    <figure className="txm-card mx-auto max-w-4xl p-6 md:p-8">
-      <div className="txm-gradient-bg mb-5 rounded-2xl p-6">
-        <p className="txm-eyebrow text-txm-base/80">Lead layer</p>
-        <p className="mt-1 text-2xl font-bold text-txm-base">{lead}</p>
-        <p className="txm-small mt-1 text-txm-base/85">Owns the brief, the quality bar and the fortnightly readout.</p>
+    <figure className="max-w-4xl">
+      <div className="mb-3 rounded-[var(--txm-radius-md)] bg-txm-navy p-6 md:p-8">
+        <p className="txm-small font-semibold text-txm-yellow">Lead layer</p>
+        <p className="mt-1 text-2xl font-bold text-white">{lead}</p>
+        <p className="txm-small mt-1 text-white/85">Owns the brief, the quality bar and the fortnightly readout.</p>
       </div>
       <ul className="grid grid-cols-2 gap-3 md:grid-cols-4">
         {roles.map((role) => (
-          <li key={role} className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-center">
-            <p className="text-xs font-semibold tracking-wider text-txm-subtle uppercase">Execution layer</p>
+          <li key={role} className="border-t border-txm-line pt-4">
+            <p className="text-xs font-semibold text-txm-subtle">Execution layer</p>
             <p className="mt-1 font-bold text-txm-ink">{role}</p>
           </li>
         ))}
       </ul>
-      <figcaption className="txm-small mt-6 text-center text-txm-subtle">{note}</figcaption>
+      <figcaption className="txm-small mt-6 text-txm-subtle">{note}</figcaption>
     </figure>
   );
 }
@@ -125,7 +49,7 @@ export function FAQ({ items, withSchema = true }: { items: Faq[]; withSchema?: b
   return (
     <>
       {withSchema && <JsonLd data={faqLd(items)} />}
-      <div className="mx-auto max-w-3xl divide-y divide-txm-line border-y border-txm-line">
+      <div className="max-w-3xl divide-y divide-txm-line border-y border-txm-line">
         {items.map((item, i) => (
           <details key={item.q} className="group" open={i === 0}>
             <summary className="txm-focus flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-left [&::-webkit-details-marker]:hidden">
@@ -143,15 +67,14 @@ export function FAQ({ items, withSchema = true }: { items: Faq[]; withSchema?: b
   );
 }
 
-/** Numbered question cards (Pods page). Also usable as a light FAQ block. */
+/** Questions set as ruled columns, each with its short answer. */
 export function QuestionCards({ items }: { items: Faq[] }) {
   return (
-    <div className="grid gap-6 md:grid-cols-2">
-      {items.map((q, i) => (
-        <div key={q.q} className="txm-card p-7">
-          <p className="mb-2 font-mono text-sm text-txm-subtle">Q{i + 1}</p>
-          <h3 className="mb-2 text-xl font-bold text-txm-ink">{q.q}</h3>
-          <p className="txm-body text-txm-slate">{q.a}</p>
+    <div className="grid gap-x-10 gap-y-10 md:grid-cols-2">
+      {items.map((q) => (
+        <div key={q.q} className="border-t border-txm-line pt-6">
+          <h3 className="txm-h3 text-txm-ink">{q.q}</h3>
+          <p className="txm-body mt-3 text-txm-slate">{q.a}</p>
         </div>
       ))}
     </div>
@@ -159,9 +82,12 @@ export function QuestionCards({ items }: { items: Faq[] }) {
 }
 
 /** Frameworks we design against. Labelled as frameworks, not certifications. */
-export function ComplianceRow() {
+export function ComplianceRow({ align = "start" }: { align?: "center" | "start" }) {
   return (
-    <ul className="flex flex-wrap items-center justify-center gap-3" aria-label="Frameworks we design against">
+    <ul
+      className={cn("flex flex-wrap items-center gap-3", align === "center" ? "justify-center" : "justify-start")}
+      aria-label="Frameworks we design against"
+    >
       {frameworks.map((f) => (
         <li
           key={f.name}
