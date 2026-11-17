@@ -58,7 +58,7 @@ export const companyMenu: NavLink[] = [
 /** Insights (P-21) stays out of the header until three articles exist. */
 export const showInsights = false;
 
-/** Lead forms post to a Phase 1 stub that sends nothing on yet (app/api/forms). They stay hidden until connected. */
+/** Shows the lead forms outside /contact. F-01…F-04 create Zoho CRM leads (lib/forms/zoho.ts); F-05 is not connected yet. */
 export const formsLive = false;
 
 export const footerColumns: { heading: string; links: NavLink[] }[] = [

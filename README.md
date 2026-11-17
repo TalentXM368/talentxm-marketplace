@@ -72,7 +72,18 @@ Add `demoVideo` to an agent in `content/agents.ts` and its POC video player appe
 
 ## Forms
 
-In Phase 1, `/api/forms/[formId]` validates the payload against the form's zod schema and returns `{ ok: true }`. Nothing is sent anywhere. The next step (A5) is to add Turnstile, write a Supabase outbox row and send a signed webhook to n8n (W-01…W-05).
+`/api/forms/[formId]` validates the payload against the form's zod schema. The CRM forms (F-01…F-04) then create a Lead in TalentXM's Zoho CRM through `lib/forms/zoho.ts`: name, email, company and role go to their own Lead fields, and every other answer goes into Description. If Zoho fails, the visitor sees the "could not send" message with the email address. F-05 (talent network) is meant for Zoho Recruit and is not connected yet. Still to add: Turnstile against spam.
+
+The contact form on `/contact` is always shown. The other forms stay hidden until `formsLive` in `content/site.ts` is `true`.
+
+### Connecting Zoho CRM
+
+1. In [api-console.zoho.com](https://api-console.zoho.com), signed in with the TalentXM Zoho account, add a **Self Client**.
+2. In its **Generate Code** tab, enter the scope `ZohoCRM.modules.leads.CREATE`, choose a time and generate a code.
+3. Put `ZOHO_CLIENT_ID` and `ZOHO_CLIENT_SECRET` in `.env.local`, then, before the code expires, run `node scripts/zoho-refresh-token.mjs <code>`. It saves `ZOHO_REFRESH_TOKEN` to `.env.local` without printing it. The refresh token does not expire; only the code does.
+4. Copy the three `ZOHO_*` values into Vercel (Production and Preview); see `.env.example` for the optional ones. Redeploy.
+
+Without these variables, `next dev` accepts the form and logs a warning; a production build returns an error so no request is lost silently.
 
 ## Deployment
 

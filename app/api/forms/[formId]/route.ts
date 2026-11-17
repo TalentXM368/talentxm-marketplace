@@ -1,7 +1,8 @@
 import { formMeta, formSchemas, isFormId } from "@/lib/forms/schemas";
+import { createZohoLead } from "@/lib/forms/zoho";
 
-// Phase 1 stub for F-01…F-05. It validates and acknowledges; nothing leaves the server yet.
-// Phase 1 integration (Architecture A5): Turnstile check, Supabase outbox row, signed n8n webhook.
+// F-01…F-05. Validates the payload; CRM forms (F-01…F-04) create a Lead in TalentXM's Zoho CRM (lib/forms/zoho.ts).
+// Still to add (Architecture A5): a Turnstile check against spam, and Zoho Recruit for F-05.
 export async function POST(request: Request, { params }: { params: Promise<{ formId: string }> }) {
   const { formId } = await params;
   if (!isFormId(formId)) {
@@ -33,6 +34,21 @@ export async function POST(request: Request, { params }: { params: Promise<{ for
     return Response.json({ ok: true });
   }
 
+  if (formMeta[formId].destination === "crm") {
+    const result = await createZohoLead(formId, parsed.data);
+    if (result.ok) {
+      console.info(`[forms] ${formId} created Zoho lead ${result.leadId}`);
+      return Response.json({ ok: true });
+    }
+    if (result.reason === "not_configured" && process.env.NODE_ENV !== "production") {
+      console.warn(`[forms] ${formId} accepted but not sent: the ZOHO_* variables are not set (see lib/forms/zoho.ts)`);
+      return Response.json({ ok: true });
+    }
+    // The visitor sees the "could not send" message with the email address, so the request is not lost silently.
+    return Response.json({ ok: false, error: result.reason }, { status: result.reason === "not_configured" ? 503 : 502 });
+  }
+
+  // F-05 (talent network) goes to Zoho Recruit, which is not connected yet; its form stays hidden until formsLive.
   console.info(`[forms] ${formId} (${formMeta[formId].name}) accepted from ${parsed.data.sourcePage || "unknown page"}`);
   return Response.json({ ok: true });
 }
