@@ -51,7 +51,9 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   poweredByHeader: false,
   // Read by lib/site-lock.ts; inlined at build time so client components see the same value.
-  env: { SITE_LOCKED: String(isProduction && process.env.NODE_ENV === "production") },
+  // The site is open. To lock production to the POC Library again, set this back to
+  // String(isProduction && process.env.NODE_ENV === "production").
+  env: { SITE_LOCKED: "false" },
   turbopack: {
     root: __dirname,
     rules: {
