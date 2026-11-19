@@ -95,7 +95,7 @@ export function SiteHeader() {
       >
         <div
           className={cn(
-            "txm-container flex items-center justify-between gap-6 transition-[height]",
+            "txm-container flex items-center justify-between gap-4 transition-[height] xl:gap-6",
             condensed ? "h-16" : "h-[72px]",
           )}
         >
@@ -190,6 +190,16 @@ export function SiteHeader() {
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             )}
+            {showPrimaryCta && (
+              // 1024 to 1279px: the full nav leaves no room for the long label, so the same action gets a short one.
+              <Link
+                href={site.primaryCta.href}
+                onNavigate={close}
+                className="txm-focus-inverse hidden shrink-0 items-center rounded-full bg-white px-4 py-2.5 text-sm font-semibold whitespace-nowrap text-txm-base transition-colors hover:bg-txm-neutral lg:inline-flex xl:hidden"
+              >
+                Contact us
+              </Link>
+            )}
             <button
               type="button"
               className="txm-focus-inverse inline-flex h-11 w-11 items-center justify-center rounded-full text-white hover:bg-white/10 lg:hidden"
@@ -209,7 +219,7 @@ export function SiteHeader() {
   );
 }
 
-const navItemClass = "inline-block rounded-md px-2.5 py-2 text-sm font-medium whitespace-nowrap text-white/85 xl:px-3 xl:text-[15px]";
+const navItemClass = "inline-block rounded-md px-2 py-2 text-sm font-medium whitespace-nowrap text-white/85 xl:px-2.5 xl:text-[15px]";
 
 function NavLink({ href, children, onNavigate }: { href: string; children: React.ReactNode; onNavigate: () => void }) {
   if (!isOpenPath(href)) return <LockedLabel className={navItemClass}>{children}</LockedLabel>;
@@ -217,7 +227,7 @@ function NavLink({ href, children, onNavigate }: { href: string; children: React
     <Link
       href={href}
       onNavigate={onNavigate}
-      className="txm-focus-inverse inline-block rounded-md px-2.5 py-2 text-sm font-medium whitespace-nowrap text-white/85 transition-colors hover:text-white xl:px-3 xl:text-[15px]"
+      className="txm-focus-inverse inline-block rounded-md px-2 py-2 text-sm font-medium whitespace-nowrap text-white/85 transition-colors hover:text-white xl:px-2.5 xl:text-[15px]"
     >
       {children}
     </Link>
@@ -251,7 +261,7 @@ function MenuTrigger({
         if (e.pointerType === "mouse") onMouseEnter();
       }}
       className={cn(
-        "txm-focus-inverse inline-flex items-center gap-1 rounded-md px-2.5 py-2 text-sm font-medium whitespace-nowrap transition-colors hover:text-white xl:px-3 xl:text-[15px]",
+        "txm-focus-inverse inline-flex items-center gap-1 rounded-md px-2 py-2 text-sm font-medium whitespace-nowrap transition-colors hover:text-white xl:px-2.5 xl:text-[15px]",
         expanded ? "text-txm-yellow" : "text-white/85",
       )}
     >

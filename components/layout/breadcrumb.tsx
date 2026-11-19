@@ -28,7 +28,7 @@ export function Breadcrumb({ items }: { items: Crumb[] }) {
                 ) : (
                   <>
                     {isOpenPath(item.href) ? (
-                      <Link href={item.href} className="txm-focus-inverse hover:text-white">
+                      <Link href={item.href} className="txm-focus-inverse relative hover:text-white after:absolute after:-inset-y-3 after:-inset-x-1 after:content-['']">
                         {item.label}
                       </Link>
                     ) : (

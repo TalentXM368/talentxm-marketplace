@@ -1,55 +1,10 @@
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
-import { Icon, IconTile } from "@/components/ui/icon";
+import { ArrowUpRight } from "lucide-react";
+import { Icon } from "@/components/ui/icon";
 import type { IconName } from "@/content/types";
 import { cn } from "@/lib/cn";
 
-/**
- * Base card for every service listing (UX01: pillar card reused).
- * `layout="wide"` is the two-column offering-card variant.
- */
-export function ServiceCard({
-  title,
-  description,
-  href,
-  icon,
-  number,
-  linkLabel = "Explore",
-  layout = "stacked",
-}: {
-  title: string;
-  description: string;
-  href: string;
-  icon: IconName;
-  number?: string;
-  linkLabel?: string;
-  layout?: "stacked" | "wide";
-}) {
-  return (
-    <Link
-      href={href}
-      className={cn(
-        "txm-card txm-focus group flex h-full p-7",
-        layout === "wide" ? "flex-col gap-5 sm:flex-row sm:items-start" : "flex-col",
-      )}
-    >
-      <div className={cn("flex items-start justify-between", layout === "stacked" && "mb-6")}>
-        <IconTile name={icon} />
-        {number && layout === "stacked" && <span className="txm-small font-mono text-txm-subtle">{number}</span>}
-      </div>
-      <div className="flex flex-1 flex-col">
-        <h3 className="mb-2 text-xl font-bold text-txm-ink">{title}</h3>
-        <p className="txm-body mb-6 flex-1 text-txm-slate">{description}</p>
-        <span className="flex items-center gap-2 font-semibold text-txm-accent">
-          {linkLabel}
-          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-        </span>
-      </div>
-    </Link>
-  );
-}
-
-/** One industry card version, always with a description (UX01). */
+/** One industry card version, always with a description (UX01). The whole card links to the industry. */
 export function IndustryCard({
   title,
   description,
@@ -63,38 +18,43 @@ export function IndustryCard({
 }) {
   return (
     <Link href={href} className="txm-focus group block h-full border-t border-txm-line pt-6">
-      <div className="mb-4 flex items-start justify-between">
+      <div className="mb-5 flex items-start justify-between">
         <Icon name={icon} className="h-6 w-6 text-txm-accent" />
         <ArrowUpRight
           className="h-5 w-5 text-txm-subtle transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
           aria-hidden="true"
         />
       </div>
-      <h3 className="mb-1 text-lg font-bold text-txm-ink">{title}</h3>
-      <p className="txm-small text-txm-slate">{description}</p>
+      <h3 className="txm-card-title text-txm-ink group-hover:text-txm-accent">{title}</h3>
+      <p className="txm-card-body mt-2 text-txm-slate">{description}</p>
     </Link>
   );
 }
 
+/**
+ * A ruled column with an optional icon, a title and one or two sentences.
+ * `size="md"` for four-column grids, where the large title would wrap into a narrow column.
+ */
 export function InfoCard({
   title,
   body,
   icon,
-  label,
+  size = "lg",
   className,
 }: {
   title: string;
   body: string;
   icon?: IconName;
-  label?: string;
+  size?: "md" | "lg";
   className?: string;
 }) {
   return (
     <div className={cn("h-full border-t border-txm-line pt-6", className)}>
-      {icon && <Icon name={icon} className="mb-4 h-6 w-6 text-txm-accent" />}
-      {label && <p className="txm-small mb-2 font-semibold text-txm-accent">{label}</p>}
-      <h3 className="txm-h3 text-txm-ink">{title}</h3>
-      <p className="txm-body mt-3 max-w-[48ch] text-txm-slate">{body}</p>
+      {icon && <Icon name={icon} className="mb-5 h-6 w-6 text-txm-accent" />}
+      <h3 className="txm-card-title text-txm-ink" data-size={size === "lg" ? "lg" : undefined}>
+        {title}
+      </h3>
+      <p className="txm-card-body mt-3 text-txm-slate">{body}</p>
     </div>
   );
 }

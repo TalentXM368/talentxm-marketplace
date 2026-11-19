@@ -5,7 +5,8 @@ import { ButtonLink } from "@/components/ui/button";
 
 /**
  * Closing CTA band on every page; only the copy changes (UX01: reuse).
- * `size="xl"` is the full-width closing moment on Energy Orange-Red (MOTION.md: "Closing call").
+ * `size="xl"` is the home page's closing moment: deep navy with the logo form as in the hero, dimmer,
+ * and the largest type on the page (MOTION.md: "Closing call").
  */
 export function CTABand({
   title,
@@ -22,25 +23,21 @@ export function CTABand({
 }) {
   if (size === "xl") {
     return (
-      <section className="relative isolate overflow-hidden bg-txm-orange py-24 md:py-36">
+      <section className="relative isolate overflow-hidden bg-txm-base py-24 md:py-36">
         <div className="absolute inset-0 -z-10">
-          <LogoForm palette="on-orange" tone="soft" />
+          <LogoForm tone="closing" />
         </div>
         <Reveal className="txm-container">
-          <h2 className="txm-display-xl max-w-4xl text-white">
+          <h2 className="txm-display-xl max-w-3xl text-white">
             <SplitText text={title} />
           </h2>
-          {description && <p className="txm-lede mt-6 max-w-xl font-medium text-txm-base">{description}</p>}
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <ButtonLink href={primary.href} className="bg-txm-base hover:bg-txm-navy">
+          {description && <p className="txm-lede mt-6 max-w-xl text-txm-on-dark">{description}</p>}
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+            <ButtonLink href={primary.href} tone="dark">
               {primary.label}
             </ButtonLink>
             {secondary && (
-              <ButtonLink
-                href={secondary.href}
-                variant="secondary"
-                className="border-txm-base/50 text-txm-base hover:border-txm-base hover:bg-white/25"
-              >
+              <ButtonLink href={secondary.href} tone="dark" variant="secondary">
                 {secondary.label}
               </ButtonLink>
             )}

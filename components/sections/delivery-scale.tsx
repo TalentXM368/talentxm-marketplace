@@ -17,8 +17,8 @@ export function DeliveryScale({ models }: { models: DeliveryModel[] }) {
         {[...talent, ...outcome].map((m) => (
           <li key={m.slug} data-group={m.group}>
             <span className="txm-scale-dot" aria-hidden="true" />
-            <h4 className="font-semibold text-white">{m.name}</h4>
-            <p className="txm-small mt-1 text-txm-on-dark">
+            <h4 className="txm-card-title text-white">{m.name}</h4>
+            <p className="txm-card-body mt-2 text-txm-on-dark">
               <span className="txm-scale-tag">{m.group === "talent-led" ? "Talent-led" : "Outcome-led"}</span>
               {m.buyerNeed}
             </p>

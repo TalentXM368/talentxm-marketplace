@@ -26,15 +26,15 @@ function TrustList({ items }: { items: TrustItem[] }) {
   return (
     <ul className="space-y-4">
       {items.map((t) => (
-        <li key={t.statement} className="flex gap-4 rounded-xl border border-txm-line bg-white p-5">
+        <li key={t.statement} className="txm-card flex gap-4 p-5 md:p-6">
           {t.state === "held" ? (
-            <CircleCheck className="mt-0.5 h-5 w-5 shrink-0 text-emerald-700" aria-hidden="true" />
+            <CircleCheck className="mt-1 h-5 w-5 shrink-0 text-emerald-700" aria-hidden="true" />
           ) : (
-            <Clock className="mt-0.5 h-5 w-5 shrink-0 text-amber-700" aria-hidden="true" />
+            <Clock className="mt-1 h-5 w-5 shrink-0 text-amber-700" aria-hidden="true" />
           )}
           <div>
-            <p className="font-semibold text-txm-ink">{t.statement}</p>
-            <p className="txm-small mt-1 text-txm-slate">{t.detail}</p>
+            <p className="txm-card-title text-txm-ink">{t.statement}</p>
+            <p className="txm-card-body mt-2 text-txm-slate">{t.detail}</p>
           </div>
         </li>
       ))}
@@ -85,7 +85,7 @@ export default function TrustPage() {
         <SectionHeader id="rai-title" title="How we keep people in control." />
         <div className="mt-12 grid gap-x-10 gap-y-10 md:grid-cols-2 lg:grid-cols-4">
           {responsibleAi.map((r) => (
-            <InfoCard key={r.title} title={r.title} body={r.body} />
+            <InfoCard key={r.title} title={r.title} body={r.body} size="md" />
           ))}
         </div>
       </Section>
@@ -98,13 +98,13 @@ export default function TrustPage() {
         />
         <div className="mt-12 grid max-w-4xl gap-x-10 gap-y-10 md:grid-cols-2">
           <div className="border-t border-txm-line pt-6">
-            <h3 className="font-semibold text-txm-ink">Formal partnerships</h3>
+            <h3 className="txm-card-title text-txm-ink">Formal partnerships</h3>
             <div className="mt-3">
               <CheckList items={partnershipsVsExperience.partnerships} />
             </div>
           </div>
           <div className="border-t border-txm-line pt-6">
-            <h3 className="font-semibold text-txm-ink">Delivery experience</h3>
+            <h3 className="txm-card-title text-txm-ink">Delivery experience</h3>
             <div className="mt-3">
               <CheckList items={partnershipsVsExperience.experience} />
             </div>

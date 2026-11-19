@@ -1,17 +1,13 @@
-import { markPaths, markViewBox } from "@/components/brand/mark-paths";
+import { loadField, SPREAD } from "./logo-field";
 
 /**
- * WebGL renderer for the hero logo form (MOTION.md: "Logo form").
+ * WebGL renderer for the logo form (MOTION.md: "Logo form").
  *
- * The mark is rasterised once into a signed distance field, so one fragment shader can draw it as a
- * glowing, slowly breathing glass form: bright rims, a darker body, lit from the pointer. Raw WebGL 1
- * with a single triangle; no library. Returns a stop function, or null when WebGL is unavailable.
+ * The mark's signed distance field (logo-field.ts, built once per page in a worker) lets one fragment
+ * shader draw it as a glowing, slowly breathing glass form: bright rims, a darker body, lit from the
+ * pointer. Raw WebGL 1 with a single triangle; no library. Returns a stop function, or null when WebGL
+ * is unavailable. `onReady` fires on the first frame, once the field has arrived.
  */
-
-const TEX_H = 900;
-/** How far, in texels, the distance field reaches either side of the edge. */
-const SPREAD = 64;
-const INF = 1e20;
 
 // Brand colours are read from the CSS tokens, so the shader never carries its own hex values.
 const brandRgb = (name: string) => {
@@ -44,6 +40,7 @@ uniform float uScroll;
 uniform vec3 uOrange;
 uniform vec3 uYellow;
 uniform vec3 uTeal;
+uniform float uIntensity;
 
 // The field is stored as 16 bits split over two bytes; linear filtering keeps that exact.
 float field(vec2 uv) {
@@ -106,118 +103,12 @@ void main() {
   float glow = exp(-max(d, 0.0) / 0.025) * (1.0 - inside) * 0.38;
   vec3 glowCol = col * glow;
 
-  float fade = 1.0 - uScroll * 0.55;
+  float fade = (1.0 - uScroll * 0.55) * uIntensity;
   vec3 rgb = (lit * bodyAlpha + glowCol) * fade;
   float a = clamp(bodyAlpha + glow, 0.0, 1.0) * fade;
   gl_FragColor = vec4(rgb, a);
 }
 `;
-
-function edt1d(grid: Float64Array, offset: number, stride: number, length: number, f: Float64Array, v: Uint16Array, z: Float64Array) {
-  v[0] = 0;
-  z[0] = -INF;
-  z[1] = INF;
-  f[0] = grid[offset];
-  for (let q = 1, k = 0, s = 0; q < length; q++) {
-    f[q] = grid[offset + q * stride];
-    const q2 = q * q;
-    do {
-      const r = v[k];
-      s = (f[q] - f[r] + q2 - r * r) / (q - r) / 2;
-    } while (s <= z[k] && --k > -1);
-    k++;
-    v[k] = q;
-    z[k] = s;
-    z[k + 1] = INF;
-  }
-  for (let q = 0, k = 0; q < length; q++) {
-    while (z[k + 1] < q) k++;
-    const r = v[k];
-    const qr = q - r;
-    grid[offset + q * stride] = f[r] + qr * qr;
-  }
-}
-
-/** Squared Euclidean distance transform (Felzenszwalb and Huttenlocher), columns then rows. */
-function edt(grid: Float64Array, width: number, height: number) {
-  const size = Math.max(width, height);
-  const f = new Float64Array(size);
-  const v = new Uint16Array(size);
-  const z = new Float64Array(size + 1);
-  for (let x = 0; x < width; x++) edt1d(grid, x, width, height, f, v, z);
-  for (let y = 0; y < height; y++) edt1d(grid, y * width, 1, width, f, v, z);
-}
-
-/** Separable box blur, in place. Smooths the stair-steps a pixel-grid distance transform leaves behind. */
-function boxBlur(src: Float32Array, width: number, height: number, radius: number) {
-  const tmp = new Float32Array(src.length);
-  const span = radius * 2 + 1;
-  for (let y = 0; y < height; y++) {
-    const row = y * width;
-    for (let x = 0; x < width; x++) {
-      let sum = 0;
-      for (let k = -radius; k <= radius; k++) sum += src[row + Math.min(width - 1, Math.max(0, x + k))];
-      tmp[row + x] = sum / span;
-    }
-  }
-  for (let x = 0; x < width; x++) {
-    for (let y = 0; y < height; y++) {
-      let sum = 0;
-      for (let k = -radius; k <= radius; k++) sum += tmp[Math.min(height - 1, Math.max(0, y + k)) * width + x];
-      src[y * width + x] = sum / span;
-    }
-  }
-}
-
-/** Rasterise the mark and turn its coverage into a signed distance field. */
-function buildField() {
-  const height = TEX_H;
-  const width = Math.round((TEX_H * markViewBox.w) / markViewBox.h);
-  const raster = document.createElement("canvas");
-  raster.width = width;
-  raster.height = height;
-  const ctx = raster.getContext("2d", { willReadFrequently: true });
-  if (!ctx) return null;
-  const k = height / markViewBox.h;
-  ctx.setTransform(k, 0, 0, k, -markViewBox.x * k, -markViewBox.y * k);
-  for (const d of markPaths) ctx.fill(new Path2D(d), "evenodd");
-  const pixels = ctx.getImageData(0, 0, width, height).data;
-
-  const count = width * height;
-  const outer = new Float64Array(count);
-  const inner = new Float64Array(count);
-  for (let i = 0; i < count; i++) {
-    const a = pixels[i * 4 + 3] / 255;
-    if (a >= 1) {
-      outer[i] = 0;
-      inner[i] = INF;
-    } else if (a <= 0) {
-      outer[i] = INF;
-      inner[i] = 0;
-    } else {
-      // Partial coverage places the edge between texels, which keeps curves smooth.
-      const e = 0.5 - a;
-      outer[i] = e > 0 ? e * e : 0;
-      inner[i] = e < 0 ? e * e : 0;
-    }
-  }
-  edt(outer, width, height);
-  edt(inner, width, height);
-
-  const dist = new Float32Array(count);
-  for (let i = 0; i < count; i++) dist[i] = Math.sqrt(outer[i]) - Math.sqrt(inner[i]);
-  boxBlur(dist, width, height, 2);
-  boxBlur(dist, width, height, 2);
-
-  // 16 bits per texel (high byte, low byte) so lighting from the field's slope stays smooth.
-  const data = new Uint8Array(count * 2);
-  for (let i = 0; i < count; i++) {
-    const v = Math.max(0, Math.min(65535, Math.round(65535 * (0.5 - dist[i] / (2 * SPREAD)))));
-    data[i * 2] = v >> 8;
-    data[i * 2 + 1] = v & 255;
-  }
-  return { data, width, height };
-}
 
 function compile(gl: WebGLRenderingContext, type: number, source: string) {
   const shader = gl.createShader(type);
@@ -235,23 +126,25 @@ export function startLogoForm({
   root,
   box,
   canvas,
+  intensity = 1,
   onReady,
   onLost,
 }: {
   root: HTMLElement;
   box: HTMLElement;
   canvas: HTMLCanvasElement;
+  /** 0 to 1: scales the whole form, glow included. */
+  intensity?: number;
   onReady: () => void;
   onLost: () => void;
 }): (() => void) | null {
   const gl = canvas.getContext("webgl", { alpha: true, premultipliedAlpha: true, antialias: false });
   if (!gl || gl.isContextLost()) return null;
 
-  const field = buildField();
   const vs = compile(gl, gl.VERTEX_SHADER, vertexSource);
   const fs = compile(gl, gl.FRAGMENT_SHADER, fragmentSource);
   const program = gl.createProgram();
-  if (!field || !vs || !fs || !program) return null;
+  if (!vs || !fs || !program) return null;
   gl.attachShader(program, vs);
   gl.attachShader(program, fs);
   gl.linkProgram(program);
@@ -266,24 +159,6 @@ export function startLogoForm({
   gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
 
   const texture = gl.createTexture();
-  gl.bindTexture(gl.TEXTURE_2D, texture);
-  gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1);
-  gl.texImage2D(
-    gl.TEXTURE_2D,
-    0,
-    gl.LUMINANCE_ALPHA,
-    field.width,
-    field.height,
-    0,
-    gl.LUMINANCE_ALPHA,
-    gl.UNSIGNED_BYTE,
-    field.data,
-  );
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
   const u = (name: string) => gl.getUniformLocation(program, name);
   const uRes = u("uRes");
   const uBox = u("uBox");
@@ -291,12 +166,10 @@ export function startLogoForm({
   const uPointer = u("uPointer");
   const uScroll = u("uScroll");
   gl.uniform1i(u("uSdf"), 0);
-  gl.uniform2f(u("uTexel"), 1 / field.width, 1 / field.height);
-  gl.uniform1f(u("uAspect"), field.width / field.height);
-  gl.uniform1f(u("uSpread"), (2 * SPREAD) / field.height);
   gl.uniform3fv(u("uOrange"), brandRgb("--txm-brand-orange"));
   gl.uniform3fv(u("uYellow"), brandRgb("--txm-brand-yellow"));
   gl.uniform3fv(u("uTeal"), brandRgb("--txm-brand-teal"));
+  gl.uniform1f(u("uIntensity"), intensity);
 
   let dpr = 1;
   const resize = () => {
@@ -322,10 +195,13 @@ export function startLogoForm({
     targetY = (e.clientY / window.innerHeight) * 2 - 1;
   };
 
-  const start = performance.now();
+  let start = performance.now();
   let frame = 0;
   let inView = true;
   let ready = false;
+  // Nothing is drawn until the distance field arrives (built in a worker, see logo-field.ts).
+  let hasField = false;
+  let stopped = false;
   const draw = (now: number) => {
     frame = 0;
     pointerX += (targetX - pointerX) * 0.06;
@@ -345,7 +221,7 @@ export function startLogoForm({
     schedule();
   };
   const schedule = () => {
-    if (!frame && inView && !document.hidden) frame = requestAnimationFrame(draw);
+    if (!frame && hasField && !stopped && inView && !document.hidden) frame = requestAnimationFrame(draw);
   };
   const pause = () => {
     cancelAnimationFrame(frame);
@@ -370,9 +246,40 @@ export function startLogoForm({
   window.addEventListener("pointermove", onPointer, { passive: true });
   document.addEventListener("visibilitychange", onVisibility);
   canvas.addEventListener("webglcontextlost", onContextLost);
-  schedule();
+
+  loadField().then((field) => {
+    if (stopped || gl.isContextLost()) return;
+    if (!field) {
+      onLost();
+      return;
+    }
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1);
+    gl.texImage2D(
+      gl.TEXTURE_2D,
+      0,
+      gl.LUMINANCE_ALPHA,
+      field.width,
+      field.height,
+      0,
+      gl.LUMINANCE_ALPHA,
+      gl.UNSIGNED_BYTE,
+      field.data,
+    );
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.uniform2f(u("uTexel"), 1 / field.width, 1 / field.height);
+    gl.uniform1f(u("uAspect"), field.width / field.height);
+    gl.uniform1f(u("uSpread"), (2 * SPREAD) / field.height);
+    hasField = true;
+    start = performance.now();
+    schedule();
+  });
 
   return () => {
+    stopped = true;
     pause();
     resizeObserver.disconnect();
     viewObserver.disconnect();

@@ -2,7 +2,6 @@ import Image from "next/image";
 import { ChevronDown, ShieldCheck } from "lucide-react";
 import { StepWords } from "@/components/motion/scroll-type";
 import { JsonLd } from "@/components/seo/json-ld";
-import { IconTile } from "@/components/ui/icon";
 import { frameworks } from "@/content/trust";
 import type { ClientLogo, Faq, Stat, Testimonial } from "@/content/types";
 import { faqLd } from "@/lib/seo";
@@ -27,15 +26,17 @@ export function PodModelDiagram({ lead, roles, note }: { lead: string; roles: st
   return (
     <figure className="max-w-4xl">
       <div className="mb-3 rounded-[var(--txm-radius-md)] bg-txm-navy p-6 md:p-8">
-        <p className="txm-small font-semibold text-txm-yellow">Lead layer</p>
-        <p className="mt-1 text-2xl font-bold text-white">{lead}</p>
-        <p className="txm-small mt-1 text-white/85">Owns the brief, the quality bar and the fortnightly readout.</p>
+        <p className="txm-card-kicker text-txm-yellow">Lead layer</p>
+        <p className="txm-card-title mt-2 text-white" data-size="lg">
+          {lead}
+        </p>
+        <p className="txm-card-body mt-2 text-white/85">Owns the brief, the quality bar and the fortnightly readout.</p>
       </div>
+      <p className="txm-card-kicker mt-6 mb-1 text-txm-subtle">Execution layer</p>
       <ul className="grid grid-cols-2 gap-3 md:grid-cols-4">
         {roles.map((role) => (
           <li key={role} className="border-t border-txm-line pt-4">
-            <p className="text-xs font-semibold text-txm-subtle">Execution layer</p>
-            <p className="mt-1 font-bold text-txm-ink">{role}</p>
+            <p className="txm-card-title text-txm-ink">{role}</p>
           </li>
         ))}
       </ul>
@@ -73,8 +74,10 @@ export function QuestionCards({ items }: { items: Faq[] }) {
     <div className="grid gap-x-10 gap-y-10 md:grid-cols-2">
       {items.map((q) => (
         <div key={q.q} className="border-t border-txm-line pt-6">
-          <h3 className="txm-h3 text-txm-ink">{q.q}</h3>
-          <p className="txm-body mt-3 text-txm-slate">{q.a}</p>
+          <h3 className="txm-card-title text-txm-ink" data-size="lg">
+            {q.q}
+          </h3>
+          <p className="txm-card-body mt-3 text-txm-slate">{q.a}</p>
         </div>
       ))}
     </div>
@@ -124,7 +127,7 @@ export function TestimonialGrid({ items }: { items: Testimonial[] }) {
   return (
     <div className="grid gap-6 md:grid-cols-3">
       {items.map((t) => (
-        <figure key={t.quote} className="txm-card p-7">
+        <figure key={t.quote} className="txm-card p-6 md:p-7">
           <blockquote className="txm-body text-txm-ink">{t.quote}</blockquote>
           <figcaption className="txm-small mt-5 text-txm-subtle">
             {t.role}, {t.organisation}
@@ -170,25 +173,5 @@ export function CheckList({ items, tone = "light" }: { items: string[]; tone?: "
         </li>
       ))}
     </ul>
-  );
-}
-
-export function IconFeature({
-  icon,
-  title,
-  body,
-}: {
-  icon: Parameters<typeof IconTile>[0]["name"];
-  title: string;
-  body: string;
-}) {
-  return (
-    <div className="flex gap-4">
-      <IconTile name={icon} size="sm" />
-      <div>
-        <h3 className="font-semibold text-txm-ink">{title}</h3>
-        <p className="txm-small mt-1 text-txm-slate">{body}</p>
-      </div>
-    </div>
   );
 }

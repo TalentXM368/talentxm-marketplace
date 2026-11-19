@@ -12,7 +12,8 @@ export const buttonStyles = cva(
       variant: {
         primary: "",
         secondary: "border",
-        text: "rounded-md px-0 py-0",
+        // The hit area reaches 44px tall for touch without changing the link's layout box.
+        text: "relative rounded-md px-0 py-0 after:absolute after:-inset-y-3 after:inset-x-0 after:content-['']",
       },
       tone: {
         light: "txm-focus",

@@ -72,11 +72,10 @@ export default function FlexibleTalentPage() {
               .map((m) => (
                 <div key={m.slug} className="h-full border-t border-txm-line pt-6">
                   <Icon name={m.icon} className="h-6 w-6 text-txm-accent" />
-                  <h3 className="txm-h3 mt-4 text-txm-ink">{m.name}</h3>
-                  <p className="txm-small mt-2 text-txm-slate">{m.description}</p>
-                  <p className="txm-small mt-4 text-txm-subtle">
-                    <span className="font-semibold">Best when:</span> {m.buyerNeed}
-                  </p>
+                  <h3 className="txm-card-title mt-5 text-txm-ink">{m.name}</h3>
+                  <p className="txm-card-body mt-2 text-txm-slate">{m.description}</p>
+                  <p className="txm-card-kicker mt-5 text-txm-subtle">Best when</p>
+                  <p className="txm-card-body mt-1 text-txm-ink">{m.buyerNeed}</p>
                 </div>
               ))}
           </div>

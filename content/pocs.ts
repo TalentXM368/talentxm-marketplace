@@ -530,7 +530,7 @@ export const pocs: Poc[] = [
   {
     slug: "ap-vendor-email-assistant",
     title: "AP Vendor Email Assistant",
-    categories: ["manufacturing"],
+    categories: [],
     functions: ["finance"],
     industries: [],
     agent: "ap-vendor-email-assistant",

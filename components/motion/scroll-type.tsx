@@ -1,3 +1,4 @@
+import { Reveal } from "@/components/motion/reveal";
 import { cn } from "@/lib/cn";
 
 /**
@@ -28,9 +29,10 @@ export function ScrubStatement({
 }
 
 /**
- * Step words (MOTION.md: "Scroll-lit type"): a sequence set as large words that start as outlines
- * and fill in one after another as the row scrolls through. Short single words are set very large;
- * longer step names a size down.
+ * Step words (MOTION.md: "Step words"): a sequence set as large words that start as outlines and fill
+ * in one after another, once, when the list comes into view. Time-based rather than scroll-linked, so
+ * every word always finishes filled whatever the screen size or scroll speed. Short single words are
+ * set very large; longer step names a size down.
  */
 export function StepWords({
   steps,
@@ -41,11 +43,11 @@ export function StepWords({
   label?: string;
   tone?: "dark" | "light";
 }) {
-  const last = Math.max(1, steps.length - 1);
   const short = steps.every((s) => s.title.length <= 9);
   const size = short && steps.length <= 3 ? "xl" : short ? "lg" : "md";
   return (
-    <ol
+    <Reveal
+      as="ol"
       className="txm-steps"
       data-size={size}
       data-tone={tone}
@@ -53,18 +55,23 @@ export function StepWords({
       style={{ "--n": steps.length } as React.CSSProperties}
     >
       {steps.map((s, i) => (
-        <li key={s.title} style={{ "--k": (i / last).toFixed(3) } as React.CSSProperties}>
+        <li key={s.title} style={{ "--i": i } as React.CSSProperties}>
           <h3 className="txm-steps-word">
             <span className="txm-steps-fill">{s.title}</span>
             <span className="txm-steps-outline" aria-hidden="true">
               {s.title}
             </span>
           </h3>
-          <p className={cn("txm-body mt-4 max-w-[34ch]", tone === "dark" ? "text-txm-on-dark" : "text-txm-slate")}>
+          <p
+            className={cn(
+              "txm-steps-body txm-body mt-4 max-w-[34ch]",
+              tone === "dark" ? "text-txm-on-dark" : "text-txm-slate",
+            )}
+          >
             {s.body}
           </p>
         </li>
       ))}
-    </ol>
+    </Reveal>
   );
 }

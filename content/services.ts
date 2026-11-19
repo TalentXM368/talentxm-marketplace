@@ -24,7 +24,7 @@ export const serviceDomains: ServiceDomain[] = [
         name: "ERP",
         anchor: "erp",
         description:
-          "Finance, procurement and supply processes on SAP S/4HANA and other ERPs, including the vendor and accounts payable flows that AI assistance touches first.",
+          "Finance, procurement and supply processes on SAP S/4HANA and other ERPs, including vendor and AP flows AI touches first.",
       },
       {
         name: "HCM",
@@ -36,7 +36,7 @@ export const serviceDomains: ServiceDomain[] = [
         name: "CRM",
         anchor: "crm",
         description:
-          "Lead, account and service processes in Zoho CRM and comparable platforms, built so sales and service teams trust what they see.",
+          "Lead, account and service processes in Zoho CRM and similar platforms, built so sales and service teams trust the data.",
       },
       {
         name: "EHR",
@@ -59,7 +59,7 @@ export const serviceDomains: ServiceDomain[] = [
       { category: "platform", name: "CMMS", evidenceLevel: "designed" },
     ],
     connectsToAi:
-      "Every agent we have validated reads from or writes back to one of these platforms. Getting permissions, field mappings and audit trails right here is what makes an AI pilot safe to extend.",
+      "Every validated agent uses one of these platforms. Correct permissions, field mappings and audit trails make a pilot safe to extend.",
     relatedAgents: ["ap-vendor-email-assistant", "schedulexm", "machine-health-monitoring"],
     relatedIndustries: ["healthcare", "manufacturing"],
     deliveryModels: ["capability-pod", "project-delivery"],
@@ -133,7 +133,7 @@ export const serviceDomains: ServiceDomain[] = [
       { category: "standard", name: "FHIR", evidenceLevel: "experience" },
     ],
     connectsToAi:
-      "Agents call integrations, not databases. Each validated agent on this site runs through an integration layer that logs the call, limits the scope and can be switched off.",
+      "Every validated agent works through an integration layer that logs calls, limits scope and can be switched off.",
     relatedAgents: ["eligibility-verification", "ap-vendor-email-assistant"],
     relatedIndustries: ["healthcare", "manufacturing"],
     deliveryModels: ["capability-pod", "project-delivery", "managed-service"],
@@ -206,7 +206,7 @@ export const serviceDomains: ServiceDomain[] = [
       { category: "integration", name: "Microsoft Teams", evidenceLevel: "tested" },
     ],
     connectsToAi:
-      "This is where the AI agents catalogue comes from. Each agent began as an AI and automation engagement scoped to a single workflow.",
+      "The AI agents catalogue comes from this work: each agent began as an engagement scoped to one workflow.",
     relatedAgents: [
       "eligibility-verification",
       "machine-health-monitoring",
@@ -284,7 +284,7 @@ export const serviceDomains: ServiceDomain[] = [
       { category: "standard", name: "EU AI Act", evidenceLevel: "experience" },
     ],
     connectsToAi:
-      "Agent permissions are identity decisions. The governance records produced here are the ones a risk or compliance reviewer asks for before an agent leaves pilot.",
+      "Agent permissions are identity decisions, and this work produces the governance records reviewers ask for before an agent leaves pilot.",
     relatedAgents: ["eligibility-verification", "machine-health-monitoring"],
     relatedIndustries: ["healthcare", "manufacturing"],
     deliveryModels: ["project-delivery", "managed-service"],
@@ -341,7 +341,7 @@ export const serviceDomains: ServiceDomain[] = [
         name: "Capability Pods",
         anchor: "capability-pods",
         description:
-          "A senior lead plus a small execution team that owns a capability, such as integration or AI evaluation, end to end.",
+          "A senior lead and a small execution team owning one capability, such as integration or AI evaluation, end to end.",
       },
       {
         name: "Dedicated Teams",

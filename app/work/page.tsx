@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { CTABand } from "@/components/sections/cta-band";
 import { Hero } from "@/components/sections/hero";
 import { Section } from "@/components/sections/section";
-import { getAgent } from "@/content/agents";
+import { agentIndustryLabel, getAgent } from "@/content/agents";
 import { pocPath } from "@/lib/pocs";
 import { evidenceItems } from "@/content/trust";
 import type { EvidenceLabel } from "@/content/types";
@@ -53,9 +53,9 @@ export default function WorkPage() {
             const agent = getAgent(e.agent);
             return (
               <li key={e.slug} className="flex h-full flex-col border-t border-txm-line pt-6">
-                <p className="txm-small font-semibold text-txm-accent">{e.label}</p>
-                <h3 className="mt-2 text-xl font-bold text-txm-ink">{e.title}</h3>
-                <p className="txm-body mt-2 text-txm-slate">{e.summary}</p>
+                <p className="txm-card-kicker text-txm-accent">{agent ? agentIndustryLabel(agent) : e.label}</p>
+                <h3 className="txm-card-title mt-2 text-txm-ink" data-size="lg">{e.title}</h3>
+                <p className="txm-card-body mt-3 text-txm-slate">{e.summary}</p>
                 <dl className="txm-small mt-5 grid gap-3 border-t border-txm-line pt-5 text-txm-slate sm:grid-cols-2">
                   <div>
                     <dt className="text-xs font-semibold text-txm-subtle">Validation</dt>

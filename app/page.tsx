@@ -14,7 +14,7 @@ import { IndustryPanels } from "@/components/sections/industry-panels";
 import { StackIndex } from "@/components/sections/stack-index";
 import { JsonLd } from "@/components/seo/json-ld";
 import { ButtonLink } from "@/components/ui/button";
-import { agents } from "@/content/agents";
+import { agentIndustryLabel, agents } from "@/content/agents";
 import { deliveryModels, deliveryRegions } from "@/content/delivery";
 import { industries } from "@/content/industries";
 import { domainsByStack } from "@/content/services";
@@ -37,6 +37,12 @@ const journey = [
   { title: "Match", body: "We choose the delivery model and the people, from a single specialist to a capability pod." },
   { title: "Deploy", body: "We build in your environment, report against the measures agreed on day one and hand over runbooks." },
 ];
+
+/** Every evidence item is a validated POC, so the row names the agent's industry instead of repeating that label. */
+const evidenceKicker = (slug: string) => {
+  const agent = agents.find((a) => a.slug === slug);
+  return agent ? agentIndustryLabel(agent) : "Validated POC";
+};
 
 const trustLinks = [
   { label: "Security and status", href: "/trust" },
@@ -104,42 +110,48 @@ export default function HomePage() {
       <JsonLd data={organizationLd} />
       <JsonLd data={websiteLd} />
 
-      <Hero
-        size="lg"
-        display
-        visual={<LogoForm />}
-        scrollHint={{ label: "See how it works", href: "#how-it-works" }}
-        eyebrow="Enterprise AI services from the US, LATAM and India"
-        title="Human Intelligence Extended"
-        tagline="Talent, technology and possibility in motion."
-        primary={site.primaryCta}
-        secondary={{ label: "Explore AI Agents", href: "/ai-agents" }}
-      />
-
-      <ClientLogoStrip logos={clientLogos} />
-
-      <section id="how-it-works" aria-labelledby="flow-title" className="txm-section-dark border-t border-white/10 py-24 lg:py-32">
-        <AgentFlow
-          stages={howItWorks}
-          label="How TalentXM works, from platforms to teams"
-          header={
-            <>
-              <h2 id="flow-title" className="txm-h2 text-white">
-                One partner from the platform to the people.
-              </h2>
-              <p className="txm-lede mt-4 text-txm-on-dark">
-                We prepare your platforms and data, build AI agents for specific workflows and staff the teams that run
-                them. Your people stay in charge of the decisions.
-              </p>
-            </>
-          }
-          footer={
-            <ButtonLink href="/services" tone="dark">
-              Explore services
-            </ButtonLink>
-          }
+      {/* The hero and the flow share one surface: the logo form starts below the header and ends whole in the flow section. */}
+      <div className="txm-bleed" data-hero-scope="">
+        <div className="txm-bleed-visual">
+          <LogoForm tone="hero" />
+        </div>
+        <Hero
+          size="lg"
+          display
+          bleed
+          scrollHint={{ label: "See how it works", href: "#how-it-works" }}
+          eyebrow="Enterprise AI services from the US, LATAM and India"
+          title="Human Intelligence Extended"
+          tagline="Talent, technology and possibility in motion."
+          primary={site.primaryCta}
+          secondary={{ label: "Explore AI Agents", href: "/ai-agents" }}
         />
-      </section>
+
+        <ClientLogoStrip logos={clientLogos} />
+
+        <section id="how-it-works" aria-labelledby="flow-title" className="relative pt-16 pb-24 text-white lg:pt-28 lg:pb-32">
+          <AgentFlow
+            stages={howItWorks}
+            label="How TalentXM works, from platforms to teams"
+            header={
+              <>
+                <h2 id="flow-title" className="txm-h2 text-white">
+                  One partner from the platform to the people.
+                </h2>
+                <p className="txm-lede mt-4 text-txm-on-dark">
+                  We prepare your platforms and data, build AI agents for specific workflows and staff the teams that run
+                  them. Your people stay in charge of the decisions.
+                </p>
+              </>
+            }
+            footer={
+              <ButtonLink href="/services" tone="dark">
+                Explore services
+              </ButtonLink>
+            }
+          />
+        </section>
+      </div>
 
       <section aria-labelledby="stack-title" className="txm-section-dark py-24 lg:py-40">
         <div className="txm-container">
@@ -182,7 +194,7 @@ export default function HomePage() {
           </ButtonLink>
         </div>
         <div className="mt-12">
-          <Rail label="AI agents" coverflow>
+          <Rail label="AI agents" coverflow tone="dark">
             {agents.map((a) => (
               <li key={a.slug}>
                 <AgentCard agent={a} />
@@ -245,9 +257,9 @@ export default function HomePage() {
                 key={e.slug}
                 className="grid gap-2 border-b border-txm-line py-7 md:grid-cols-[12rem_minmax(0,1fr)_minmax(0,1fr)] md:gap-10"
               >
-                <p className="txm-small font-semibold text-txm-accent">{e.label}</p>
-                <h3 className="text-lg font-semibold text-txm-ink">{e.title}</h3>
-                <p className="txm-body text-txm-slate">{e.validationSummary}</p>
+                <p className="txm-card-kicker pt-1 text-txm-accent">{evidenceKicker(e.agent)}</p>
+                <h3 className="txm-card-title text-txm-ink">{e.title}</h3>
+                <p className="txm-card-body text-txm-slate">{e.validationSummary}</p>
               </li>
             ))}
           </Reveal>

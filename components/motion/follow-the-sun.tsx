@@ -1,7 +1,9 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { Reveal } from "@/components/motion/reveal";
 import type { deliveryRegions } from "@/content/delivery";
+import { cn } from "@/lib/cn";
 
 type Region = (typeof deliveryRegions)[number];
 
@@ -52,7 +54,7 @@ export function FollowTheSun({ regions }: { regions: Region[] }) {
 
   return (
     <div>
-      <div className="txm-hours" role="group" aria-label="Working hours of each delivery hub">
+      <Reveal className="txm-hours" role="group" aria-label="Working hours of each delivery hub">
         {regions.map((r) => {
           const offset = now ? zoneOffset(r.timeZone, now) : r.baseOffset;
           const shift = viewerOffset - offset;
@@ -62,16 +64,21 @@ export function FollowTheSun({ regions }: { regions: Region[] }) {
           return (
             <div key={r.name} className="txm-hours-row">
               <div className="min-w-0">
-                <p className="flex items-baseline gap-3">
-                  <span className="text-lg font-semibold text-white">{r.name}</span>
+                <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <span className="txm-card-title text-white">{r.name}</span>
                   {clock && <span className="txm-small tabular-nums text-txm-on-dark">{clock}</span>}
+                  {local !== null && (
+                    <span
+                      className={cn(
+                        "txm-small ml-auto font-semibold md:ml-0",
+                        working ? "text-txm-yellow" : "text-txm-on-dark",
+                      )}
+                    >
+                      {working ? "Working now" : "Off hours"}
+                    </span>
+                  )}
                 </p>
                 <p className="txm-small mt-1 text-txm-on-dark">{r.detail}</p>
-                {local !== null && (
-                  <p className="txm-small mt-1 font-semibold text-txm-yellow">
-                    {working ? "Working now" : "Off hours now"}
-                  </p>
-                )}
               </div>
               <div className="txm-hours-track">
                 {segments(r.hours[0], r.hours[1], shift).map(([s, len]) => (
@@ -92,18 +99,19 @@ export function FollowTheSun({ regions }: { regions: Region[] }) {
           <span />
           <div className="txm-hours-axis">
             {ticks.map((t) => (
-              <span key={t} style={{ left: pct(t) }}>
+              <span key={t} style={{ left: pct(t) }} data-minor={t % 6 !== 0 ? "" : undefined}>
                 {String(t % 24).padStart(2, "0")}
               </span>
             ))}
             {nowHour !== null && (
-              <span className="txm-hours-now" style={{ left: pct(nowHour) }}>
+              // Kept inside the band so the label never hangs off the edge of the screen.
+              <span className="txm-hours-now" style={{ left: pct(Math.min(22.6, Math.max(1.4, nowHour))) }}>
                 Now
               </span>
             )}
           </div>
         </div>
-      </div>
+      </Reveal>
       <p className="txm-small mt-4 text-txm-on-dark">
         {now ? "Hours shown in your time zone." : "Hours shown in UTC."}
       </p>

@@ -27,7 +27,7 @@ The logo is the node mark plus the wordmark **TALENTXM** in bold, wide-tracked c
 | Light (Clara) | Neutral Base `#e6e5e2`, white or cream | Trust Blue | Trust Blue | Default on light surfaces: header, documents |
 | Dark (Escura) | Trust Blue | Neutral Base | Neutral Base | Dark surfaces where a quiet logo is wanted |
 | Highlight (Destaque) | Opportunity Yellow | Trust Blue | Trust Blue | Campaigns, social, callouts. Not for page chrome |
-| Gradient (Gradiente) | Trust Blue | Orange → yellow → teal gradient | Neutral Base | Hero moments: footer, social image, app icon |
+| Gradient (Gradiente) | Trust Blue | Orange → yellow → teal gradient | Neutral Base | Hero moments: social image, app icon |
 
 ### Files in this repo
 
@@ -36,8 +36,8 @@ All in `public/images/brand/`. Transparent PNGs unless noted.
 | File | What it is | Used in |
 |---|---|---|
 | `logo-horizontal-navy.png` | Mark + wordmark side by side, navy | Mobile menu |
-| `logo-horizontal-gradient.png` | Gradient mark + neutral wordmark | Footer (on navy) |
-| `logo-horizontal-neutral.png` | All neutral, for dark surfaces | Header |
+| `logo-horizontal-gradient.png` | Gradient mark + neutral wordmark | Available |
+| `logo-horizontal-neutral.png` | All neutral, for dark surfaces | Header and footer (still, white) |
 | `logo-stacked-navy.png` | Mark above wordmark, navy | Organization schema in `lib/seo.ts` |
 | `logo-stacked-gradient.png` | Stacked, gradient mark | Available |
 | `mark-navy.png`, `mark-neutral.png`, `mark-gradient.png` | Mark only | Available |
@@ -155,7 +155,18 @@ Both web fonts load through `next/font/google` in `app/layout.tsx`.
 | `.txm-small` | 14/20 | 400 | |
 | `.txm-eyebrow` | 13/20 | 600 | Uppercase, 0.12em tracking |
 
-Headings use sentence case. Uppercase is reserved for eyebrows and the wordmark.
+Headings use sentence case. Uppercase is reserved for eyebrows, card kickers and the wordmark.
+
+**Cards** use one scale, in this order, so every card reads the same way: kicker, title, body, tags.
+
+| Class | Size / line height | Weight | Notes |
+|---|---|---|---|
+| `.txm-card-kicker` | 12/16 | 600 | Uppercase, 0.06em tracking; one per card at most; accent on light, on-dark grey or yellow on navy |
+| `.txm-card-title` | 20/26, 21/28 from 768px | 600 | Display font. `data-size="lg"`: 24/30, 28/34 from 768px, for two-column blocks and panels |
+| `.txm-card-body` | 15/24 | 400 | Max 60ch; clamp to three lines on library grids |
+| `.txm-tag` | 12 | 500 | Pill on a 6% navy tint; up to three per card, then "+n more" |
+
+Four-column grids use the standard card title; `data-size="lg"` would wrap into the narrow column.
 
 ## Shape, depth and layout
 

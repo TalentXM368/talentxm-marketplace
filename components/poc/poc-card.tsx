@@ -4,12 +4,17 @@ import { Play } from "lucide-react";
 import type { Poc } from "@/content/types";
 import { pocLabels, pocPath, pocTechnologies } from "@/lib/pocs";
 
-/** Library card: thumbnail, category, title, summary and technologies. The whole card links to the POC. */
+/**
+ * Library card: thumbnail, category, name, a short summary and technologies. The whole card links to the
+ * POC. The card shows the POC's name only (the part before a colon); its full title and description are
+ * on the POC page.
+ */
 export function PocCard({ poc, headingLevel = "h3" }: { poc: Poc; headingLevel?: "h2" | "h3" }) {
   const Heading = headingLevel;
   const techs = pocTechnologies(poc);
-  const shown = techs.slice(0, 4);
+  const shown = techs.slice(0, 3);
   const more = techs.length - shown.length;
+  const name = poc.title.split(":")[0].trim();
 
   return (
     <article className="txm-card txm-card-hover group relative flex h-full flex-col overflow-hidden">
@@ -32,25 +37,23 @@ export function PocCard({ poc, headingLevel = "h3" }: { poc: Poc; headingLevel?:
         )}
       </div>
       <div className="flex flex-1 flex-col p-6">
-        <p className="txm-small font-semibold text-txm-accent">{pocLabels(poc).join(", ")}</p>
-        <Heading className="mt-2 text-lg font-bold text-txm-ink">
+        <p className="txm-card-kicker text-txm-accent">{pocLabels(poc).join(" · ")}</p>
+        <Heading className="txm-card-title mt-2 text-txm-ink">
           <Link
             href={pocPath(poc.slug)}
-            className="txm-focus after:absolute after:inset-0 after:content-[''] hover:text-txm-accent"
+            className="txm-focus after:absolute after:inset-0 after:content-[''] group-hover:text-txm-accent"
           >
-            {poc.title}
+            {name}
           </Link>
         </Heading>
-        <p className="txm-small mt-2 flex-1 text-txm-slate">{poc.summary}</p>
-        <ul className="mt-5 flex flex-wrap gap-1.5" aria-label="Technologies">
+        <p className="txm-card-body mt-3 line-clamp-3 flex-1 text-txm-slate">{poc.summary}</p>
+        <ul className="mt-6 flex flex-wrap gap-1.5" aria-label="Technologies">
           {shown.map((t) => (
-            <li key={t.slug} className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700">
+            <li key={t.slug} className="txm-tag">
               {t.name}
             </li>
           ))}
-          {more > 0 && (
-            <li className="rounded-full px-1.5 py-1 text-xs font-medium text-txm-subtle">+{more} more</li>
-          )}
+          {more > 0 && <li className="txm-tag bg-transparent">+{more} more</li>}
         </ul>
       </div>
     </article>

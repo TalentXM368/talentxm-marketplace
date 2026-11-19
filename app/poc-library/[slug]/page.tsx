@@ -120,11 +120,11 @@ export default async function PocPage({ params }: PageProps<"/poc-library/[slug]
         <SectionHeader id="overview-title" title="The problem, and what the POC does." />
         <div className="mt-12 grid gap-6 md:grid-cols-2">
           <div className="border-t border-txm-line pt-6">
-            <h3 className="text-lg font-bold text-txm-ink">The problem</h3>
+            <h3 className="txm-card-title text-txm-ink" data-size="lg">The problem</h3>
             <p className="txm-body mt-3 text-txm-slate">{p.problem}</p>
           </div>
           <div className="border-t-2 border-txm-orange pt-6">
-            <h3 className="text-lg font-bold text-txm-ink">What the POC does</h3>
+            <h3 className="txm-card-title text-txm-ink" data-size="lg">What the POC does</h3>
             <p className="txm-body mt-3 text-txm-slate">{p.solution}</p>
           </div>
         </div>
@@ -139,7 +139,7 @@ export default async function PocPage({ params }: PageProps<"/poc-library/[slug]
             </div>
             {p.boundaries && p.boundaries.length > 0 && (
               <div className="mt-10 rounded-2xl border border-txm-line bg-txm-light p-6">
-                <h3 className="txm-small font-semibold text-txm-accent">Boundaries built in</h3>
+                <h3 className="txm-card-kicker text-txm-accent">Boundaries built in</h3>
                 <ul className="mt-4 space-y-3">
                   {p.boundaries.map((b) => (
                     <li key={b} className="flex gap-3">

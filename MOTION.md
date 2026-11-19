@@ -65,6 +65,7 @@ Each pattern has one implementation. Reuse it; do not build a second version.
 
 - **What:** the pieces around the hero headline (eyebrow, lede, buttons, scroll hint) fade up in sequence after the headline.
 - **How:** class `txm-load` with `style={{ "--i": n }}` for the order. Built into `Hero`.
+- **Hero gate:** the load-in and the headline words wait, paused, until the fonts are ready and the logo form has drawn its first frame (or fallen back), capped at 1.2 seconds. Then `<HeroGate>` (`components/motion/hero-gate.tsx`) sets `data-ready` and the hero plays in one piece, so visitors never see it assemble. The hold applies only with scripting on and motion allowed; without JavaScript, or with reduced motion, the hero shows at once.
 
 ### Display type
 
@@ -75,9 +76,10 @@ Each pattern has one implementation. Reuse it; do not build a second version.
 ### Logo form
 
 - **What:** the TalentXM mark larger than the hero and cut by its top, bottom and right edges, as on the brand essence board ("Human Intelligence Extended"). Orange, yellow and teal blend inside it; its rims glow against deep navy. It is drawn in 3D from its first frame: it breathes slowly, catches light from the pointer and recedes as the page scrolls.
-- **How:** `<LogoForm />` in `components/motion/logo-form.tsx`, with the mark's paths in `components/brand/mark-paths.ts`. On deep navy, WebGL (`components/motion/logo-form-gl.ts`) starts as soon as the component mounts: the mark is turned into a signed distance field and drawn by one fragment shader. Raw WebGL, no library. The inline SVG is in the HTML but stays hidden while WebGL starts (CSS `@media (scripting: enabled)`), so the flat version never flashes first.
-- **Variants:** `tone="hero"` on the home page; `tone="soft"`, placed further right and dimmer, on every interior `Hero` and inner-page closing band. `palette="on-orange"` draws the mark flat in Trust Blue for the home closing call.
-- **Rules:** the form stays on the right so the headline on the left keeps its contrast; on small screens it sits behind the text at reduced opacity; decorative and hidden from assistive technology.
+- **How:** `<LogoForm />` in `components/motion/logo-form.tsx`, with the mark's paths in `components/brand/mark-paths.ts`. WebGL (`components/motion/logo-form-gl.ts`) starts as soon as the component mounts and draws the mark with one fragment shader. Raw WebGL, no library. The shader reads a signed distance field of the mark that is built once per page in a Web Worker (`logo-field.ts`, `logo-field.worker.ts`, `logo-field-build.ts`), so the hero and the closing band share one field and the main thread stays free; browsers that cannot draw in a worker build it on the main thread. The inline SVG is in the HTML but stays hidden while WebGL starts (CSS `@media (scripting: enabled)`), so the flat version never flashes first.
+- **Variants:** `tone="hero"` on the home page, starting below the header and continuing past the hero into the section after it (both sit in one `.txm-bleed` wrapper, so there is no line between them); `tone="closing"` in the home closing call, placed like the hero; `tone="soft"`, placed further right, on every interior `Hero`.
+- **Brightness:** `intensity` (0 to 1) scales the whole form, glow included, in the shader and on the SVG fallback. Defaults: hero 0.8, closing 0.55, soft 0.85. Keep the closing band dimmer than the hero.
+- **Rules:** the form stays on the right so the headline on the left keeps its contrast, and never sits under the header; on small screens it sits behind the text at reduced opacity; decorative and hidden from assistive technology.
 - **Fallback:** without JavaScript, without WebGL (`data-gl="off"`), if the WebGL context is lost, if the first frame has not arrived after 2.5 seconds, or with reduced motion, the still SVG shows.
 - **Limit:** heroes and closing bands only, so at most two per page. Do not place it behind body content.
 
@@ -92,7 +94,7 @@ Each pattern has one implementation. Reuse it; do not build a second version.
 ### Rail
 
 - **What:** a horizontal row of large cards that scrolls sideways and snaps to each card.
-- **How:** `<Rail label="…">` in `components/motion/rail.tsx` with `<li>` children. It uses native scrolling, so touch, trackpad and keyboard work; the arrow buttons move one card.
+- **How:** `<Rail label="…">` in `components/motion/rail.tsx` with `<li>` children. It uses native scrolling, so touch, trackpad and keyboard work. The arrow buttons move exactly one card (measured from layout, so coverflow scaling does not shorten the step) and switch off at either end. With a mouse the row can be dragged sideways; a drag never opens the card it ends on. A thin line under the rail shows the visible share and position. `tone="dark"` on deep navy sections.
 - **Not for:** fewer than four cards (use a grid).
 
 ### Hover
@@ -111,10 +113,10 @@ Each pattern has one implementation. Reuse it; do not build a second version.
 CSS scroll-driven animations (`animation-timeline`) in `app/globals.css`, used in place of card grids on the home page. They are tied to scroll position, so they also run backwards, and everything comes to rest fully visible. With reduced motion, or in browsers without support, the layout is shown still and complete.
 
 - **Scroll-lit statement** (`<ScrubStatement>` in `components/motion/scroll-type.tsx`): a large sentence whose words brighten one after another as it moves up the screen. One per page.
-- **Step words** (`<StepWords>`, same file): a real sequence set as very large words that start as outlines and fill in, one after another. Use only for content that is a sequence.
+- **Step words** (`<StepWords>`, same file): a real sequence set as very large words that start as outlines and fill in, left to right, one after another; each body line rises in after its word. Not scroll-linked: it plays once, on time, when the list comes into view (`Reveal`), so every word always ends complete. Use only for content that is a sequence.
 - **Spotlight index** (`<StackIndex>` in `components/sections/stack-index.tsx`): the service domains as large type rows, top layer first; each row's words drift in and brighten as it passes the middle of the screen. From 768px up.
-- **Coverflow rail** (`<Rail coverflow>`): cards near the edges of the rail turn away in depth and fade; cards fully in view face forward. Driven by the rail's own sideways scroll. From 768px up.
-- **Hours band** (`<FollowTheSun>` in `components/motion/follow-the-sun.tsx`): each delivery hub's working day on one 24-hour axis in the visitor's time zone, with a line at the current time. Bars grow in on scroll. Before the visitor's clock is known (server render), it is drawn in UTC.
+- **Coverflow rail** (`<Rail coverflow>`): cards near the edges of the rail shrink slightly and dim; cards fully in view are full size. No 3D turn, so cards never overlap. Driven by the rail's own sideways scroll. From 768px up.
+- **Hours band** (`<FollowTheSun>` in `components/motion/follow-the-sun.tsx`): each delivery hub's working day on one 24-hour axis in the visitor's time zone, with a line at the current time. Not scroll-linked: the bars grow in once, hub after hub, when the band comes into view (`Reveal`), so they never sit half-grown. Under 640px the axis is labelled every six hours. Before the visitor's clock is known (server render), it is drawn in UTC.
 - **Expanding panels** (`<IndustryPanels>` in `components/sections/industry-panels.tsx`): industries as tall photo panels side by side; the one under the pointer or keyboard focus widens. This answers the visitor, it is not scroll-linked. Stacked under 1024px.
 
 ### Sheet
@@ -127,10 +129,11 @@ CSS scroll-driven animations (`animation-timeline`) in `app/globals.css`, used i
 
 - **What:** on navigation the old page fades out quickly (160ms) and the new one rises in (460ms). The header does not move.
 - **How:** `app/template.tsx` wraps every page in React's `ViewTransition`; the header is anchored with `viewTransitionName: "site-header"`. Browsers without support simply switch pages.
+- **Scroll:** `<html data-scroll-behavior="smooth">` lets Next jump to the top of the new page instantly. Without it, the global smooth scroll animates that jump and the transition cuts it short, leaving the new page part-way down.
 
 ### Closing call
 
-- **What:** a full-width Energy Orange-Red band with the largest type on the page, the logo form in Trust Blue, and the primary action as a deep navy pill. It is the one full-colour surface on a page.
+- **What:** a deep navy band with the largest type on the page and the logo form drawn as in the hero, but dimmer (`tone="closing"`), with the primary action as a white pill.
 - **How:** `<CTABand size="xl">`.
 
 ## Scroll triggers
@@ -142,7 +145,7 @@ CSS scroll-driven animations (`animation-timeline`) in `app/globals.css`, used i
 
 ## Brand in motion
 
-- Moving colour is limited to the logo form, on deep navy or on Energy Orange-Red. The brand colours never blend in UI fills (BRANDING.md, "Gradient").
+- Moving colour is limited to the logo form, on deep navy. The brand colours never blend in UI fills (BRANDING.md, "Gradient").
 - Text on yellow or orange is navy, never white.
 - One bright colour per component still applies when things move.
 
@@ -168,7 +171,7 @@ Also:
 ## Performance
 
 - No animation library is installed. Reveals use `IntersectionObserver` plus CSS; the agent flow uses one timer and one `IntersectionObserver`; scroll-linked type and layout is pure CSS; the logo form is an inline SVG plus, on the home hero, one raw WebGL fragment shader.
-- The WebGL logo form starts when the browser is idle, is code-split, caps the pixel ratio at 1.5, and pauses when the hero is off screen or the tab is hidden.
+- The WebGL logo form caps the pixel ratio at 1.5 and pauses when it is off screen or the tab is hidden. Its distance field is built once per page in a worker and shared by every form, so it adds no long task to the main thread.
 - The hero headline is real text and appears within the first second; the canvas starts after the page is interactive.
 - Every observer, listener and animation loop is cleaned up when a page is hidden, because Next keeps previous pages mounted.
 - Before adding a dependency (Motion, GSAP, three.js), show that the pattern cannot be built with what is here.
@@ -185,16 +188,16 @@ Also:
 
 | # | Section | Motion |
 |---|---|---|
-| 1 | Hero | Display headline rises word by word; logo form (WebGL); tagline under a hairline rule; load-in; scroll hint |
+| 1 | Hero | Held until ready (hero gate); display headline rises word by word; logo form (WebGL) continuing into section 3; tagline under a hairline rule; load-in; scroll hint |
 | 2 | Client logos (when there are any) | Reveal |
-| 3 | How it works: platforms and data, agents, people decide, teams | Agent flow, every step linking to its page |
+| 3 | How it works: platforms and data, agents, people decide, teams | Agent flow, every step linking to its page; shares the hero's surface, with no dividing line |
 | 4 | Five domains, one stack | Scroll-lit statement, then spotlight index |
 | 5 | Define. Match. Deploy. | Step words |
 | 6 | Six agents | Coverflow rail |
 | 7 | Industries | Expanding panels |
 | 8 | Hours and delivery models | Hours band; delivery models on one line |
 | 9 | Work and trust | Rows staggered; frameworks |
-| 10 | Closing call | Display-XL headline on orange with the logo form in Trust Blue |
+| 10 | Closing call | Display-XL headline on deep navy with a dimmer logo form |
 | 11 | Marketplace teaser | Still |
 
 ## Roadmap for other pages

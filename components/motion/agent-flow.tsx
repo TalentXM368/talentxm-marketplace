@@ -22,7 +22,7 @@ export interface FlowStage {
 }
 
 /** How long the flow rests at each station. It waits longest where a person decides. */
-const dwell = (key: FlowStage["key"]) => (key === "human" ? 5200 : 3800);
+const dwell = (key: FlowStage["key"]) => (key === "human" ? 3600 : 2600);
 
 const reducedQuery = "(prefers-reduced-motion: reduce)";
 const subscribeReduced = (onChange: () => void) => {
@@ -141,10 +141,10 @@ export function AgentFlow({
                     <StageIcon className="h-5 w-5" aria-hidden="true" />
                   </button>
                   <div className="txm-flow-body">
-                    <p className="txm-small font-semibold text-txm-on-dark">
+                    <p className="txm-card-kicker text-txm-on-dark">
                       {i + 1}. {s.label}
                     </p>
-                    <h3 className="mt-1 text-xl font-semibold text-white">{s.title}</h3>
+                    <h3 className="txm-card-title mt-2 text-white">{s.title}</h3>
                     <ul className="mt-4 space-y-2.5">
                       {s.items.map((item) => (
                         <li key={item.text} className="txm-flow-item txm-small text-txm-on-dark">

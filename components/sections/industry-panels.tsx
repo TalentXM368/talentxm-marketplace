@@ -7,6 +7,8 @@ interface Panel {
   description: string;
   href: string;
   image?: string;
+  /** A short fact line under the description, such as counts. */
+  meta?: string;
 }
 
 /**
@@ -36,13 +38,14 @@ export function IndustryPanels({ panels }: { panels: Panel[] }) {
             )}
             <div className="relative mt-auto p-7 md:p-9">
               <div className="flex items-start justify-between gap-6">
-                <h3 className="txm-h3 text-white">{p.title}</h3>
+                <h3 className="txm-card-title text-white" data-size="lg">{p.title}</h3>
                 <ArrowUpRight
                   className="h-6 w-6 shrink-0 text-txm-yellow transition-transform group-hover:-translate-y-1 group-hover:translate-x-1"
                   aria-hidden="true"
                 />
               </div>
-              <p className="txm-body mt-3 max-w-[38ch] text-white/85">{p.description}</p>
+              <p className="txm-card-body mt-3 max-w-[38ch] text-white/85">{p.description}</p>
+              {p.meta && <p className="txm-card-kicker mt-5 text-txm-yellow">{p.meta}</p>}
             </div>
           </Link>
         </li>

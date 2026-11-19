@@ -1,4 +1,5 @@
 import { ArrowDown } from "lucide-react";
+import { HeroGate } from "@/components/motion/hero-gate";
 import { LogoForm } from "@/components/motion/logo-form";
 import { SplitText } from "@/components/motion/split-text";
 import { ButtonLink } from "@/components/ui/button";
@@ -11,7 +12,7 @@ interface HeroProps {
   lede?: string;
   /** Kept for existing callers. Heroes now use the logo form instead of a background photo. */
   image?: string;
-  /** Replaces the default background (the soft logo form). */
+  /** Replaces the default background (the soft logo form). Ignored with `bleed`. */
   visual?: React.ReactNode;
   /** Large display headline (MOTION.md: "Display type"). */
   display?: boolean;
@@ -23,6 +24,11 @@ interface HeroProps {
   secondary?: { label: string; href: string };
   breadcrumbs?: Crumb[];
   size?: "lg" | "md";
+  /**
+   * Home only: the hero has no background of its own. It sits inside `.txm-bleed`, which draws the
+   * logo form across the hero and the section after it (see app/page.tsx).
+   */
+  bleed?: boolean;
   aside?: React.ReactNode;
   children?: React.ReactNode;
 }
@@ -45,17 +51,21 @@ export function Hero({
   secondary,
   breadcrumbs,
   size = "md",
+  bleed = false,
   aside,
   children,
 }: HeroProps) {
   return (
     <section
+      data-hero-gate=""
       className={cn(
-        "txm-under-header relative isolate flex items-center overflow-hidden bg-txm-base",
+        "txm-under-header relative flex items-center",
+        bleed ? "" : "isolate overflow-hidden bg-txm-base",
         size === "lg" ? "min-h-[88svh] lg:min-h-svh" : "min-h-[56vh]",
       )}
     >
-      <div className="absolute inset-0 -z-10">{visual ?? <LogoForm tone="soft" />}</div>
+      <HeroGate />
+      {!bleed && <div className="absolute inset-0 -z-10">{visual ?? <LogoForm tone="soft" />}</div>}
       <div className="txm-container w-full py-16 md:py-24">
         {breadcrumbs && <Breadcrumb items={breadcrumbs} />}
         <div className={cn("grid items-center gap-12", aside ? "lg:grid-cols-[minmax(0,1fr)_420px]" : "")}>

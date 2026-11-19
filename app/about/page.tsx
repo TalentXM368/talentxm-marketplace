@@ -125,7 +125,7 @@ export default function AboutPage() {
           />
           <div className="grid gap-6 sm:grid-cols-2">
             <div className="border-t border-txm-line pt-6">
-              <h3 className="font-semibold text-txm-ink">Partnerships</h3>
+              <h3 className="txm-card-title text-txm-ink">Partnerships</h3>
               <ul className="txm-small mt-3 space-y-2 text-txm-slate">
                 {partnershipsVsExperience.partnerships.map((p) => (
                   <li key={p}>{p}</li>
@@ -133,7 +133,7 @@ export default function AboutPage() {
               </ul>
             </div>
             <div className="border-t border-txm-line pt-6">
-              <h3 className="font-semibold text-txm-ink">Delivery experience</h3>
+              <h3 className="txm-card-title text-txm-ink">Delivery experience</h3>
               <ul className="txm-small mt-3 space-y-2 text-txm-slate">
                 {partnershipsVsExperience.experience.map((p) => (
                   <li key={p}>{p}</li>
@@ -148,7 +148,7 @@ export default function AboutPage() {
         <SectionHeader id="ecosystem-title" title="Part of a wider group." />
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {ecosystem.map((e) => (
-            <InfoCard key={e.name} title={e.name} body={e.body} />
+            <InfoCard key={e.name} title={e.name} body={e.body} size="md" />
           ))}
         </div>
       </Section>

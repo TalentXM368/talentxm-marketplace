@@ -90,7 +90,7 @@ export function FilterButton({
       aria-pressed={active}
       onClick={onClick}
       className={cn(
-        "txm-focus rounded-full border px-4 py-2 text-sm font-semibold transition-colors",
+        "txm-focus min-h-11 rounded-full border px-4 py-2 text-sm font-semibold transition-colors",
         active
           ? "border-transparent bg-txm-base text-white"
           : "border-txm-line bg-white text-txm-ink hover:bg-slate-50",

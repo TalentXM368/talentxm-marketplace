@@ -12,7 +12,7 @@ export function SiteFooter() {
         <div className="grid gap-10 lg:grid-cols-[1.2fr_repeat(4,minmax(0,1fr))]">
           <div>
             <Link href={homeHref} className="txm-focus-inverse inline-block" aria-label="TalentXM home">
-              <Image src="/images/brand/logo-horizontal-gradient.png" alt="TalentXM" width={893} height={220} className="h-9 w-auto" />
+              <Image src="/images/brand/logo-horizontal-neutral.png" alt="TalentXM" width={893} height={220} className="h-9 w-auto" />
             </Link>
             <p className="txm-small mt-5 max-w-xs text-slate-400">
               Enterprise AI services, from platforms and integration to agents and delivery teams.

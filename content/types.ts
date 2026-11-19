@@ -244,7 +244,8 @@ export interface VideoMoment {
 export interface Poc {
   slug: string;
   title: string;
-  categories: AtLeastOne<PocCategorySlug>;
+  /** Industry filters on the POC library. Empty for cross-industry POCs, which are found by function. */
+  categories: PocCategorySlug[];
   functions: BusinessFunctionSlug[];
   /** Links the POC to the industry pages. */
   industries: IndustrySlug[];

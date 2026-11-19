@@ -36,7 +36,8 @@ export default function IndustriesPage() {
           <IndustryPanels
             panels={industries.map((i) => ({
               title: i.name,
-              description: `${i.summary} ${agentsForIndustry(i.slug).length} validated agents and ${i.useCaseRows.length} mapped workflows.`,
+              description: i.summary,
+              meta: `${agentsForIndustry(i.slug).length} validated agents · ${i.useCaseRows.length} mapped workflows`,
               href: `/industries/${i.slug}`,
               image: i.image,
             }))}

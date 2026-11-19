@@ -28,7 +28,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${inter.variable} ${montserrat.variable}`}>
+    <html lang="en" data-scroll-behavior="smooth" className={`${inter.variable} ${montserrat.variable}`}>
       <body className="flex min-h-screen flex-col">
         <a
           href="#main"

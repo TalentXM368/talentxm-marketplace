@@ -87,7 +87,7 @@ export default async function AgentPage({ params }: PageProps<"/ai-agents/[slug]
         <SectionHeader id="workflow-title" title="Today, and with the agent." />
         <div className="mt-12 grid gap-x-10 gap-y-10 md:grid-cols-2">
           <div className="border-t border-txm-line pt-6">
-            <h3 className="txm-h3 text-txm-ink">Current workflow</h3>
+            <h3 className="txm-card-title text-txm-ink" data-size="lg">Current workflow</h3>
             <ol className="mt-4 space-y-3">
               {a.currentWorkflow.map((s) => (
                 <li key={s} className="txm-body flex gap-3 text-txm-slate">
@@ -98,7 +98,7 @@ export default async function AgentPage({ params }: PageProps<"/ai-agents/[slug]
             </ol>
           </div>
           <div className="border-t-2 border-txm-orange pt-6">
-            <h3 className="txm-h3 text-txm-ink">Assisted workflow</h3>
+            <h3 className="txm-card-title text-txm-ink" data-size="lg">Assisted workflow</h3>
             <ol className="mt-4 space-y-3">
               {a.assistedWorkflow.map((s) => (
                 <li key={s} className="txm-body flex gap-3 text-txm-slate">
@@ -177,19 +177,19 @@ export default async function AgentPage({ params }: PageProps<"/ai-agents/[slug]
         </h2>
         <div className="grid gap-x-10 gap-y-10 lg:grid-cols-3">
           <div className="border-t border-txm-line pt-6">
-            <h3 className="text-lg font-bold text-txm-ink">Security controls</h3>
+            <h3 className="txm-card-title text-txm-ink">Security controls</h3>
             <div className="mt-4">
               <CheckList items={a.securityControls} />
             </div>
           </div>
           <div className="border-t border-txm-line pt-6">
-            <h3 className="text-lg font-bold text-txm-ink">Evaluation measures</h3>
+            <h3 className="txm-card-title text-txm-ink">Evaluation measures</h3>
             <div className="mt-4">
               <CheckList items={a.evaluationMeasures} />
             </div>
           </div>
           <div className="border-t border-txm-line pt-6">
-            <h3 className="text-lg font-bold text-txm-ink">Deployment options</h3>
+            <h3 className="txm-card-title text-txm-ink">Deployment options</h3>
             <div className="mt-4">
               <CheckList items={a.deploymentOptions} />
             </div>

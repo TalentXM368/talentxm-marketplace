@@ -31,11 +31,11 @@ export function StatusLegend({ statuses }: { statuses: AgentStatus[] }) {
   return (
     <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {statuses.map((s) => (
-        <div key={s} className="rounded-xl border border-txm-line bg-white p-4">
+        <div key={s} className="txm-card p-5">
           <dt>
             <StatusChip status={s} />
           </dt>
-          <dd className="txm-small mt-2 text-txm-slate">{statusDescriptions[s]}</dd>
+          <dd className="txm-card-body mt-3 text-txm-slate">{statusDescriptions[s]}</dd>
         </div>
       ))}
     </dl>
@@ -46,14 +46,14 @@ export function HumanDecisionPoints({ points }: { points: HumanDecisionPoint[] }
   return (
     <ol className="grid gap-4 md:grid-cols-2">
       {points.map((p) => (
-        <li key={p.step} className="flex gap-4 rounded-xl border border-txm-line bg-white p-5">
+        <li key={p.step} className="txm-card flex gap-4 p-5 md:p-6">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-txm-base">
             <UserCheck className="h-5 w-5 text-white" aria-hidden="true" />
           </div>
           <div>
-            <p className="font-semibold text-txm-ink">{p.step}</p>
-            <p className="txm-small mt-0.5 font-medium text-txm-accent">{p.who}</p>
-            <p className="txm-small mt-2 text-txm-slate">{p.why}</p>
+            <p className="txm-card-kicker text-txm-accent">{p.who}</p>
+            <p className="txm-card-title mt-1.5 text-txm-ink">{p.step}</p>
+            <p className="txm-card-body mt-2 text-txm-slate">{p.why}</p>
           </div>
         </li>
       ))}
@@ -84,7 +84,7 @@ export function TechTags({ tags, inverse = false }: { tags: TechTag[]; inverse?:
     <div className="grid gap-6 sm:grid-cols-2">
       {groups.map((g) => (
         <div key={g.category}>
-          <p className={cn("txm-small font-semibold mb-3", inverse ? "text-slate-400" : "text-txm-subtle")}>
+          <p className={cn("txm-card-kicker mb-3", inverse ? "text-txm-on-dark" : "text-txm-subtle")}>
             {categoryLabels[g.category]}
           </p>
           <ul className="flex flex-wrap gap-2">
@@ -97,7 +97,7 @@ export function TechTags({ tags, inverse = false }: { tags: TechTag[]; inverse?:
                 )}
               >
                 <span className="font-semibold">{t.name}</span>
-                <span className={cn("text-xs", inverse ? "text-slate-400" : "text-txm-subtle")}>
+                <span className={cn("text-xs", inverse ? "text-txm-on-dark" : "text-txm-subtle")}>
                   {evidenceLabels[t.evidenceLevel]}
                 </span>
               </li>

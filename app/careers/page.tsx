@@ -35,7 +35,7 @@ export default function CareersPage() {
         <SectionHeader id="skills-title" title="Skills we work with." />
         <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {skills.map((s) => (
-            <InfoCard key={s.title} title={s.title} body={s.body} />
+            <InfoCard key={s.title} title={s.title} body={s.body} size="md" />
           ))}
         </div>
       </Section>

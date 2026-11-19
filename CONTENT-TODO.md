@@ -38,3 +38,17 @@ Phase 1 copy was drafted from the Replit site, the Architecture & Sitemap doc (S
 ## Redirects
 
 - [ ] Confirm that no active users rely on `/login`, `/admin` or the dashboards before they return 410 (`proxy.ts`, TXM-016).
+
+## Copy trims from the 2026-11-19 design pass (sign-off)
+
+Service copy was cut to 20 words or fewer per line so cards read at a glance (`content/services.ts`). No facts were added or removed beyond what is listed. Approve, or restore the original wording.
+
+- [ ] ERP: "including the vendor and accounts payable flows that AI assistance touches first" → "including vendor and AP flows AI touches first".
+- [ ] CRM: "comparable platforms … trust what they see" → "similar platforms … trust the data".
+- [ ] Enterprise Platforms, how it connects to AI: "reads from or writes back to one of these platforms. Getting permissions, field mappings and audit trails right here is what makes an AI pilot safe to extend" → "uses one of these platforms. Correct permissions, field mappings and audit trails make a pilot safe to extend".
+- [ ] Data & Integration, how it connects to AI: dropped "Agents call integrations, not databases." Now: "Every validated agent works through an integration layer that logs calls, limits scope and can be switched off."
+- [ ] AI & Automation, how it connects to AI: "This is where the AI agents catalogue comes from…" → "The AI agents catalogue comes from this work: each agent began as an engagement scoped to one workflow."
+- [ ] Cloud & Cybersecurity, how it connects to AI: "a risk or compliance reviewer" → "reviewers", joined into one sentence.
+- [ ] Capability Pods: "A senior lead plus a small execution team that owns a capability" → "A senior lead and a small execution team owning one capability".
+- [ ] AI Governance (25 words) left unchanged: shortening it would drop "where they apply", a legal qualifier. Counsel or the security owner to decide.
+- [ ] The AP Vendor Email POC no longer sits under the Manufacturing filter (`content/pocs.ts`). Its agent is cross-industry, so it is now found under Finance.

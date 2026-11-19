@@ -74,7 +74,7 @@ export default async function ServiceDomainPage({ params }: PageProps<"/services
         <div className="mt-12 grid gap-x-10 gap-y-10 md:grid-cols-2">
           {d.capabilities.map((c) => (
             <article key={c.anchor} id={c.anchor} className="scroll-mt-28 border-t border-txm-line pt-6">
-              <h3 className="txm-h3 text-txm-ink">{c.name}</h3>
+              <h3 className="txm-card-title text-txm-ink" data-size="lg">{c.name}</h3>
               <p className="txm-body mt-2 text-txm-slate">{c.description}</p>
             </article>
           ))}
@@ -96,7 +96,7 @@ export default async function ServiceDomainPage({ params }: PageProps<"/services
           </div>
           <div className="border-t border-txm-line pt-6">
             <Icon name="sparkles" className="h-6 w-6 text-txm-accent" />
-            <h3 className="txm-h3 mt-4 text-txm-ink">How this connects to AI</h3>
+            <h3 className="txm-card-title mt-4 text-txm-ink" data-size="lg">How this connects to AI</h3>
             <p className="txm-body mt-2 text-txm-slate">{d.connectsToAi}</p>
             <div className="mt-6">
               <ButtonLink href="/ai-agents" variant="text">
